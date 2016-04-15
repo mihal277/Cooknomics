@@ -4,4 +4,6 @@ settings.py
 
 *.json
 
+db.sqlite3
+
 
