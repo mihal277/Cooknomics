@@ -7,7 +7,7 @@
 1. Try to always test every module. Use coverage.
 2. Comment your code. Sphinx will be used to create documentation.
 3. Use PEP 8 to maintain good coding style.
-4. 
+
 
 ##### Making changes:
 
