@@ -6,12 +6,24 @@
 
 1. Try to always test every module. Use coverage.
 2. Comment your code. Sphinx will be used to create documentation.
-3. Create pull requests.
+3. Use PEP 8 to maintain good coding style.
+4. 
+
+##### Making changes:
+
+1. Create a new branch.
+2. Push the branch with your changes to the remote.
+3. Create a new pull request for your code to be reviewed by at least one other collaborator.
+
 
 ##### How to install
 
-This short tutorial assumes you have already installed Python, virtualenv, Django etc.
-Note that the steps related to installing PostgreSQL are optional as SQLite can also be used for development.
+This short tutorial assumes you have already installed Python, virtualenv, Django etc. 
+
+It focuses primarily on installing and configuring PostgreSQL, which will be used in the final product.
+
+Note that the steps related to installing PostgreSQL can actually be considered optional as SQLite is also suitable for development.
+
 
 First, install and start PostgreSQL:
 
@@ -59,7 +71,7 @@ Clone the repo:
 git clone https://github.com/mihal277/Cooknomics.git
 ```
 
-Create a standard settings.py file and change the detabase setting into:
+Create a standard settings.py file and change the detabase settings into:
 
 ```Python
 DATABASES = {
@@ -84,15 +96,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'videos'
+    'videos',
+    'news'
 ]
 ```
 
-Finish by making migrations in Django.
+Unless you've made changes in models you don't have to create new migration files. If you did, however, type:
 
-After making some changes, push the branch and start a new pull request.
+```
+python manage.py makemigrations
+```
 
+Finish by telling Django to create or modify tables in your PostreSQL database:
 
+```
+python manage.py migrate
+```
 
 
 ### Docs (in Polish):
