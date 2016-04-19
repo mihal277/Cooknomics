@@ -2,7 +2,16 @@
 
 ### Contributing
 
+##### General hints:
+
+1. Try to always test every module. Use coverage.
+2. Comment your code. Sphinx will be used to create documentation.
+3. Create pull requests.
+
+##### How to install
+
 This short tutorial assumes you have already installed Python, virtualenv, Django etc.
+Note that the steps related to installing PostgreSQL are optional as SQLite can also be used for development.
 
 First, install and start PostgreSQL:
 
@@ -37,7 +46,7 @@ Install libpython3.5-dev:
 sudo apt-get install libpython3.5-dev 
 ```
 
-If you use PyCharm, go to File -> Settings -> Project: Cooknomics -> Project Interpreter. Otherwise use pip. Install following packages:
+If you use PyCharm, go to File -> Settings -> Project: Cooknomics -> Project Interpreter. Otherwise use pip. Install the following packages:
 
 ```
 psycopg2
