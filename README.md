@@ -3,6 +3,7 @@
 ### Contributing
 
 This short tutorial assumes you have already installed Python, virtualenv, Django etc.
+Note that steps related to installing PostgreSQL are optional as SQLite can also be used for development.
 
 First, install and start PostgreSQL:
 

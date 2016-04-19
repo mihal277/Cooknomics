@@ -3,15 +3,13 @@ from django.utils import timezone
 from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from videos.utils import random_url_populate
 
 
-class Video(models.Model):
-    slug = AutoSlugField(populate_from=random_url_populate,
-                         unique=True, primary_key=True, editable=False)
+class Article(models.Model):
+    slug = AutoSlugField(populate_from='title', editable=False, primary_key=True)
     title = models.CharField(max_length=200)
-    video_url = models.CharField(max_length=200)
-    description = models.TextField()
+    author = models.CharField(max_length=200)
+    content = models.TextField()
     published_date = models.DateTimeField()
     up_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     down_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
@@ -23,7 +21,5 @@ class Video(models.Model):
         if self.published_date > timezone.now():
             raise ValidationError('The date cannot be in the future')
 
-    class Meta:
-        unique_together = ('title', 'published_date', 'video_url')
 
 

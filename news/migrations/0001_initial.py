@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import autoslug.fields
 import django.core.validators
 from django.db import migrations, models
-import videos.utils
 
 
 class Migration(migrations.Migration):
@@ -17,19 +16,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Video',
+            name='Article',
             fields=[
-                ('slug', autoslug.fields.AutoSlugField(editable=False, populate_from=videos.utils.random_url_populate, primary_key=True, serialize=False, unique=True)),
+                ('slug', autoslug.fields.AutoSlugField(editable=False, populate_from='title', primary_key=True, serialize=False)),
                 ('title', models.CharField(max_length=200)),
-                ('video_url', models.CharField(max_length=200)),
-                ('description', models.TextField()),
+                ('author', models.CharField(max_length=200)),
+                ('content', models.TextField()),
                 ('published_date', models.DateTimeField()),
                 ('up_votes', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)])),
                 ('down_votes', models.IntegerField(default=0, validators=[django.core.validators.MinValueValidator(0)])),
             ],
-        ),
-        migrations.AlterUniqueTogether(
-            name='video',
-            unique_together=set([('title', 'published_date', 'video_url')]),
         ),
     ]
