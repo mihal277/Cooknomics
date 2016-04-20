@@ -134,7 +134,7 @@ If you've created a file, modify \_\_init.py\_\_ accordingly.
 
 ##### How to run tests
 
-First, add this code to your setting.py file in order to use SQLite for testing, which is mucha faster:
+First, add this code to your setting.py file in order to use SQLite for testing, which is much faster:
 
 ```Python
 import sys
