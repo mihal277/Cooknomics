@@ -151,7 +151,7 @@ if 'test' in sys.argv:
 
 Now you can run coverage inside your virtualenv:
 ```
-coverage run manage.py test whatever -v 2
+coverage run manage.py test appname -v 2
 ```
 
 ### Documentation
