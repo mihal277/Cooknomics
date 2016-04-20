@@ -1,3 +1,11 @@
 img {
     width: 100%;
 }
+
+#pad-left {
+  padding-left: 2%;
+}
+
+#pad-right {
+  padding-right: 2%;
+}
