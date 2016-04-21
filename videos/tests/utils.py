@@ -1,5 +1,5 @@
 from django.test import TestCase
-from videos.utils import random_url_populate, youtube_video_exists
+from videos.utils import youtube_video_exists
 
 
 class UtilsTestCase(TestCase):
@@ -17,11 +17,6 @@ class UtilsTestCase(TestCase):
         'https://www.google.com/',
         'sdjfnksjafnbubiubsadf'
     ]
-
-    def test_random_url_populate(self):
-        random_str = random_url_populate()
-        self.assertTrue(random_str.__len__() == 7)
-        self.assertTrue(random_str.isalnum())
 
     def test_youtube_video_exists(self):
         for v in self.CORRECT_VIDEOS:

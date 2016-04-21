@@ -66,6 +66,7 @@ autoslug
 django-tinymce
 coverage
 requests
+unidecode
 Sphinx
 ```
 

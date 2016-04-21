@@ -3,11 +3,13 @@ from django.utils import timezone
 from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from videos.utils import random_url_populate, youtube_video_exists
+from videos.utils import youtube_video_exists
+import unidecode
+from unidecode import unidecode
 
 
 class Video(models.Model):
-    slug = AutoSlugField(populate_from=random_url_populate,
+    slug = AutoSlugField(populate_from=unidecode('title'),
                          unique=True, primary_key=True, editable=False)
     title = models.CharField(max_length=200)
     video_url = models.CharField(max_length=200)
