@@ -63,6 +63,10 @@ If you use PyCharm, go to File -> Settings -> Project: Cooknomics -> Project Int
 ```
 psycopg2
 autoslug
+django-tinymce
+coverage
+requests
+Sphinx
 ```
 
 Clone the repo:
@@ -86,7 +90,7 @@ DATABASES = {
 }
 ```
 
-Also, let Django know about any apps used in the project, e.g:
+Also, let Django know about any apps used in the project. For now it's:
 
 ```Python
 INSTALLED_APPS = [
@@ -97,7 +101,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'videos',
-    'news'
+    'news',
+    'tinymce',
+    'coverage'
 ]
 ```
 
@@ -113,8 +119,48 @@ Finish by telling Django to create or modify tables in your PostreSQL database:
 python manage.py migrate
 ```
 
+### Testing
 
-### Docs (in Polish):
+##### How to write tests
+
+Use coverage to determine what parts of your code are still not tested:
+```
+coverage run manage.py test -v 2
+coverage html
+```
+
+Create or modify a specific file in app/tests folder.
+If you've created a file, modify \_\_init.py\_\_ accordingly.
+
+##### How to run tests
+
+First, add this code to your setting.py file in order to use SQLite for testing, which is much faster:
+
+```Python
+import sys
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {'ENGINE': 'django.db.backends.sqlite3'}
+    }
+
+    PASSWORD_HASHERS = (
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+        'django.contrib.auth.hashers.SHA1PasswordHasher',
+    )
+```
+
+Now you can run coverage inside your virtualenv:
+```
+coverage run manage.py test appname -v 2
+```
+
+### Documentation
+
+##### Using Sphinx
+
+
+
+### Docs (in Polish)
 
 1. [Specyfikacja ogólna](https://docs.google.com/document/d/1n9y66y2N_7tTQVqIJG90byW1PNnvo9r_IjUtjLXqby0/edit?usp=sharing)
 2. [Usecase'y](https://docs.google.com/document/d/1VePjd6CFBpNj6oXDiueuRqSyV8FtM03lg1_Le045E1U/edit)

@@ -3,14 +3,15 @@ from django.utils import timezone
 from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
+from tinymce.models import HTMLField
 
 
 class Article(models.Model):
     slug = AutoSlugField(populate_from='title', editable=False, primary_key=True)
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
-    content = models.TextField()
-    published_date = models.DateTimeField()
+    content = HTMLField()
+    published_date = models.DateTimeField(default=timezone.now)
     up_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     down_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
