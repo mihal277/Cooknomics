@@ -4,10 +4,12 @@ from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from tinymce.models import HTMLField
+import unidecode
+from unidecode import unidecode
 
 
 class Article(models.Model):
-    slug = AutoSlugField(populate_from='title', editable=False, primary_key=True)
+    slug = AutoSlugField(populate_from=unidecode('title'), editable=False, primary_key=True)
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
     content = HTMLField()
