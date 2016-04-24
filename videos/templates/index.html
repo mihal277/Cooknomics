@@ -10,19 +10,42 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 </head>
+<!--<body style = "background-image: url({% static 'videos/desk_shade.png' %}); background-size: cover">-->
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-default">
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav" id="pad-left">
-                <li><a href="#">Cooknomics</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" id="pad-right">
-                <li><a href="http://127.0.0.1:8000/videos/">Videos</a></li>
-                <li id="funny"><a href="http://127.0.0.1:8000">News</a></li>
-            </ul>
+    <div class="container">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav" id="pad-left">
+                    <li><a href="#">Cooknomics</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" id="pad-right">
+                    <li><a href="http://127.0.0.1:8000/videos/">Videos</a></li>
+                    <li id="funny"><a href="http://127.0.0.1:8000">News</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <header class="intro-header" style="background-image: url({% static 'videos/desk_shade.png' %})">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <img src={% static 'videos/logobiale.png' %}>
+                        <span class="subheading">Simple meals for everyone</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </nav>
-    <img src="{% static 'videos/Logo.jpg' %}"/>
-    <img src="{% static 'videos/Logo.jpg' %}"/>
+    </header>
+    <div class="video">
+        <h2 class="title"> Sample title</h2>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/ExVtrghW5Y4" frameborder="0"></iframe>
+        <p class = "description"> Sample description</p>
+    </div>
+    <div class="video">
+        <h2 class="title"> Sample title</h2>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/ExVtrghW5Y4" frameborder="0"></iframe>
+        <p class = "description"> Sample description</p>
+    </div>
 </body>
 </html>
