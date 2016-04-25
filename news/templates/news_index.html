@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cooknomics</title>
+    <title>Cooknomics - Videos</title>
     <!-- Little icon -->
     <link rel="icon" href="{% static 'Logo2.png' %}">
     <!-- Custom CSS-->
@@ -27,6 +27,7 @@
                     <li id="funny"><a href="http://127.0.0.1:8000">News</a></li>
                     <li id="funny"><a href="#">Partners</a></li>
                     <li id="funny"><a href="#">Recipes</a></li>
+
                 </ul>
             </div>
         </nav>
@@ -44,12 +45,21 @@
             </div>
         </div>
     </header>
-    <div class="video">
-        <h2 class="title"> {{ article.title }}</h2>
-    </div>
-    <a href="http://127.0.0.1:8000/news"><button class="more btn-md btn-primary">Back</button></a>
+
+    {% if by_date %}
+        {% for article in by_date %}
+        <div class="video">
+            <a href="http://127.0.0.1:8000/news/{{ article.slug }}/"><h2 class="title"> {{ article.title }}</h2></a>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <h4> No articles :/</h4>
+    {% endif %}
+    <br>
+    <br>
+    <button class="more btn-md btn-primary">More</button>
     <footer>
-            <div class="container">
+        <div class="container">
             <a href="https://www.facebook.com/Cooknomics">
                 <span class="fa-stack fa-2x">
                     <i class="fa fa-circle fa-stack-2x"></i>

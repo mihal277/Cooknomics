@@ -14,7 +14,7 @@ def news_list(request):
         'by_date': articles_sorted_by_date,
     }
 
-    return render(request, 'news/news_list.html', context)
+    return render(request, 'news_index.html', context)
 
 
 def article(request, article_slug):
@@ -40,7 +40,7 @@ def article(request, article_slug):
         'session_vote_state': vote_state,
     }
 
-    return render(request, 'news/article.html', context)
+    return render(request, 'news_detail.html', context)
 
 @require_POST
 def vote(request):
