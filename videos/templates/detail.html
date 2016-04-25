@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cooknomics - Videos</title>
+    <title>Cooknomics</title>
     <!-- Little icon -->
     <link rel="icon" href="{% static 'Logo2.png' %}">
     <!-- Custom CSS-->
@@ -42,30 +42,21 @@
             </div>
         </div>
     </header>
-
-    {% if videos %}
-        {% for video in videos %}
-        <div class="video">
-            <a href="http://127.0.0.1:8000/video/{{ video.slug }}/"><h2 class="title"> {{ video.title }}</h2></a>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
-            <div class="video_buttons row">
-                <button>
-                    <i class="fa fa-thumbs-up fa-lg"></i> {{ video.up_votes }}
-                </button>
-                <button>
-                    <i class="fa fa-thumbs-down fa-lg"></i> {{  video.down_votes }}
-                </button>
-            </div>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <h4> No videos :/</h4>
-    {% endif %}
-    <br>
-    <br>
-    <button class="more btn-md btn-primary">More</button>
+    <div class="video">
+        <h2 class="title"> {{ video.title }}</h2>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
+        <div class="video_buttons row">
+            <button>
+                <i class="fa fa-thumbs-up fa-lg"></i> {{ video.up_votes }}
+            </button>
+            <button>
+                <i class="fa fa-thumbs-down fa-lg"></i> {{  video.down_votes }}
+            </button>
+            <p class="description">{{ video.description }}</p>
+        </div>
+        <a href="http://127.0.0.1:8000/videos"><button class="more btn-md btn-primary">Back</button></a>
     <footer>
-        <div class="container">
+            <div class="container">
             <a href="https://www.facebook.com/Cooknomics">
                 <span class="fa-stack fa-2x">
                     <i class="fa fa-circle fa-stack-2x"></i>
