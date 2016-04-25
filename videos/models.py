@@ -4,7 +4,6 @@ from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from videos.utils import youtube_video_exists
-import unidecode
 from unidecode import unidecode
 
 # === Models for videos app ===
@@ -24,10 +23,14 @@ class Video(models.Model):
     6. **up_votes** - how many people liked the article
     7. **down_votes** - how many people disliked the article
 
-    The Video Class has also two functions:
+    The Video Class has also six functions:
 
     1. **__str__** - returns the name (title) of the video
     2. **clean** - validates the published_date field and the youtube link
+    3. **upvote** - incerements up_votes count
+    4. **downvote** - increments down_vote count
+    5. **cancel_upvote** - decrements up_votes count
+    6. **cancel_downvote** - decrements down_votes count
 
     The Video Class has also a subclass:
 
