@@ -24,5 +24,19 @@ class Article(models.Model):
         if self.published_date > timezone.now():
             raise ValidationError('The date cannot be in the future')
 
+    def upvote(self):
+        self.up_votes += 1
+        self.save()
 
+    def downvote(self):
+        self.down_votes += 1
+        self.save()
+
+    def cancel_upvote(self):
+        self.up_votes -= 1
+        self.save()
+
+    def cancel_downvote(self):
+        self.down_votes -= 1
+        self.save()
 
