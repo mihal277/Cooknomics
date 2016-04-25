@@ -77,7 +77,7 @@ Clone the repo:
 git clone https://github.com/mihal277/Cooknomics.git
 ```
 
-Create a standard settings.py file and change the detabase settings into:
+Create a standard settings.py file and change the database settings into:
 
 ```Python
 DATABASES = {
@@ -106,6 +106,15 @@ INSTALLED_APPS = [
     'news',
     'tinymce',
     'coverage'
+]
+```
+
+Inform Django about your static_files folder. Replace '?' with path to your project folder.
+
+```Python
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+    '?/static_files'
 ]
 ```
 
