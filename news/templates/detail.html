@@ -45,18 +45,9 @@
         </div>
     </header>
     <div class="video">
-        <h2 class="title"> {{ video.title }}</h2>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
-        <div class="video_buttons row">
-            <button>
-                <i class="fa fa-thumbs-up fa-lg"></i> {{ video.up_votes }}
-            </button>
-            <button>
-                <i class="fa fa-thumbs-down fa-lg"></i> {{  video.down_votes }}
-            </button>
-            <p class="description">{{ video.description }}</p>
-        </div>
-        <a href="http://127.0.0.1:8000/videos"><button class="more btn-md btn-primary">Back</button></a>
+        <h2 class="title"> {{ article.title }}</h2>
+    </div>
+    <a href="http://127.0.0.1:8000/news"><button class="more btn-md btn-primary">Back</button></a>
     <footer>
             <div class="container">
             <a href="https://www.facebook.com/Cooknomics">
