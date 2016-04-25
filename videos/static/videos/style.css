@@ -73,12 +73,21 @@ hr {
     border-top: 1px solid #eee;
 }
 
+.subheading {
+    font-size: 24px;
+    line-height: 1.1;
+    display: block;
+    font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-weight: 300;
+    margin-left: 60px;
+}
+
 .video  {
     font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
     font-weight: 800;
     color: black;
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
 }
 
 hr.small {
@@ -88,13 +97,23 @@ hr.small {
     border-color: #fff;
 }
 
-.subheading {
-    font-size: 24px;
-    line-height: 1.1;
-    display: block;
-    font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
-    font-weight: 300;
-    margin-left: 60px;
+.video_buttons {
+    margin-top: 10px;
+}
+
+.fa-thumbs-up {
+    color: green;
+}
+
+.fa-thumbs-down {
+    color: red;
+}
+
+.more {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
 }
 
 footer {

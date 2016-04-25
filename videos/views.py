@@ -1,14 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from models import Video
+from videos.models import Video
 
 
 def videos_list(request):
-    # videos = Video.objects.all()
-    # context = {
-    #     'videos': videos,
-    #
-    return render(request, 'index.html')
+    videos = Video.objects.order_by('title')
+    context = { 'videos': videos }
+    return render(request, 'index.html', context)
 
 
 def single_video(request, video_slug):
