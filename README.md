@@ -5,7 +5,7 @@
 ##### General hints
 
 1. Try to always test every module. Use coverage.
-2. Comment your code. Sphinx will be used to create documentation.
+2. Comment your code. Pycco will be used to create documentation.
 3. Use PEP 8 to maintain good coding style.
 
 
@@ -67,7 +67,7 @@ django-tinymce
 coverage
 requests
 unidecode
-Sphinx
+Pycco
 django-disqus
 ```
 
@@ -167,11 +167,15 @@ coverage run manage.py test appname -v 2
 
 ### Documentation
 
-##### Using Sphinx
+##### Using Pycco
 
+Use:
+```
+pyccoo appname/*.py -p
 
+```
 
-### Docs (in Polish)
+##### Docs (in Polish)
 
 1. [Wizja i specyfikacja ogólna](https://docs.google.com/document/d/1n9y66y2N_7tTQVqIJG90byW1PNnvo9r_IjUtjLXqby0/edit?usp=sharing)
 2. [Usecase'y](https://docs.google.com/document/d/1VePjd6CFBpNj6oXDiueuRqSyV8FtM03lg1_Le045E1U/edit?usp=sharing)

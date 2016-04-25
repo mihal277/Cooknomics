@@ -7,8 +7,29 @@ from tinymce.models import HTMLField
 import unidecode
 from unidecode import unidecode
 
+# === Models for news app ===
+
 
 class Article(models.Model):
+    """
+
+    The Article class defines a single article.
+    Each article has the following fields:
+
+    1. **slug** - primary key and URL of the article
+    2. **title** - title of the article
+    3. **author** - author of the article
+    4. **content** - content of the article
+    5. **published_date** - when the article was published
+    6. **up_votes** - how many people liked the article
+    7. **down_votes** - how many people disliked the article
+
+    The Article Class has also two functions:
+
+    1. **__str__** - returns the name (title) of the article
+    2. **clean** - validates the published_date field
+
+    """
     slug = AutoSlugField(populate_from=unidecode('title'), editable=False, primary_key=True)
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
