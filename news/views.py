@@ -18,9 +18,10 @@ def news_list(request):
 
 
 def article(request, article_slug):
-    article = get_object_or_404(Article, pk=article_slug)
+    current_article = get_object_or_404(Article, pk=article_slug)
 
-    session_vote_state = request.session.get('vote_state_%s' %article_slug, 'none')
+    session_vote_state = request.session.get(
+        'vote_state_article_%s' % article_slug, 'none')
 
     if session_vote_state == 'upvoted':
         vote_state = 'upvoted'
@@ -31,50 +32,47 @@ def article(request, article_slug):
 
     context = {
         'slug': article_slug,
-        'author': article.author,
-        'title': article.title,
-        'published_date': article.published_date,
-        'content': article.content,
-        'upvotes': article.up_votes,
-        'downvotes': article.down_votes,
+        'author': current_article.author,
+        'title': current_article.title,
+        'published_date': current_article.published_date,
+        'content': current_article.content,
+        'upvotes': current_article.up_votes,
+        'downvotes': current_article.down_votes,
         'session_vote_state': vote_state,
     }
 
     return render(request, 'news_detail.html', context)
 
+
 @require_POST
 def vote(request):
     if request.method == 'POST':
         article_slug = request.POST.get('slug', None)
-        article = get_object_or_404(Article, slug=article_slug)
+        current_article = get_object_or_404(Article, slug=article_slug)
 
-        status = request.session['vote_state_%s' %article_slug]
-
+        status = request.session['vote_state_article_%s' % article_slug]
         request_type = request.POST.get('type', None)
-        print('REQUEST TYPE = %s' %request_type)
 
         if request_type == 'upvote':
-            article.upvote()
+            current_article.upvote()
             if status == 'downvoted':
-                article.cancel_downvote()
-
-            request.session['vote_state_%s' %article_slug] = 'upvoted'
+                current_article.cancel_downvote()
+            request.session['vote_state_article_%s' % article_slug] = 'upvoted'
         elif request_type == 'cancel_upvote':
-            article.cancel_upvote()
-            request.session['vote_state_%s' %article_slug] = 'none'
+            current_article.cancel_upvote()
+            request.session['vote_state_article_%s' % article_slug] = 'none'
         elif request_type == 'downvote':
-            article.downvote()
+            current_article.downvote()
             if status == 'upvoted':
-                article.cancel_upvote()
-
-            request.session['vote_state_%s' %article_slug] = 'downvoted'
+                current_article.cancel_upvote()
+            request.session['vote_state_article_%s' % article_slug] = 'downvoted'
         elif request_type == 'cancel_downvote':
-            article.cancel_downvote()
-            request.session['vote_state_%s' %article_slug] = 'none'
+            current_article.cancel_downvote()
+            request.session['vote_state_article_%s' % article_slug] = 'none'
 
         context = {
-            'upvotes': article.up_votes,
-            'downvotes': article.down_votes,
+            'upvotes': current_article.up_votes,
+            'downvotes': current_article.down_votes,
         }
 
     return HttpResponse(json.dumps(context), content_type='application/json')
