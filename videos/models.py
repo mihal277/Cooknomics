@@ -29,5 +29,3 @@ class Video(models.Model):
 
     class Meta:
         unique_together = ('title', 'published_date', 'video_url')
-
-
