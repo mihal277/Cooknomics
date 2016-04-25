@@ -4,13 +4,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cooknomics</title>
+    <title>Cooknomics - Videos</title>
+    <!-- Little icon -->
     <link rel="icon" href="{% static 'videos/Logo2.png' %}">
+    <!-- Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'videos/style.css' %}">
+    <!-- Custom Fonts-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <!-- jQuery Core -->
+    <script src="{% static 'videos/jquery-2.2.3.min.js' %}"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'videos/myJs.js' %}"></script>
 </head>
-<!--<body style = "background-image: url({% static 'videos/desk_shade.png' %}); background-size: cover">-->
 <body>
     <div class="container">
         <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
@@ -25,6 +32,7 @@
             </div>
         </nav>
     </div>
+
     <header class="intro-header" style="background-image: url({% static 'videos/desk_shade.png' %})">
         <div class="container">
             <div class="row">
@@ -37,15 +45,23 @@
             </div>
         </div>
     </header>
+
     <div class="video">
         <h2 class="title"> Sample title</h2>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/ExVtrghW5Y4" frameborder="0"></iframe>
         <p class = "description"> Sample description</p>
     </div>
-    <div class="video">
-        <h2 class="title"> Sample title</h2>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/ExVtrghW5Y4" frameborder="0"></iframe>
-        <p class = "description"> Sample description</p>
-    </div>
+
+    <footer>
+        <div class="container">
+            <a href="https://www.facebook.com/Cooknomics">
+                <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+            <p class="copyright text-muted">Copyright © Cooknomics 2016</p>
+        </div>
+    </footer>
 </body>
 </html>
