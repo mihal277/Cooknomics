@@ -113,8 +113,7 @@ Inform Django about your static_files folder. Replace '?' with path to your proj
 
 ```Python
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '?/static_files'
+    os.path.join(BASE_DIR, "static_files")
 ]
 ```
 
