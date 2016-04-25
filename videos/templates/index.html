@@ -4,27 +4,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cooknomics</title>
+    <title>Cooknomics - Videos</title>
+    <!-- Little icon -->
     <link rel="icon" href="{% static 'videos/Logo2.png' %}">
+    <!-- Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'videos/style.css' %}">
+    <!-- Custom Fonts-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 </head>
 <body>
-<p> asd</p>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav" id="pad-left">
-                <li><a href="#">Cooknomics</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" id="pad-right">
-                <li><a href="http://127.0.0.1:8000/videos/">Videos</a></li>
-                <li><a href="http://127.0.0.1:8000">News</a></li>
-            </ul>
+    <div class="container">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav" id="pad-left">
+                    <li><a href="#">Cooknomics</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" id="pad-right">
+                    <li><a href="http://127.0.0.1:8000/videos/">Videos</a></li>
+                    <li id="funny"><a href="http://127.0.0.1:8000">News</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <header class="intro-header" style="background-image: url({% static 'videos/desk_shade.png' %})">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <img src={% static 'videos/logobiale.png' %}>
+                        <span class="subheading">Simple meals for everyone</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </nav>
-    <img src="{% static 'videos/Logo.jpg' %}"/>
-    <img src="{% static 'videos/Logo.jpg' %}"/>
-    <img src="{% static 'videos/Logo.jpg' %}"/>
+    </header>
+
+    <div class="video">
+        <h2 class="title"> Sample title</h2>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/ExVtrghW5Y4" frameborder="0"></iframe>
+        <p class = "description"> Sample description</p>
+    </div>
+
+    <footer>
+        <div class="container">
+            <a href="https://www.facebook.com/Cooknomics">
+                <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+            <p class="copyright text-muted">Copyright © Cooknomics 2016</p>
+        </div>
+    </footer>
 </body>
 </html>
