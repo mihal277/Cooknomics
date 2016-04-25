@@ -52,5 +52,21 @@ class Video(models.Model):
         if not youtube_video_exists(self.video_url):
             raise ValidationError('Video doesn\'t exist')
 
+    def upvote(self):
+        self.up_votes += 1
+        self.save()
+
+    def downvote(self):
+        self.down_votes += 1
+        self.save()
+
+    def cancel_upvote(self):
+        self.up_votes -= 1
+        self.save()
+
+    def cancel_downvote(self):
+        self.down_votes -= 1
+        self.save()
+
     class Meta:
         unique_together = ('title', 'published_date', 'video_url')
