@@ -68,6 +68,7 @@ coverage
 requests
 unidecode
 Sphinx
+django-disqus
 ```
 
 Clone the repo:
