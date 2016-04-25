@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cooknomics - Videos</title>
+    <title>Cooknomics</title>
     <!-- Little icon -->
     <link rel="icon" href="{% static 'Logo2.png' %}">
     <!-- Custom CSS-->
@@ -27,7 +27,6 @@
                     <li id="funny"><a href="http://127.0.0.1:8000">News</a></li>
                     <li id="funny"><a href="#">Partners</a></li>
                     <li id="funny"><a href="#">Recipes</a></li>
-
                 </ul>
             </div>
         </nav>
@@ -46,20 +45,16 @@
         </div>
     </header>
 
-    {% if news %}
-        {% for article in news %}
-        <div class="video">
-            <a href="http://127.0.0.1:8000/video/{{ article.slug }}/"><h2 class="title"> {{ article.title }}</h2></a>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <h4> No videos :/</h4>
-    {% endif %}
-    <br>
-    <br>
-    <button class="more btn-md btn-primary">More</button>
+    <div class="article">
+        <h2 class="title"> {{ title }}</h2>
+        <h3 class="author"> {{ author }}</h3>
+        <h4 class="fcontent"> {{ content }}</h4>
+
+    </div>
+    <a href="http://127.0.0.1:8000/news"><button class="more btn-md btn-primary">Back</button></a>
+
     <footer>
-        <div class="container">
+            <div class="container">
             <a href="https://www.facebook.com/Cooknomics">
                 <span class="fa-stack fa-2x">
                     <i class="fa fa-circle fa-stack-2x"></i>
