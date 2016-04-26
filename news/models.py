@@ -4,7 +4,6 @@ from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from tinymce.models import HTMLField
-import unidecode
 from unidecode import unidecode
 
 # === Models for news app ===
@@ -24,10 +23,14 @@ class Article(models.Model):
     6. **up_votes** - how many people liked the article
     7. **down_votes** - how many people disliked the article
 
-    The Article Class has also two functions:
+    The Article Class has also six functions:
 
     1. **__str__** - returns the name (title) of the article
-    2. **clean** - validates the published_date field
+    2. **clean** - validates the published_date fiel3
+    3. **upvote** - incerements up_votes count
+    4. **downvote** - increments down_vote count
+    5. **cancel_upvote** - decrements up_votes count
+    6. **cancel_downvote** - decrements down_votes count
 
     """
     slug = AutoSlugField(populate_from=unidecode('title'), editable=False, primary_key=True)
@@ -60,4 +63,3 @@ class Article(models.Model):
     def cancel_downvote(self):
         self.down_votes -= 1
         self.save()
-
