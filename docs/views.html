@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>views.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>views.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">videos.models</span> <span class="kn">import</span> <span class="n">Video</span>
+<span class="kn">from</span> <span class="nn">django.views.decorators.http</span> <span class="kn">import</span> <span class="n">require_POST</span>
+<span class="kn">import</span> <span class="nn">json</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h3><span id="views-for-video-app" href="views-for-video-app"> Views for video app </span></h3>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>Generates site containing list of videos sorted by title.
+Adds a <strong><em>vote_state</em></strong> field to every video object passed
+to template that contains information about whether user already
+upvoted or downvoted the video. Style of like button objects
+depend on this parameter.</p>
+<p>:param request: HttpRequest passed by browser
+:return: html rendered from apropriate template</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">videos_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">videos</span> <span class="o">=</span> <span class="n">Video</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">video</span> <span class="ow">in</span> <span class="n">videos</span><span class="p">:</span>
+        <span class="n">video</span><span class="o">.</span><span class="n">vote_state</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;vote_state_video_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">video</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">)</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;videos&#39;</span><span class="p">:</span> <span class="n">videos</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>TODO</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">single_video</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">video_slug</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s2">&quot;Video:&quot;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>Generates JSON response to a POST request sent after user up(down)votes
+a video. Part of AJAX interface.
+Requires following parameters to be passed:
+<strong><em>slug</em></strong> - videos slug
+<strong><em>type</em></strong> - type of request, possible choices:
+            upvote - increase up_vote count
+            cancel_upvote - decrease up_vote count
+            downvote - increase down_vote count
+            cancel_downvote - decreast down_vote count
+Returns JSON file containing:
+<strong><em>upvotes</em></strong> - up_vote count of given video
+<strong><em>downvotes</em></strong> - down_vote count of given video</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@require_POST</span>
+<span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">video_slug</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;slug&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">current_video</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Video</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">video_slug</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vote_state_article_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">video_slug</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">)</span>
+        <span class="n">request_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s1">&#39;upvote&#39;</span><span class="p">:</span>
+            <span class="n">current_video</span><span class="o">.</span><span class="n">upvote</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;downvoted&#39;</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p>If the video was already downvoted, downvote count
+has to be decreased.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                <span class="n">current_video</span><span class="o">.</span><span class="n">cancel_downvote</span><span class="p">()</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_article_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">video_slug</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;upvoted&#39;</span>
+        <span class="k">elif</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s1">&#39;cancel_upvote&#39;</span><span class="p">:</span>
+            <span class="n">current_video</span><span class="o">.</span><span class="n">cancel_upvote</span><span class="p">()</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_article_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">video_slug</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+        <span class="k">elif</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s1">&#39;downvote&#39;</span><span class="p">:</span>
+            <span class="n">current_video</span><span class="o">.</span><span class="n">downvote</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;upvoted&#39;</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>If the news was already upvoted, upvote count
+has to be decreased.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                <span class="n">current_video</span><span class="o">.</span><span class="n">cancel_upvote</span><span class="p">()</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_article_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">video_slug</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;downvoted&#39;</span>
+        <span class="k">elif</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s1">&#39;cancel_downvote&#39;</span><span class="p">:</span>
+            <span class="n">current_video</span><span class="o">.</span><span class="n">cancel_downvote</span><span class="p">()</span>
+            <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_article_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">video_slug</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;upvotes&#39;</span><span class="p">:</span> <span class="n">current_video</span><span class="o">.</span><span class="n">up_votes</span><span class="p">,</span>
+            <span class="s1">&#39;downvotes&#39;</span><span class="p">:</span> <span class="n">current_video</span><span class="o">.</span><span class="n">down_votes</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
