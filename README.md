@@ -164,6 +164,15 @@ Now you can run coverage inside your virtualenv:
 coverage run manage.py test appname -v 2
 ```
 
+### Fixture
+There is a smiple database fixture included in Cooknomics/fixtures directory. In order to load it into your database:
+In PyCharm press alt+r (ctrl+alt+r if you're not on OSX) and type the following into your manage.py console:
+(manage.py) loaddata fixtures/fixture.json
+
+If you want to create fixture from your own database, type into your manage.py console:
+(manage.py) dumpdata --natural-foreign --natural-primary --format=json -o fixtures/fixture_name.json
+
+
 ### Documentation
 
 ##### Using Pycco
