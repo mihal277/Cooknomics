@@ -1,7 +1,10 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from videos.models import Video
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
+from django.core.paginator import Paginator, InvalidPage
+from django.core.urlresolvers import reverse
+from django.forms.models import model_to_dict
 import json
 
 # === Views for video app ===
@@ -17,27 +20,70 @@ def videos_list(request):
     depend on this parameter.
 
     :param request: HttpRequest passed by browser
-    :return: html rendered from apropriate template
+    :return: html rendered from appropriate template
     """
+    videos = Video.objects.all().order_by('published_date')
 
-    videos = Video.objects.order_by('title')
-
-    for video in videos:
-        video.vote_state = request.session.get(
-            'vote_state_video_%s' % video.slug, 'none')
+    paginator = Paginator(videos, 1)
+    page = paginator.page(1)
 
     context = {
-        'videos': videos
+        'page': page,
     }
 
-    return render(request, 'index.html', context)
+    return render(request, 'video_index.html', context)
+
+
+@require_GET
+def video_page(request):
+    """
+    View to generate updates to videos list when user scrolls down the page.
+
+    Returns page_number-th page as JSON.
+    """
+    page_number = request.GET.get('page', None)
+
+    if page_number is None:
+        raise Http404
+
+    videos = Video.objects.all().order_by('published_date')
+    paginator = Paginator(videos, 1)
+
+    try:
+        page = paginator.page(page_number)
+    except InvalidPage:
+        raise Http404
+
+    page_data = {'objects': {}}
+
+    for video in page.object_list:
+        page_data['objects'][video.slug] = \
+            model_to_dict(video, exclude='published_date')
+        page_data['objects'][video.slug]['published_date'] = \
+            video.published_date.timestamp()
+        page_data['objects'][video.slug]['url'] = \
+            reverse('videos:single_video', kwargs={'video_slug': video.slug})
+
+    page_data['has_next'] = page.has_next()
+
+    context = {
+        "page": page_data
+    }
+
+    return HttpResponse(json.dumps(context), content_type='application/json')
 
 
 def single_video(request, video_slug):
     """
     TODO
     """
-    return HttpResponse("Video:")
+    video = get_object_or_404(Video, pk=video_slug)
+
+    context = {
+        'video': video
+    }
+
+    return render(request, 'video_detail.html', context)
 
 
 @require_POST

@@ -1,8 +1,12 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
-from django.views.decorators.http import require_POST
+from django.http import HttpResponse, Http404
+from django.views.decorators.http import require_POST, require_GET
+from django.core.paginator import Paginator, InvalidPage
+from django.core.urlresolvers import reverse
+from django.forms.models import model_to_dict
 import json
 from .models import Article
+
 
 # === Views for news app ===
 
@@ -10,24 +14,65 @@ from .models import Article
 def news_list(request):
     """
 
-    Generates site containing list of articles sorted by title.
+    Generates site containing first page of news list sorted by published_date.
     """
-    articles_sorted_by_title = Article.objects.all().order_by('title')
-    articles_sorted_by_date = Article.objects.all().order_by('published_date')
+    articles = Article.objects.all().order_by('published_date')
+
+    paginator = Paginator(articles, 20)
+    page = paginator.page(1)
 
     context = {
-        'by_title': articles_sorted_by_title,
-        'by_date': articles_sorted_by_date,
+        'page': page,
     }
 
     return render(request, 'news_index.html', context)
+
+
+@require_GET
+def news_page(request):
+    """
+    View to generate updates to news list when user scrolls down the page.
+
+    Returns page_number-th page as JSON.
+    """
+    page_number = request.GET.get('page', None)
+
+    if page_number is None:
+        raise Http404
+
+    articles = Article.objects.all().order_by('published_date')
+
+    paginator = Paginator(articles, 20)
+
+    try:
+        page = paginator.page(page_number)
+    except InvalidPage:
+        raise Http404
+
+    page_data = {'objects': {}}
+
+    for news in page.object_list:
+        page_data['objects'][news.slug] = \
+            model_to_dict(news, exclude='published_date')
+        page_data['objects'][news.slug]['published_date'] = \
+            news.published_date.timestamp()
+        page_data['objects'][news.slug]['url'] = \
+            reverse('news:article', kwargs={'article_slug': news.slug})
+
+    page_data['has_next'] = page.has_next()
+
+    context = {
+        "page": page_data
+    }
+
+    return HttpResponse(json.dumps(context), content_type='application/json')
 
 
 def article(request, article_slug):
     """
 
     Generates site of a given article. Style of elements (i.e. upvote
-    and downvote buttons) depents on whether the user already up(down)voted
+    and downvote buttons) depends on whether the user already up(down)voted
     the article.
 
     """

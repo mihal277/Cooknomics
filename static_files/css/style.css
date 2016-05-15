@@ -1,7 +1,9 @@
-{% load staticfiles %}
-
 img {
     width: 100%;
+}
+
+li {
+    list-style-type: none;
 }
 
 #pad-left {
@@ -94,8 +96,7 @@ hr {
 hr.small {
     max-width: 100px;
     margin: 15px auto;
-    border-width: 4px;
-    border-color: #fff;
+    border: 4px #fff;
 }
 
 .video_buttons {
@@ -111,10 +112,7 @@ hr.small {
 }
 
 .more {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5%;
-    margin-bottom: 5%;
+    margin: 5% auto;
 }
 
 footer {
@@ -133,7 +131,10 @@ footer {
     margin-right: auto;
     max-width: 700px;
     font-style: italic;
-    font-family: "Droid Serif", "DejaVu Serif", "STIX", serif;
+    font-family: 'Amatic SC', cursive;
     font-weight: 200;
 }
 
+.article {
+    font-family: 'Amatic SC', cursive;
+}
