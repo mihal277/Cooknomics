@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Cooknomics - Videos</title>
     <!-- Little icon -->
-    <link rel="icon" href="{% static 'Logo2.png' %}">
+    <link rel="icon" href="{% static 'img/Logo2.png' %}">
     <!-- Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{% static 'videos/style.css' %}">
     <!-- Custom Fonts-->
@@ -19,6 +19,16 @@
     <link href='https://fonts.googleapis.com/css?family=Life+Savers' rel='stylesheet' type='text/css'>
     <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+    <!-- Script that gets new pages -->
+    <script type="application/javascript">
+        var pageNumber = {{ page.number }};
+        var hasNextPage = {{ page.has_next|lower }};
+        var url = '{% url 'videos:page' %}';
+    </script>
+    <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
+    <script type="application/javascript" src="{% static 'videos/js/scripts.js' %}" ></script>
+
     <!-- Vote button click POST for AJAJ request -->
     <script>
         function post_vote() {
@@ -75,12 +85,12 @@
         </nav>
     </div>
 
-    <header class="intro-header" style="background-image: url({% static 'desk_shade.png' %})">
+    <header class="intro-header" style="background-image: url({% static 'img/desk_shade.png' %})">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <img src={% static 'logobiale.png' %}>
+                        <img src={% static 'img/logobiale.png' %}>
                         <span class="subheading">Simple meals for everyone</span>
                     </div>
                 </div>
@@ -88,40 +98,50 @@
         </div>
     </header>
 
-    {% if videos %}
-        {% for video in videos %}
-        <div class="video">
-            <a href="{% url 'videos:single_video' video.slug %}"><h2 class="title"> {{ video.title }}</h2></a>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
-            <div class="video_buttons row">
-                <button class="upvote-button" name="{{ video.slug }}" id="upbtn_{{ video.slug }}"
-                    {% if video.vote_state == 'upvoted' %}
-                        data-on-click-action = "cancel_upvote"
-                    {% else %}
-                        data-on-click-action = "upvote"
-                    {% endif %}
-                >
-                    <i class="fa fa-thumbs-up fa-lg"></i>
-                    <section id="upvote_count_{{ video.slug }}">{{ video.up_votes }}</section>
-                </button>
+{#    {% if videos %}#}
+{#        {% for video in videos %}#}
+{#        <div class="video">#}
+{#            <a href="{% url 'videos:single_video' video.slug %}"><h2 class="title"> {{ video.title }}</h2></a>#}
+{#            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>#}
+{#            <div class="video_buttons row">#}
+{#                <button class="upvote-button" name="{{ video.slug }}" id="upbtn_{{ video.slug }}"#}
+{#                    {% if video.vote_state == 'upvoted' %}#}
+{#                        data-on-click-action = "cancel_upvote"#}
+{#                    {% else %}#}
+{#                        data-on-click-action = "upvote"#}
+{#                    {% endif %}#}
+{#                >#}
+{#                    <i class="fa fa-thumbs-up fa-lg"></i>#}
+{#                    <section id="upvote_count_{{ video.slug }}">{{ video.up_votes }}</section>#}
+{#                </button>#}
+{##}
+{#                <button class="downvote-button" name="{{ video.slug }}" id="dwnbtn_{{ video.slug }}"#}
+{#                    {% if video.vote_state == 'downvoted' %}#}
+{#                        data-on-click-action = "cancel_downvote"#}
+{#                    {% else %}#}
+{#                        data-on-click-action = "downvote"#}
+{#                    {% endif %}#}
+{#                >#}
+{#                    <i class="fa fa-thumbs-down fa-lg"></i>#}
+{#                    <section id="downvote_count_{{ video.slug }}">{{  video.down_votes }}</section>#}
+{#                </button>#}
+{#            </div>#}
+{#            <hr>#}
+{#        {% endfor %}#}
+{#    {% else %}#}
+{#        <h4> No videos :/</h4>#}
+{#    {% endif %}#}
+{#        </div>#}
 
-                <button class="downvote-button" name="{{ video.slug }}" id="dwnbtn_{{ video.slug }}"
-                    {% if video.vote_state == 'downvoted' %}
-                        data-on-click-action = "cancel_downvote"
-                    {% else %}
-                        data-on-click-action = "downvote"
-                    {% endif %}
-                >
-                    <i class="fa fa-thumbs-down fa-lg"></i>
-                    <section id="downvote_count_{{ video.slug }}">{{  video.down_votes }}</section>
-                </button>
-            </div>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <h4> No videos :/</h4>
-    {% endif %}
-        </div>
+    <main>
+        <ul class="video">
+            {% for video in page %}
+                <a href="{% url 'videos:single_video' video.slug %}"><h2 class="title"> {{ video.title }}</h2></a>
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
+            {% endfor %}
+            <div id="videolist-anchor"></div>
+        </ul>
+    </main>
     <br>
     <br>
     <button class="more btn-md btn-primary">More</button>
