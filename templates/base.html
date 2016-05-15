@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+    <title>{% block title %}Cooknomics{% endblock %}</title>
+    <!-- Little icon -->
+    <link rel="icon" href="{% static 'img/Logo2.png' %}">
+    <!-- Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <!-- Custom Fonts-->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <!-- More Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Loved+by+the+King' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Life+Savers' rel='stylesheet' type='text/css'>
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+
+    {% block scripts %}
+    {% endblock scripts %}
+
+    {% block extra_head %}
+    {% endblock extra_head %}
+
+
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav" id="pad-left">
+                    <li><a href="#">Cooknomics</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" id="pad-right">
+                    <li id="funny"><a href="{% url 'news:news_list' %}">News</a></li>
+                    <li><a href="{% url 'videos:videos_list' %}">Videos</a></li>
+                    <li id="funny"><a href="#">Recipes</a></li>
+                    <li id="funny"><a href="#">Partners</a></li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <header class="intro-header" style="background-image: url({% static 'img/desk_shade.png' %})">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="site-heading">
+                        <img src={% static 'img/logobiale.png' %}>
+                        <span class="subheading">Simple meals for everyone</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock content %}
+
+    <br>
+    <br>
+{#    <button class="more btn-md btn-primary">More</button>#}
+    <footer>
+        <div class="container">
+            <a href="https://www.facebook.com/Cooknomics">
+                <span class="fa-stack fa-2x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                </span>
+            </a>
+            <p class="copyright text-muted">Copyright © Cooknomics 2016</p>
+        </div>
+    </footer>
+</body>
+</html>

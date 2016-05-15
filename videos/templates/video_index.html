@@ -1,25 +1,11 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Cooknomics - Videos</title>
-    <!-- Little icon -->
-    <link rel="icon" href="{% static 'img/Logo2.png' %}">
-    <!-- Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="{% static 'videos/style.css' %}">
-    <!-- Custom Fonts-->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <!-- More Fonts -->
-    <link href='https://fonts.googleapis.com/css?family=Loved+by+the+King' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Life+Savers' rel='stylesheet' type='text/css'>
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+{% block title %}
+    Cooknomics - Video
+{% endblock title %}
 
+{% block scripts %}
     <!-- Script that gets new pages -->
     <script type="application/javascript">
         var pageNumber = {{ page.number }};
@@ -28,133 +14,21 @@
     </script>
     <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
     <script type="application/javascript" src="{% static 'videos/js/scripts.js' %}" ></script>
+{% endblock %}
 
-    <!-- Vote button click POST for AJAJ request -->
-    <script>
-        function post_vote() {
-            var action = $(this).data('on-click-action');
-            var slug = $(this).attr('name');
-
-            var post_data = {
-                'slug': slug,
-                'type': action,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            };
-
-            $.post('{% url 'videos:vote' %}', post_data, function(response) {
-                    $('#upvote_count_' + slug).html(response.upvotes);
-                    $('#downvote_count_' + slug).html(response.downvotes);
-                }, 'json');
-
-            if (action == 'upvote') {
-                $(this).data('on-click-action', 'cancel_upvote');
-                $('#dwnbtn_' + slug).data('on-click-action', 'downvote');
-            } else if (action == 'cancel_upvote') {
-                $(this).data('on-click-action', 'upvote');
-            } else if (action == 'downvote') {
-                $(this).data('on-click-action', 'cancel_downvote');
-                $('#upbtn_' + slug).data('on-click-action', 'upvote');
-            } else if (action == 'cancel_downvote') {
-                $(this).data('on-click-action', 'downvote');
-            }
-        }
-    </script>
-    <!-- Event listeners for upvote and downvote buttons -->
-    <script>
-        $( document ).ready(function() {
-            $(".upvote-button, .downvote-button").on("click", post_vote)
-        });
-    </script>
-
-</head>
-<body>
-    <div class="container">
-        <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav" id="pad-left">
-                    <li><a href="#">Cooknomics</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right" id="pad-right">
-                    <li><a href="{% url 'videos:videos_list' %}">Videos</a></li>
-                    <li id="funny"><a href="{% url 'news:news_list' %}">News</a></li>
-                    <li id="funny"><a href="#">Partners</a></li>
-                    <li id="funny"><a href="#">Recipes</a></li>
-
-                </ul>
-            </div>
-        </nav>
-    </div>
-
-    <header class="intro-header" style="background-image: url({% static 'img/desk_shade.png' %})">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="site-heading">
-                        <img src={% static 'img/logobiale.png' %}>
-                        <span class="subheading">Simple meals for everyone</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-{#    {% if videos %}#}
-{#        {% for video in videos %}#}
-{#        <div class="video">#}
-{#            <a href="{% url 'videos:single_video' video.slug %}"><h2 class="title"> {{ video.title }}</h2></a>#}
-{#            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>#}
-{#            <div class="video_buttons row">#}
-{#                <button class="upvote-button" name="{{ video.slug }}" id="upbtn_{{ video.slug }}"#}
-{#                    {% if video.vote_state == 'upvoted' %}#}
-{#                        data-on-click-action = "cancel_upvote"#}
-{#                    {% else %}#}
-{#                        data-on-click-action = "upvote"#}
-{#                    {% endif %}#}
-{#                >#}
-{#                    <i class="fa fa-thumbs-up fa-lg"></i>#}
-{#                    <section id="upvote_count_{{ video.slug }}">{{ video.up_votes }}</section>#}
-{#                </button>#}
-{##}
-{#                <button class="downvote-button" name="{{ video.slug }}" id="dwnbtn_{{ video.slug }}"#}
-{#                    {% if video.vote_state == 'downvoted' %}#}
-{#                        data-on-click-action = "cancel_downvote"#}
-{#                    {% else %}#}
-{#                        data-on-click-action = "downvote"#}
-{#                    {% endif %}#}
-{#                >#}
-{#                    <i class="fa fa-thumbs-down fa-lg"></i>#}
-{#                    <section id="downvote_count_{{ video.slug }}">{{  video.down_votes }}</section>#}
-{#                </button>#}
-{#            </div>#}
-{#            <hr>#}
-{#        {% endfor %}#}
-{#    {% else %}#}
-{#        <h4> No videos :/</h4>#}
-{#    {% endif %}#}
-{#        </div>#}
-
+{% block content %}
     <main>
         <ul class="video">
             {% for video in page %}
-                <a href="{% url 'videos:single_video' video.slug %}"><h2 class="title"> {{ video.title }}</h2></a>
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
+                <a href="{% url 'videos:single_video' video.slug %}">
+                    <h2 class="title"> {{ video.title }}</h2>
+                </a>
+                <iframe width="560" height="315"
+                        src="https://www.youtube.com/embed/{{ video.video_url }}"
+                        frameborder="0" allowfullscreen>
+                </iframe>
             {% endfor %}
             <div id="videolist-anchor"></div>
         </ul>
     </main>
-    <br>
-    <br>
-    <button class="more btn-md btn-primary">More</button>
-    <footer>
-        <div class="container">
-            <a href="https://www.facebook.com/Cooknomics">
-                <span class="fa-stack fa-2x">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                </span>
-            </a>
-            <p class="copyright text-muted">Copyright © Cooknomics 2016</p>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock content %}

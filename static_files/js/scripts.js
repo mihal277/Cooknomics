@@ -25,7 +25,6 @@ function loadPage() {
     .done(function(data) {
         hasNextPage = data.page.has_next;
         var newPage = data.page.objects;
-
         appendElements(newPage);
 
         $(window).on('scroll', loadPageOnScroll)

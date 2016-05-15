@@ -62,7 +62,7 @@ def video_page(request):
         page_data['objects'][video.slug]['published_date'] = \
             video.published_date.timestamp()
         page_data['objects'][video.slug]['url'] = \
-            reverse('news:article', kwargs={'article_slug': video.slug})
+            reverse('videos:single_video', kwargs={'video_slug': video.slug})
 
     page_data['has_next'] = page.has_next()
 
@@ -77,7 +77,13 @@ def single_video(request, video_slug):
     """
     TODO
     """
-    return HttpResponse("Video:")
+    video = get_object_or_404(Video, pk=video_slug)
+
+    context = {
+        'video': video
+    }
+
+    return render(request, 'video_detail.html', context)
 
 
 @require_POST
