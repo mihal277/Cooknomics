@@ -165,12 +165,18 @@ coverage run manage.py test appname -v 2
 ```
 
 ### Fixture
-There is a smiple database fixture included in Cooknomics/fixtures directory. In order to load it into your database:
-In PyCharm press alt+r (ctrl+alt+r if you're not on OSX) and type the following into your manage.py console:
-(manage.py) loaddata fixtures/fixture.json
+There is a smiple database fixture included in Cooknomics/fixtures directory.
 
-If you want to create fixture from your own database, type into your manage.py console:
+#### Loading fixture into database
+In PyCharm press alt+r (ctrl+alt+r if you're not on OSX) and type the following into your manage.py console:
+```
+(manage.py) loaddata fixtures/fixture.json
+```
+
+#### Creating fixture from your own database
+```
 (manage.py) dumpdata --natural-foreign --natural-primary --format=json -o fixtures/fixture_name.json
+```
 
 
 ### Documentation
