@@ -138,3 +138,8 @@ footer {
 .article {
     font-family: 'Amatic SC', cursive;
 }
+
+#disqus_thread {
+    width: 80%;
+    margin: 0 auto;
+}
