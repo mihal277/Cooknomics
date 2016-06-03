@@ -14,21 +14,91 @@
     </script>
     <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
     <script type="application/javascript" src="{% static 'recipes/js/scripts.js' %}" ></script>
-{% endblock %}
+
+    <script type="application/javascript">
+        $(document).ready(function() {
+            var $productList = $('#ingredient-selecter');
+
+            $.ajax({
+                type:  'GET',
+                url: '{% url 'recipes:get_items' %}'
+            })
+            .done(function(data) {
+                $.each(data, function(index, parameter) {
+                    $.each(parameter, function(name, value) {
+                        $productList.append('<option value="' + value + '">' + name + '</option>');
+                    });
+                })
+            })
+            .error(function(jqXHR) {
+                console.log("AJAX error: " + jqXHR.status);
+            });
+
+            $("#search-button").click(function() {
+                var selectedItems = $productList.val();
+                var $errorMessage = $('#error-message');
+
+                if (selectedItems == null) {
+                    $errorMessage.text("Nie wybrano żadnego produktu.");
+                    $errorMessage.show();
+                    return;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url 'recipes:process_items' %}',
+                    data: JSON.stringify(selectedItems),
+                    dataType: 'json',
+                    encode: true
+                })
+                .done(function(data) {
+                    $errorMessage.hide();
+                    console.log("Successful request.");
+                    var newPage = data.page.objects;
+                    jQuery("#initial_list").html('');
+                    appendElements(newPage);
+                })
+                .error(function(jqXHR) {
+                    $errorMessage.text("Bład serwera: " + jqXHR.status);
+                    $errorMessage.show();
+                    console.log("AJAX error: " + jqXHR.status)
+                })
+            })
+        });
+    </script>
+{% endblock scripts %}
 
 {%  block app_title %}
 <span class="app_title">RECIPES</span>
 {% endblock app_title %}
 
 {% block content %}
+    <div id="search-container">
+        <span id="error-message" style="display: none; color: red;"></span>
+        </br>
+        <select id="ingredient-selecter" class="selectpicker"
+                multiple data-live-search="true"
+                data-selected-text-format="count > 3"
+                title="Wybierz składnik"
+        >
+            <option value="testowy_skladnik">TestowySkladnik</option>
+        </select>
+        <button id="search-button" class="btn btn-default"
+                style="padding-top: 6px; padding-bottom: 6px"
+                type="button"
+        >
+        Wyszukaj
+        </button>
+    </div>
     <main>
         <ul id="recipe">
-            {% for recipe in page %}
-                <li><a href="{% url 'recipes:recipe' recipe.slug %}"><h2 class="title">{{ recipe.title }}</h2></a></li>
-                <li><img src={{ recipe.image_url }} style="max-height:315px;width:auto;"></li>
-            {% endfor %}
+            <div id="initial_list">
+                {% for recipe in page %}
+                    <li><a href="{% url 'recipes:recipe' recipe.slug %}"><h2 class="title">{{ recipe.title }}</h2></a></li>
+                    <li><img src={{ recipe.image_url }} style="max-height:315px;width:auto;"></li>
+                {% endfor %}
+            </div>
             <div id="recipelist-anchor"></div>
         </ul>
     </main>
 {% endblock content %}
-

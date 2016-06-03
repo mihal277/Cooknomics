@@ -8,6 +8,10 @@
 {% block content %}
     <main>
         <div>
+            <h2>Składniki</h2>
+            {% for ingredient in ingredients %}
+                <h2>{{ ingredient }}</h2>
+            {% endfor %}
             <h2 class="title"> {{ title }}</h2>
             <h3 class="author"> {{ author }}</h3>
             <img src={{ image_url }} style="max-height:315px;width:auto;">

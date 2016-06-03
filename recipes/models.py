@@ -103,7 +103,7 @@ class IngredientRecipe(models.Model):
     amount = models.FloatField(default=0, verbose_name="Ilość składnika (x100 gramów lub x100 mililitrów")
 
     def __str__(self):
-        return self.ingredient + " -> " + self.recipe + "x" + self.amount
+        return str(self.ingredient) + " -> " + str(self.recipe) + "x" + str(self.amount)
 
     def clean(self):
         if self.amount <= 0:
