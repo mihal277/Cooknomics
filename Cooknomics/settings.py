@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'videos',
     'news',
+    'recipes',
     'tinymce'
 ]
 
@@ -54,6 +55,9 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'Cooknomics.urls'
+
+MEDIA_ROOT = '/Users/michalgraczykowski/Desktop/IO/Cooknomics/media/'
+MEDIA_URL='/media/'
 
 TEMPLATES = [
     {
@@ -125,6 +129,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/Users/michalgraczykowski/Desktop/IO/Cooknomics/media/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/

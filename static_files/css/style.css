@@ -85,12 +85,33 @@ hr {
     margin-left: 60px;
 }
 
+.app_title {
+    font-size: 50px;
+    line-height: 1.1;
+    display: block;
+    font-family: 'Amatic SC', cursive;
+    font-weight: 300;
+    margin-left: 60px;
+}
+
 .video  {
     font-family: 'Life Savers', cursive;
     font-weight: 800;
     color: black;
     text-align: center;
     margin-bottom: 60px;
+}
+
+.recipe  {
+    font-family: 'Life Savers', cursive;
+    font-weight: 800;
+    color: black;
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.recipe_image {
+    max-height: 315px;
 }
 
 hr.small {

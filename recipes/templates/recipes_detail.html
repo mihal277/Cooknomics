@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block content %}
+    <main>
+        <div>
+            <h2 class="title"> {{ title }}</h2>
+            <h3 class="author"> {{ author }}</h3>
+            <img src={{ image_url }} style="max-height:315px;width:auto;">
+            <h4 class="fcontent"> {{ content|safe }}</h4>
+        </div>
+        <div>
+            <a href="{% url 'recipes:recipes_list' %}">
+                <button class="more btn-md btn-primary">Back</button>
+            </a>
+        </div>
+    </main>
+{% endblock content %}

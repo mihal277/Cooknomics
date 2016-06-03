@@ -69,6 +69,7 @@ requests
 unidecode
 Pycco
 django-disqus
+Pillow
 ```
 
 Clone the repo:
