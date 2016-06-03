@@ -18,7 +18,6 @@
                 data-selected-text-format="count > 3"
                 title="Wybierz składnik"
         >
-            <option value="Pomidory">Pomidory</option>
         </select>
         <button id="search-button" class="btn btn-default"
                 style="padding-top: 6px; padding-bottom: 6px"
@@ -27,15 +26,17 @@
         Wyszukaj
         </button>
     </div>
+
     <main>
-        <ul id="recipe">
-            <div id="initial_list">
-                {% for recipe in page %}
-                    <li><a href="{% url 'recipes:recipe' recipe.slug %}"><h2 class="title">{{ recipe.title }}</h2></a></li>
-                    <li><img src={{ recipe.image_url }} style="max-height:315px;width:auto;"></li>
-                {% endfor %}
-            </div>
-            <div id="recipelist-anchor"></div>
+        <ul class="element-list">
+            {% for recipe in page %}
+                <li>
+                    <a href="{% url 'recipes:recipe' recipe.slug %}">
+                        <h2 class="title">{{ recipe.title }}</h2>
+                    </a>
+                    <img src='{{ recipe.image.url }}' style="max-height:315px;width:auto;">
+                </li>
+            {% endfor %}
         </ul>
     </main>
 {% endblock content %}
@@ -52,6 +53,8 @@
 
     <script type="application/javascript">
         $(document).ready(function() {
+
+            /* Fill product select list */
             var $productList = $('#ingredient-selecter');
 
             $.ajax({
@@ -69,13 +72,16 @@
                 console.log("AJAX error: " + jqXHR.status);
             });
 
+
+            /* Add search button onlick listener */
             $("#search-button").click(function() {
                 var selectedItems = $productList.val();
                 var $errorMessage = $('#error-message');
+                var $initalList = $(".element-list");
+
                 if (selectedItems != null) {
-                    jQuery("#initial_list").html('');
-                    document.getElementById("recipelist-anchor").innerHTML = "";
-                } else {
+                    $initalList.empty();
+                } else { /* TODO: ZAMIAST TEGO WYCIAGNIJ LISTE WSZYSTKICH */
                     $errorMessage.text("Nie wybrano żadnego składnika.");
                     $errorMessage.show();
                     return;
@@ -84,13 +90,15 @@
                 $.ajax({
                     type: 'GET',
                     url: '{% url 'recipes:process_items' %}',
-                    data: JSON.stringify(selectedItems),
+{#                    data: JSON.stringify(selectedItems),#}
+                    data: {},
                     dataType: 'json',
                     encode: true
                 })
                 .done(function(data) {
                     $errorMessage.hide();
                     console.log("Successful request.");
+
                     var newPage = data.page.objects;
                     appendElements(newPage);
                 })

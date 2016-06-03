@@ -65,8 +65,7 @@ class Recipe(models.Model):
     author = models.CharField(max_length=200)
     content = HTMLField()
     published_date = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(default='/Users/michalgraczykowski/Desktop/funny.jpg', upload_to='/Users/michalgraczykowski/Desktop/IO/Cooknomics/media/')
-    image_url = models.CharField(max_length=400, editable=False, default='')
+    image = models.ImageField(default='images/BNN.jpg', upload_to='images/')
 
     def __str__(self):
         return self.title

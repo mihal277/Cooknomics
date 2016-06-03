@@ -20,7 +20,9 @@ def recipes_list(request):
     """
     recipes = Recipe.objects.all().order_by('published_date')
     recipe = recipes[0]
-    print(recipe.image.url)
+
+    # prawidlowy sposob zbierania URLa - object.image.url
+    print("path2: " + recipe.image.url)
 
     paginator = Paginator(recipes, 20)
     page = paginator.page(1)
@@ -96,7 +98,7 @@ def recipe(request, recipe_slug):
         'title': current_recipe.title,
         'published_date': current_recipe.published_date,
         'content': current_recipe.content,
-        'image_url': current_recipe.image_url,
+        'image_url': current_recipe.image.url,
         'ingredients': ingredients_list,
         'price': price
     }
@@ -109,7 +111,7 @@ def recipe(request, recipe_slug):
 def get_items(request):
     items = Ingredient.objects.all().order_by('name')
 
-    # te video wzialem jako przyklad, powinny byc elementy nazwa: primary_key
+    # return list of {item.name: item.pk}
     context = []
     for item in items:
         context.append({item.name: item.pk})
@@ -119,28 +121,33 @@ def get_items(request):
 
 @require_GET
 def process_items(request):
-    # sprawdz czy dane nie sa puste
+    # If GET data is empty, assume no filters and return list of all recipes
     if not request.GET:
-        return HttpResponse(status=400)
+        recipes = Recipe.objects.all()
+    else:
+        # filter the recipes
+        # recipes =
+        pass
 
-    #narazie nie filtruje
+    #narazie nie filtrujex
     recipes = Recipe.objects.all()
     #recipes = []
 
+    # If there are no recipes, return empty data <- POPRAWIC ZEBY MOZE JAKIES INFO WYPISYWALO (BRAK PRZEPISOW~)
     if len(recipes) == 0:
         return HttpResponse(json.dumps({}), content_type='application/json')
 
     page_data = {'objects': {}}
 
-    for recipe in recipes:
-        page_data['objects'][recipe.slug] = \
+    for r in recipes:
+        page_data['objects'][r.slug] = \
             model_to_dict(recipe, exclude=['published_date', 'image'])
-        page_data['objects'][recipe.slug]['image_url'] = \
-            recipe.image_url
-        page_data['objects'][recipe.slug]['published_date'] = \
+        page_data['objects'][r.slug]['image_url'] = \
+            recipe.image.url
+        page_data['objects'][r.slug]['published_date'] = \
             recipe.published_date.timestamp()
-        page_data['objects'][recipe.slug]['url'] = \
-            reverse('recipes:recipe', kwargs={'recipe_slug': recipe.slug})
+        page_data['objects'][r.slug]['url'] = \
+            reverse('recipes:recipe', kwargs={'recipe_slug': r.slug})
 
     context = {
         "page": page_data

@@ -22,17 +22,18 @@
 
 {% block content %}
     <main>
-        <ul class="video">
+        <ul class="element-list">
             {% for video in page %}
-                <a href="{% url 'videos:single_video' video.slug %}">
+                <li>
+                    <a href="{% url 'videos:single_video' video.slug %}">
                     <h2 class="title"> {{ video.title }}</h2>
-                </a>
-                <iframe width="560" height="315"
+                    </a>
+                    <iframe width="560" height="315"
                         src="https://www.youtube.com/embed/{{ video.video_url }}"
                         frameborder="0" allowfullscreen>
-                </iframe>
+                    </iframe>
+                </li>
             {% endfor %}
-            <div id="videolist-anchor"></div>
         </ul>
     </main>
 {% endblock content %}

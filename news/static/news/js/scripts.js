@@ -1,8 +1,13 @@
 function appendElements(newData) {
     var newElementsHtml = [];
     $.each(newData, function(element, data) {
-        newElementsHtml.push('<li><a href="' + data.url + '"><h2 class="title">' + data.title + '</h2></a></li>');
+        var htmlString = '<li>';
+
+        htmlString += '<a href="' + data.url + '">';
+        htmlString += '<h2 class="title">' + data.title + '</h2>';
+        htmlString += '</li>';
+
+        newElementsHtml.push(htmlString);
     });
-    console.log(newElementsHtml);
-    $("#newslist-anchor").before(newElementsHtml.join(""));
+    $(".element-list").append(newElementsHtml.join(""));
 }

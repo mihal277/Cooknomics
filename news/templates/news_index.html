@@ -22,11 +22,14 @@
 
 {% block content %}
     <main>
-        <ul class="newslist">
+        <ul class="element-list">
             {% for article in page %}
-                <li><a href="{% url 'news:article' article.slug %}"><h2 class="title">{{ article.title }}</h2></a></li>
+                <li>
+                    <a href="{% url 'news:article' article.slug %}">
+                        <h2 class="title">{{ article.title }}</h2>
+                    </a>
+                </li>
             {% endfor %}
-            <div id="newslist-anchor"></div>
         </ul>
     </main>
 {% endblock content %}
