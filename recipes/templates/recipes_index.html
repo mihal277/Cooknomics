@@ -5,6 +5,41 @@
     Cooknomics - Recipes
 {% endblock title %}
 
+{%  block app_title %}
+<span class="app_title">RECIPES</span>
+{% endblock app_title %}
+
+{% block content %}
+    <div id="search-container">
+        <span id="error-message" style="display: none; color: red;"></span>
+        </br>
+        <select id="ingredient-selecter" class="selectpicker"
+                multiple data-live-search="true"
+                data-selected-text-format="count > 3"
+                title="Wybierz składnik"
+        >
+            <option value="Pomidory">Pomidory</option>
+        </select>
+        <button id="search-button" class="btn btn-default"
+                style="padding-top: 6px; padding-bottom: 6px"
+                type="button"
+        >
+        Wyszukaj
+        </button>
+    </div>
+    <main>
+        <ul id="recipe">
+            <div id="initial_list">
+                {% for recipe in page %}
+                    <li><a href="{% url 'recipes:recipe' recipe.slug %}"><h2 class="title">{{ recipe.title }}</h2></a></li>
+                    <li><img src={{ recipe.image_url }} style="max-height:315px;width:auto;"></li>
+                {% endfor %}
+            </div>
+            <div id="recipelist-anchor"></div>
+        </ul>
+    </main>
+{% endblock content %}
+
 {% block scripts %}
     <!-- Script that gets new pages -->
     <script type="application/javascript">
@@ -37,9 +72,11 @@
             $("#search-button").click(function() {
                 var selectedItems = $productList.val();
                 var $errorMessage = $('#error-message');
-
-                if (selectedItems == null) {
-                    $errorMessage.text("Nie wybrano żadnego produktu.");
+                if (selectedItems != null) {
+                    jQuery("#initial_list").html('');
+                    document.getElementById("recipelist-anchor").innerHTML = "";
+                } else {
+                    $errorMessage.text("Nie wybrano żadnego składnika.");
                     $errorMessage.show();
                     return;
                 }
@@ -55,7 +92,6 @@
                     $errorMessage.hide();
                     console.log("Successful request.");
                     var newPage = data.page.objects;
-                    jQuery("#initial_list").html('');
                     appendElements(newPage);
                 })
                 .error(function(jqXHR) {
@@ -67,38 +103,3 @@
         });
     </script>
 {% endblock scripts %}
-
-{%  block app_title %}
-<span class="app_title">RECIPES</span>
-{% endblock app_title %}
-
-{% block content %}
-    <div id="search-container">
-        <span id="error-message" style="display: none; color: red;"></span>
-        </br>
-        <select id="ingredient-selecter" class="selectpicker"
-                multiple data-live-search="true"
-                data-selected-text-format="count > 3"
-                title="Wybierz składnik"
-        >
-            <option value="testowy_skladnik">TestowySkladnik</option>
-        </select>
-        <button id="search-button" class="btn btn-default"
-                style="padding-top: 6px; padding-bottom: 6px"
-                type="button"
-        >
-        Wyszukaj
-        </button>
-    </div>
-    <main>
-        <ul id="recipe">
-            <div id="initial_list">
-                {% for recipe in page %}
-                    <li><a href="{% url 'recipes:recipe' recipe.slug %}"><h2 class="title">{{ recipe.title }}</h2></a></li>
-                    <li><img src={{ recipe.image_url }} style="max-height:315px;width:auto;"></li>
-                {% endfor %}
-            </div>
-            <div id="recipelist-anchor"></div>
-        </ul>
-    </main>
-{% endblock content %}

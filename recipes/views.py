@@ -83,8 +83,10 @@ def recipe(request, recipe_slug):
 
     ingredients_list = []
 
+    price = 0
     for ingredient in ingredients:
-        ingredients_list.append(str(ingredient.ingredient))
+        ingredients_list.append(str(ingredient.ingredient) + " - " + str(ingredient.amount_name))
+        price += ingredient.ingredient.price * ingredient.amount
 
     print(ingredients_list)
 
@@ -95,7 +97,8 @@ def recipe(request, recipe_slug):
         'published_date': current_recipe.published_date,
         'content': current_recipe.content,
         'image_url': current_recipe.image_url,
-        'ingredients': ingredients_list
+        'ingredients': ingredients_list,
+        'price': price
     }
 
     return render(request, 'recipes_detail.html', context)
@@ -120,26 +123,16 @@ def process_items(request):
     if not request.GET:
         return HttpResponse(status=400)
 
-    # kazdy element to primary_key elementu
-    for element in request.GET:
-        print(element)
-
-    page_number = 1
-
-    if page_number is None:
-        raise Http404
-
+    #narazie nie filtruje
     recipes = Recipe.objects.all()
-    paginator = Paginator(recipes, 2)
+    #recipes = []
 
-    try:
-        page = paginator.page(page_number)
-    except InvalidPage:
-        raise Http404
+    if len(recipes) == 0:
+        return HttpResponse(json.dumps({}), content_type='application/json')
 
     page_data = {'objects': {}}
 
-    for recipe in page.object_list:
+    for recipe in recipes:
         page_data['objects'][recipe.slug] = \
             model_to_dict(recipe, exclude=['published_date', 'image'])
         page_data['objects'][recipe.slug]['image_url'] = \
@@ -148,8 +141,6 @@ def process_items(request):
             recipe.published_date.timestamp()
         page_data['objects'][recipe.slug]['url'] = \
             reverse('recipes:recipe', kwargs={'recipe_slug': recipe.slug})
-
-    page_data['has_next'] = page.has_next()
 
     context = {
         "page": page_data

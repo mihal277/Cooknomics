@@ -14,7 +14,7 @@ class Ingredient(models.Model):
     Each ingredient has the following fields:
 
     1. **name** - name of the ingredient
-    2. **price** - price of the ingredient for 100 grams or 100 mililitres
+    2. **price** - price of the ingredient for 1kg or 1l
 
     The Ingredient Class has also two functions:
 
@@ -23,7 +23,7 @@ class Ingredient(models.Model):
 
     """
     name = models.CharField(max_length=200, primary_key=True, verbose_name="Nazwa składnika")
-    price = models.FloatField(default=0, verbose_name="Cena w PLN za 100 gram lub 100 mililitrów")
+    price = models.FloatField(default=0, verbose_name="Cena w PLN za 1kg lub 1l")
 
     def __str__(self):
         return self.name
@@ -32,8 +32,8 @@ class Ingredient(models.Model):
         if self.name == '':
             raise ValidationError('The ingredient name should not be empty')
 
-        if self.price <= 0:
-            raise ValidationError('The price should be > 0')
+        if self.price < 0:
+            raise ValidationError('The price should be >= 0')
 
     class Meta:
         verbose_name = "Składnik"
@@ -100,14 +100,15 @@ class IngredientRecipe(models.Model):
 
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, verbose_name="Składnik")
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Przepis")
-    amount = models.FloatField(default=0, verbose_name="Ilość składnika (x100 gramów lub x100 mililitrów")
+    amount = models.FloatField(default=0, verbose_name="Ilość składnika (kilogramów lub litrów)")
+    amount_name = models.CharField(max_length=200, default="", verbose_name="Nazwa ilosci, np. 1 szklanka, 2 łyżeczki")
 
     def __str__(self):
-        return str(self.ingredient) + " -> " + str(self.recipe) + "x" + str(self.amount)
+        return str(self.ingredient) + " -> " + str(self.recipe) + " x " + str(self.amount)
 
     def clean(self):
-        if self.amount <= 0:
-            raise ValidationError('Amount should be > 0')
+        if self.amount < 0:
+            raise ValidationError('Amount should be >= 0')
 
     class Meta:
         verbose_name = "Składnik do przepisu"
