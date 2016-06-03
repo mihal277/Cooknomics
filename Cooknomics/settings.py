@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'videos',
     'news',
     'partners',
-    'tinymce'
+    'tinymce',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -129,6 +130,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
