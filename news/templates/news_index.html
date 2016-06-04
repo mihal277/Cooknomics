@@ -11,6 +11,7 @@
         var pageNumber = {{ page.number }};
         var hasNextPage = {{ page.has_next|lower }};
         var url = '{% url 'news:page' %}';
+        var dataDict = null;
     </script>
     <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
     <script type="application/javascript" src="{% static 'news/js/scripts.js' %}" ></script>

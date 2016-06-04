@@ -7,6 +7,7 @@ from unidecode import unidecode
 
 # === Models for recipes app ===
 
+
 class Ingredient(models.Model):
     """
 
@@ -66,6 +67,7 @@ class Recipe(models.Model):
     content = HTMLField()
     published_date = models.DateTimeField(default=timezone.now)
     image = models.ImageField(default='images/BNN.jpg', upload_to='images/')
+    ingredients = models.ManyToManyField(Ingredient, through='IngredientDetails')
 
     def __str__(self):
         return self.title
@@ -80,7 +82,7 @@ class Recipe(models.Model):
         verbose_name_plural = "Przepisy"
 
 
-class IngredientRecipe(models.Model):
+class IngredientDetails(models.Model):
     """
 
         The IngredientRecipe class defines ingredients used in recipe
@@ -110,8 +112,7 @@ class IngredientRecipe(models.Model):
             raise ValidationError('Amount should be >= 0')
 
     class Meta:
-        verbose_name = "Składnik do przepisu"
-        verbose_name_plural = "Składniki do przepisów"
-        unique_together = (('ingredient', 'recipe'),)
+        verbose_name = "Dodatkowe dane składnika"
+        verbose_name_plural = "Dodatkowe dane składników"
 
 

@@ -6,6 +6,12 @@ li {
     list-style-type: none;
 }
 
+.centered-error-msg {
+    font-size: 25px;
+    padding-top: 100px;
+    margin: 0 auto;
+}
+
 #pad-left {
     padding-left: 20px;
 }
