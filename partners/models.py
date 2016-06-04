@@ -27,7 +27,7 @@ class Partner(models.Model):
     """
     name = models.CharField(max_length=50)
     url = models.CharField(max_length=100, blank=True)
-    image = ThumbnailerImageField(upload_to="partners", resize_source=dict(size=(300, 300), sharpen=True),
+    image = ThumbnailerImageField(upload_to="partners/", resize_source=dict(size=(300, 300), sharpen=True),
                                   blank=True)
 
     def __str__(self):

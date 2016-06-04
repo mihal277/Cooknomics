@@ -14,10 +14,21 @@
     <link href='https://fonts.googleapis.com/css?family=Loved+by+the+King' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Amatic+SC' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Life+Savers' rel='stylesheet' type='text/css'>
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <!-- jQuery -->
+    {# jQuery #}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    {# BOOTSTRAP #}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+    <!-- (Optional) Latest compiled and minified JavaScript translation files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/i18n/defaults-*.min.js"></script>
 
     {% block scripts %}
     {% endblock scripts %}
@@ -37,9 +48,8 @@
                 <ul class="nav navbar-nav navbar-right" id="pad-right">
                     <li id="funny"><a href="{% url 'news:news_list' %}">News</a></li>
                     <li><a href="{% url 'videos:videos_list' %}">Videos</a></li>
-                    <li id="funny"><a href="#">Recipes</a></li>
+                    <li><a href="{% url 'recipes:recipes_list' %}">Recipes</a></li>
                     <li id="funny"><a href="{% url 'partners:partners_list' %}">Partners</a></li>
-
                 </ul>
             </div>
         </nav>
@@ -52,6 +62,9 @@
                     <div class="site-heading">
                         <img src={% static 'img/logobiale.png' %}>
                         <span class="subheading">Simple meals for everyone</span>
+                        <br>
+                        {%  block app_title %}
+                        {% endblock app_title %}
                     </div>
                 </div>
             </div>

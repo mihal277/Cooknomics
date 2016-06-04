@@ -8,6 +8,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,9 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'videos',
     'news',
+    'recipes',
     'partners',
-    'tinymce',
     'easy_thumbnails',
+    'tinymce'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -53,6 +55,9 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'Cooknomics.urls'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
+MEDIA_URL = 'media/uploads/'
 
 TEMPLATES = [
     {
@@ -80,7 +85,6 @@ DATABASES = {
     }
 }
 
-import sys
 if 'test' in sys.argv:
     DATABASES = {
         'default': {'ENGINE': 'django.db.backends.sqlite3'}
@@ -124,14 +128,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static_files"),

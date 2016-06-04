@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Cooknomics - Recipes
+{% endblock title %}
+
+{%  block app_title %}
+<span class="app_title">RECIPES</span>
+{% endblock app_title %}
+
+{% block scripts %}
+    <!-- Script that gets new pages -->
+    <script type="application/javascript">
+        var pageNumber = {{ page.number }};
+        var hasNextPage = {{ page.has_next|lower }};
+        var url = '{% url 'recipes:page' %}';
+        var dataDict = null;
+    </script>
+    <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
+    <script type="application/javascript" src="{% static 'recipes/js/scripts.js' %}" ></script>
+    <script type="application/javascript">
+        {# Add event listener to search button click #}
+        $(document).ready(function() {
+            $('#search-button').click(function() {
+                var $errorMsg = $('#error-message');
+                var $productList = $('#ingredient-selecter');
+                var selectedItems = $productList.val();
+                var $initalList = $('.element-list');
+
+                $errorMsg.hide();
+                $initalList.empty();
+                if (selectedItems == null) {
+                    /* If no items selected ask for all recipes */
+                    url = '{% url 'recipes:page' %}';
+                    dataDict = null;
+                } else {
+                    /* If some items selected ask for filtered recipes */
+                    url = '{% url 'recipes:get_recipes' %}';
+
+                    /* Create dict to send to server (its easier to process then) */
+                    var selectedItemsDict = {};
+                    var selectedItemsLength = selectedItems.length;
+                    for (var i = 0; i < selectedItemsLength; ++i) {
+                        selectedItemsDict[selectedItems[i]] = '';
+                    }
+                    dataDict = selectedItemsDict;
+                }
+
+                /* 0, cause loadPage does pageNumber++ */
+                pageNumber = 0;
+                hasNextPage = true;
+
+                loadPage(function(errorStatus) {
+                    var $errorMsg = $('#error-message');
+
+                    if (errorStatus == 404) {
+                        $errorMsg.text("Nie znaleziono żadnych przepisów.");
+                        $errorMsg.css('display', 'table');
+                    }
+                })
+            });
+        });
+
+        {# Fill product select list #}
+        $(document).ready(function() {
+            var $productList = $('#ingredient-selecter');
+
+            $.ajax({
+                type:  'GET',
+                url: '{% url 'recipes:get_ingredients' %}'
+            })
+            .done(function(data) {
+                console.log(data);
+                $.each(data, function(index, parameter) {
+                    $.each(parameter, function(name, value) {
+                        $productList.append('<option value="' + value + '">' + name + '</option>');
+                    });
+                })
+            })
+            .error(function(jqXHR) {
+                console.log("AJAX error: " + jqXHR.status);
+            });
+        })
+    </script>
+{% endblock scripts %}
+
+
+{% block content %}
+    <div id="search-container">
+        <select id="ingredient-selecter" class="selectpicker"
+                multiple data-live-search="true"
+                data-selected-text-format="count > 3"
+                title="Wybierz składnik"
+        >
+        </select>
+        <button id="search-button" class="btn btn-default"
+                style="padding-top: 6px; padding-bottom: 6px"
+                type="button"
+        >
+        Wyszukaj
+        </button>
+    </div>
+
+    <main>
+        <span id="error-message" class="centered-error-msg " style="display: none;"></span>
+        <ul class="element-list">
+            {% for recipe in page %}
+                <li>
+                    <a href="{% url 'recipes:recipe' recipe.slug %}">
+                        <h2 class="title">{{ recipe.title }}</h2>
+                    </a>
+                    <img src='{{ recipe.image.url }}' class="center">
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+{% endblock content %}

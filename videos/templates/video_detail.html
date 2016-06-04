@@ -5,6 +5,60 @@
     {{ video.title }}
 {% endblock title %}
 
+{# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#}
+{# SKRYPTY DO WYSZUKIWANIA DLA MAJKELA #}
+{% block scripts %}
+    <script type="application/javascript">
+        $(document).ready(function() {
+            var $productList = $('#product-selecter');
+
+            $.ajax({
+                type:  'GET',
+                url: '{% url 'videos:get_items' %}'
+            })
+            .done(function(data) {
+                $.each(data, function(index, parameter) {
+                    $.each(parameter, function(name, value) {
+                        $productList.append('<option value="' + value + '">' + name + '</option>');
+                    });
+                })
+            })
+            .error(function(jqXHR) {
+                console.log("AJAX error: " + jqXHR.status);
+            });
+
+            $("#search-button").click(function() {
+                var selectedItems = $productList.val();
+                var $errorMessage = $('#error-message');
+
+                if (selectedItems == null) {
+                    $errorMessage.text("Nie wybrano żadnego produktu.");
+                    $errorMessage.show();
+                    return;
+                }
+
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url 'videos:process_items' %}',
+                    data: JSON.stringify(selectedItems),
+                    dataType: 'json',
+                    encode: true
+                })
+                .done(function(data) {
+                    $errorMessage.hide();
+                    console.log("Successful request.");
+                })
+                .error(function(jqXHR) {
+                    $errorMessage.text("Bład serwera: " + jqXHR.status);
+                    $errorMessage.show();
+                    console.log("AJAX error: " + jqXHR.status)
+                })
+            })
+
+        });
+    </script>
+{% endblock scripts %}
+
 {% block content %}
     <main>
         <div>
@@ -30,4 +84,23 @@
             </a>
         </div>
     </main>
+
+{# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#}
+{# ELEMENTY DO WYSZUKIWANIA DLA MAJKELA #}
+    <div id="search-container">
+        <span id="error-message" style="display: none; color: red;"></span>
+        </br>
+        <select id="product-selecter" class="selectpicker"
+                multiple data-live-search="true"
+                data-selected-text-format="count > 3"
+                title="Wybierz składnik"
+        >
+        </select>
+        <button id="search-button" class="btn btn-default"
+                style="padding-top: 6px; padding-bottom: 6px"
+                type="button"
+        >
+        Wyszukaj
+        </button>
+    </div>
 {% endblock content %}
