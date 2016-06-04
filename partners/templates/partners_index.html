@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    Cooknomics - Partners
+{% endblock title %}
+
+{% block content %}
+    <main>
+        <ul class="element-list">
+            {% for partner in partners %}
+                <li>
+                {% if partner.url %}
+                    <a href="{{ partner.url }}">
+                {% endif %}
+                {% if partner.image %}
+                    <img src="{{ partner.image.url }}" class="center">
+                {% else %}
+                    <h2 class="title">{{ partner.name }}</h2>
+                {% endif %}
+                {% if partner.url %}
+                    </a>
+                {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+{% endblock content %}

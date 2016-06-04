@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^videos/', include('videos.urls')),
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^news/', include('news.urls')),
+    url(r'^partners/', include('partners.urls')),
     url(r'^recipes/', include('recipes.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

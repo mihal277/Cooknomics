@@ -69,8 +69,9 @@ requests
 unidecode
 Pycco
 django-disqus
+easy_thumbnails
 Pillow
-```
+
 
 Clone the repo:
 
@@ -106,7 +107,8 @@ INSTALLED_APPS = [
     'videos',
     'news',
     'tinymce',
-    'coverage'
+    'coverage',
+    'easy_thumbnails'
 ]
 ```
 

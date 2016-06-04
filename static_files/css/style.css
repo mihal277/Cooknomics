@@ -158,6 +158,11 @@ footer {
     font-family: 'Amatic SC', cursive;
 }
 
+img.center {
+    max-height:315px;
+    width:auto;
+}
+
 #disqus_thread {
     width: 80%;
     margin: 0 auto;

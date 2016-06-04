@@ -22,7 +22,7 @@ def recipes_list(request):
 
     # prawidlowy sposob zbierania URLa - object.image.url
     # recipe = recipes[0]
-    # print("path2: " + recipe.image.url)
+    # print("path: " + recipe.image.url)
 
     paginator = Paginator(recipes, NUMBER_OF_ELEMENTS_ON_PAGE)
     page = paginator.page(1)

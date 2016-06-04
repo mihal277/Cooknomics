@@ -110,7 +110,7 @@
                     <a href="{% url 'recipes:recipe' recipe.slug %}">
                         <h2 class="title">{{ recipe.title }}</h2>
                     </a>
-                    <img src='{{ recipe.image.url }}' style="max-height:315px;width:auto;">
+                    <img src='{{ recipe.image.url }}' class="center">
                 </li>
             {% endfor %}
         </ul>
