@@ -7,6 +7,23 @@
 
 {% block content %}
     <main>
-
+        <ul class="newslist">
+            {% for partner in partners %}
+                <li>
+                {% if partner.url %}
+                    <a href="{{ partner.url }}">
+                {% endif %}
+                {% if partner.image %}
+                    <img src="{{ partner.image.url }}" class="center">
+                {% else %}
+                    <h2 class="title">{{ partner.name }}</h2>
+                {% endif %}
+                {% if partner.url %}
+                    </a>
+                {% endif %}
+                </li>
+            {% endfor %}
+            <div id="newslist-anchor"></div>
+        </ul>
     </main>
 {% endblock content %}

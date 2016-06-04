@@ -138,3 +138,10 @@ footer {
 .article {
     font-family: 'Amatic SC', cursive;
 }
+
+img.center {
+    max-height: 300px;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+}

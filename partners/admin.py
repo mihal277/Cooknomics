@@ -1,21 +1,17 @@
 from django.contrib import admin
-from .models import Partner, Image
-
-
-class ImageAdmin(admin.ModelAdmin):
-    readonly_fields = ('image_tag',)
-
-
-class ImageInline(admin.StackedInline):
-    model = Image
+from .models import Partner
 
 
 class PartnerAdmin(admin.ModelAdmin):
-    inlines = [ImageInline, ]
+    """
 
+    The Django admin size will display the thumbnails of images.
+
+    """
+    readonly_fields = ('image_tag',)
 
 admin.site.register(Partner, PartnerAdmin)
-admin.site.register(Image, ImageAdmin)
+
 
 
 
