@@ -2,11 +2,12 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, Http404
 from django.views.decorators.http import require_GET
 from django.core.paginator import Paginator
-import json
+from django.core.urlresolvers import reverse
 from .models import Ingredient
 from .models import Recipe
 from .models import IngredientDetails
 from .utils import do_pagination
+import json
 
 
 # === Views for recipes app ===
@@ -36,6 +37,11 @@ def recipes_list(request):
 # widok ktory zwraca AJAXEM liste produktow
 @require_GET
 def get_ingredients(request):
+    """
+
+    :param request: HttpRequest passed by browser.
+    :return: List of all ingredients stored in a database in format {'ingredient.name': ingredient.pk}.
+    """
     items = Ingredient.objects.all().order_by('name')
 
     # return list of {item.name: item.pk}
@@ -97,6 +103,28 @@ def get_recipes(request):
     return HttpResponse(json.dumps(context), content_type='application/json')
 
 
+@require_GET
+def search_recipes(request):
+    """
+
+    :param request: HttpRequest passed by browser. Should contain string to be searched for.
+    :return: List of recipes whose title contains given string. Format: JSON.
+    """
+
+    string_to_find = request.GET.get("term", None)
+
+    if string_to_find is None:
+        return HttpResponse(status=400)
+
+    matching_recipes = Recipe.objects.filter(title__icontains=string_to_find)
+
+    context = {}
+    for r in matching_recipes:
+        context[r.title] = reverse('recipes:recipe', kwargs={'recipe_slug': r.slug})
+
+    return HttpResponse(json.dumps(context), content_type='application/json')
+
+
 def recipe(request, recipe_slug):
     """
 
@@ -127,4 +155,5 @@ def recipe(request, recipe_slug):
     }
 
     return render(request, 'recipes_detail.html', context)
+
 
