@@ -137,31 +137,3 @@ def vote(request):
         }
 
     return HttpResponse(json.dumps(context), content_type='application/json')
-
-
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! #
-####### WIDOKI DO WYSZUKIWANIA DLA MAJKELA ###########
-
-# widok ktory zwraca AJAXEM liste produktow
-@require_GET
-def get_items(request):
-    items = Video.objects.all().order_by('title')
-
-    # te video wzialem jako przyklad, powinny byc elementy nazwa: primary_key
-    context = []
-    for item in items:
-        context.append({item.title: item.pk})
-
-    return HttpResponse(json.dumps(context), content_type='application/json')
-
-@require_GET
-def process_items(request):
-    # sprawdz czy dane nie sa puste
-    if not request.GET:
-        return HttpResponse(status=400)
-
-    # kazdy element to primary_key elementu
-    for element in request.GET:
-        print(element)
-
-    return HttpResponse(json.dumps({}), content_type="application/json")
