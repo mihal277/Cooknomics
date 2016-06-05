@@ -110,6 +110,9 @@ def vote(request):
         status = request.session.get('vote_state_article_%s' % video_slug, 'none')
         request_type = request.POST.get('type', None)
 
+        print("status: " + status)
+        print("request_type = " + request_type)
+
         if request_type == 'upvote':
             current_video.upvote()
             if status == 'downvoted':

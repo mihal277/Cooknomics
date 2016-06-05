@@ -19,26 +19,27 @@
         function post_vote() {
             var action = $(this).data('on-click-action');
             var slug = $(this).attr('name');
-            var post_data = {
-                'slug': slug,
-                'type': action,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
+
+            var postData = {
+                slug: slug,
+                type: action
             };
-            $.post('{% url 'videos:vote' %}', post_data, function(response) {
-                    $('#upvote_count_' + slug).html(response.upvotes);
-                    $('#downvote_count_' + slug).html(response.downvotes);
-                }, 'json');
-            if (action == 'upvote') {
-                $(this).data('on-click-action', 'cancel_upvote');
-                $('#dwnbtn_' + slug).data('on-click-action', 'downvote');
-            } else if (action == 'cancel_upvote') {
-                $(this).data('on-click-action', 'upvote');
-            } else if (action == 'downvote') {
-                $(this).data('on-click-action', 'cancel_downvote');
-                $('#upbtn_' + slug).data('on-click-action', 'upvote');
-            } else if (action == 'cancel_downvote') {
-                $(this).data('on-click-action', 'downvote');
-            }
+
+            $.ajax({
+                type: 'POST',
+                headers     : {'X-CSRFToken': '{{ csrf_token }}'},
+                url: '{%  url 'videos:vote' %}',
+                data: postData,
+                dataType: 'json',
+                encode: 'true'
+            })
+            .done(function(data) {
+                $('#upvote_count_' + slug).html(data.upvotes);
+                $('#downvote_count_' + slug).html(data.downvotes);
+            })
+            .error(function(jqXHR) {
+                console.log(jqXHR.status);
+            })
         }
         <!-- Event listeners for upvote and downvote buttons -->
         $( document ).ready(function() {
@@ -65,22 +66,14 @@
                     </iframe>
                     <div class="video_buttons row">
                         <button class="upvote-button" name="{{ video.slug }}" id="upbtn_{{ video.slug }}"
-                            {% if video.vote_state == 'upvoted' %}
-                                data-on-click-action = "cancel_upvote"
-                            {% else %}
                                 data-on-click-action = "upvote"
-                            {% endif %}
                         >
                             <i class="fa fa-thumbs-up fa-lg"></i>
                             <section id="upvote_count_{{ video.slug }}">{{ video.up_votes }}</section>
                         </button>
 
                         <button class="downvote-button" name="{{ video.slug }}" id="dwnbtn_{{ video.slug }}"
-                            {% if video.vote_state == 'downvoted' %}
-                                data-on-click-action = "cancel_downvote"
-                            {% else %}
                                 data-on-click-action = "downvote"
-                            {% endif %}
                         >
                             <i class="fa fa-thumbs-down fa-lg"></i>
                             <section id="downvote_count_{{ video.slug }}">{{  video.down_votes }}</section>
