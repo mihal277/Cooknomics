@@ -22,8 +22,8 @@ def recipes_list(request):
     recipes = Recipe.objects.all().order_by('published_date')
 
     # prawidlowy sposob zbierania URLa - object.image.url
-    # recipe = recipes[0]
-    # print("path: " + recipe.image.url)
+    recipe = recipes[0]
+    print("path: " + recipe.image.url)
 
     paginator = Paginator(recipes, NUMBER_OF_ELEMENTS_ON_PAGE)
     page = paginator.page(1)
@@ -141,7 +141,7 @@ def recipe(request, recipe_slug):
         ingredients_list.append(str(ingredient.ingredient) + " - " + str(ingredient.amount_name))
         price += ingredient.ingredient.price * ingredient.amount
 
-    print(ingredients_list)
+    print(current_recipe.image.url)
 
     context = {
         'slug': recipe_slug,

@@ -11,6 +11,5 @@ urlpatterns = [
     url(r'^get_recipes$', views.get_recipes, name='get_recipes'),
     url(r'^(?P<recipe_slug>([a-zA-Z0-9-])+)/$', views.recipe, name='recipe'),
     url(r'^search_recipes$', views.search_recipes, name='search_recipes'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
+] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
