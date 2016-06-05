@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from tinymce.models import HTMLField
 from unidecode import unidecode
 
@@ -68,6 +69,8 @@ class Recipe(models.Model):
     published_date = models.DateTimeField(default=timezone.now)
     image = models.ImageField(default='images/BNN.jpg', upload_to='images/')
     ingredients = models.ManyToManyField(Ingredient, through='IngredientDetails')
+    up_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    down_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
     def __str__(self):
         return self.title
@@ -76,6 +79,22 @@ class Recipe(models.Model):
         self.image_url = self.image.url[self.image.url.find('/media/'):]
         if self.published_date > timezone.now():
             raise ValidationError('The date cannot be in the future')
+
+    def upvote(self):
+        self.up_votes += 1
+        self.save()
+
+    def downvote(self):
+        self.down_votes += 1
+        self.save()
+
+    def cancel_upvote(self):
+        self.up_votes -= 1
+        self.save()
+
+    def cancel_downvote(self):
+        self.down_votes -= 1
+        self.save()
 
     class Meta:
         verbose_name = "Przepis"

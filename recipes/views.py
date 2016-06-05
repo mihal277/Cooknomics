@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, Http404
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from .models import Ingredient
@@ -156,4 +156,58 @@ def recipe(request, recipe_slug):
 
     return render(request, 'recipes_detail.html', context)
 
+@require_POST
+def vote(request):
+    """
 
+    Generates JSON response to a POST request sent after user up(down)votes
+    a video. Part of AJAX interface.
+    Requires following parameters to be passed:
+    ***pk*** - recipes database pk
+    ***type*** - type of request, possible choices:
+                upvote - increase up_vote count
+                downvote - increase down_vote count
+    Returns JSON file containing:
+    ***upvotes*** - up_vote count of given video
+    ***downvotes*** - down_vote count of given video
+    """
+    if request.method == 'POST':
+        object_pk = request.POST.get('pk', None)
+        current_object = get_object_or_404(Recipe, pk=object_pk)
+
+        status = request.session.get('vote_state_recipe_%s' % object_pk, 'none')
+        request_type = request.POST.get('type', None)
+
+        # set cookie expiry to 1 year
+        request.session.set_expiry(31556926)
+
+        if request_type == 'upvote':
+            if status == 'none':
+                current_object.upvote()
+                request.session['vote_state_recipe_%s' % object_pk] = 'upvoted'
+            elif status == 'upvoted':
+                current_object.cancel_upvote()
+                request.session['vote_state_recipe_%s' % object_pk] = 'none'
+            elif status == 'downvoted':
+                current_object.upvote()
+                current_object.cancel_downvote()
+                request.session['vote_state_recipe_%s' % object_pk] = 'upvoted'
+        elif request_type == 'downvote':
+            if status == 'none':
+                current_object.downvote()
+                request.session['vote_state_recipe_%s' % object_pk] = 'downvoted'
+            elif status == 'upvoted':
+                current_object.cancel_upvote()
+                current_object.downvote()
+                request.session['vote_state_recipe_%s' % object_pk] = 'downvoted'
+            elif status == 'downvoted':
+                current_object.cancel_downvote()
+                request.session['vote_state_recipe_%s' % object_pk] = 'none'
+
+        context = {
+            'upvotes': current_object.up_votes,
+            'downvotes': current_object.down_votes,
+            'pk': current_object.pk,
+        }
+
+    return HttpResponse(json.dumps(context), content_type='application/json')

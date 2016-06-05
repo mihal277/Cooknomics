@@ -58,13 +58,14 @@ def video_page(request):
 
     for video in page.object_list:
         page_data['objects'][video.slug] = \
-            model_to_dict(video, exclude='published_date')
+            model_to_dict(video, exclude=['published_date', 'description'])
         page_data['objects'][video.slug]['published_date'] = \
             video.published_date.timestamp()
         page_data['objects'][video.slug]['url'] = \
             reverse('videos:single_video', kwargs={'video_slug': video.slug})
 
     page_data['has_next'] = page.has_next()
+
 
     context = {
         "page": page_data
@@ -104,39 +105,42 @@ def vote(request):
     ***downvotes*** - down_vote count of given video
     """
     if request.method == 'POST':
-        video_slug = request.POST.get('slug', None)
+        video_slug = request.POST.get('pk', None)
         current_video = get_object_or_404(Video, pk=video_slug)
 
         status = request.session.get('vote_state_article_%s' % video_slug, 'none')
         request_type = request.POST.get('type', None)
 
-        print("status: " + status)
-        print("request_type = " + request_type)
+        # set cookie expiry to 1 year
+        request.session.set_expiry(31556926)
 
         if request_type == 'upvote':
-            current_video.upvote()
-            if status == 'downvoted':
-                # If the video was already downvoted, downvote count
-                # has to be decreased.
-                current_video.cancel_downvote()
-            request.session['vote_state_article_%s' % video_slug] = 'upvoted'
-        elif request_type == 'cancel_upvote':
-            current_video.cancel_upvote()
-            request.session['vote_state_article_%s' % video_slug] = 'none'
-        elif request_type == 'downvote':
-            current_video.downvote()
-            if status == 'upvoted':
-                # If the news was already upvoted, upvote count
-                # has to be decreased.
+            if status == 'none':
+                current_video.upvote()
+                request.session['vote_state_article_%s' % video_slug] = 'upvoted'
+            elif status == 'upvoted':
                 current_video.cancel_upvote()
-            request.session['vote_state_article_%s' % video_slug] = 'downvoted'
-        elif request_type == 'cancel_downvote':
-            current_video.cancel_downvote()
-            request.session['vote_state_article_%s' % video_slug] = 'none'
+                request.session['vote_state_article_%s' % video_slug] = 'none'
+            elif status == 'downvoted':
+                current_video.upvote()
+                current_video.cancel_downvote()
+                request.session['vote_state_article_%s' % video_slug] = 'upvoted'
+        elif request_type == 'downvote':
+            if status == 'none':
+                current_video.downvote()
+                request.session['vote_state_article_%s' % video_slug] = 'downvoted'
+            elif status == 'upvoted':
+                current_video.cancel_upvote()
+                current_video.downvote()
+                request.session['vote_state_article_%s' % video_slug] = 'downvoted'
+            elif status == 'downvoted':
+                current_video.cancel_downvote()
+                request.session['vote_state_article_%s' % video_slug] = 'none'
 
         context = {
             'upvotes': current_video.up_votes,
             'downvotes': current_video.down_votes,
+            'pk': current_video.pk,
         }
 
     return HttpResponse(json.dumps(context), content_type='application/json')

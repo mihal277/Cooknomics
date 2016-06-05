@@ -82,7 +82,7 @@
             .error(function(jqXHR) {
                 console.log("AJAX error: " + jqXHR.status);
             });
-        })
+        });
 
         {# Add actions to jQuery-UI-autocomplete plugin #}
         $(document).ready(function() {
@@ -128,6 +128,11 @@
                     window.location = result.url;
                 }
             });
+
+            {# Add event listeners to vote buttons #}
+            $( document ).ready(function() {
+                $(".element-list").on("click", ".upvote-button, .downvote-button", {voteUrl: '{% url 'recipes:vote' %}'}, postVote);
+            });
         })
     </script>
 {% endblock scripts %}
@@ -161,6 +166,21 @@
                         <h2 class="title">{{ recipe.title }}</h2>
                     </a>
                     <img src='{{ recipe.image.url }}' class="center">
+                    <div class="video_buttons row">
+                            <button class="upvote-button" name="{{ recipe.pk }}" id="upbtn_{{ recipe.pk }}"
+                                    data-on-click-action="upvote"
+                            >
+                                <i class="fa fa-thumbs-up fa-lg"></i>
+                                <section id="upvote_count_{{ recipe.pk }}">{{ recipe.up_votes }}</section>
+                            </button>
+
+                            <button class="downvote-button" name="{{ recipe.pk }}" id="dwnbtn_{{ recipe.pk }}"
+                                    data-on-click-action="downvote"
+                            >
+                                <i class="fa fa-thumbs-down fa-lg"></i>
+                                <section id="downvote_count_{{ recipe.pk }}">{{  recipe.down_votes }}</section>
+                            </button>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
