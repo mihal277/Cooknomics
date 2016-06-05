@@ -1,5 +1,5 @@
 function loadPageOnScrollAndNavbar() {
-    // loadPageOnScroll();
+    loadPageOnScroll();
     fancyNavbar();
 }
 
