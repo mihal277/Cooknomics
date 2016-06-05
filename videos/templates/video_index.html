@@ -15,6 +15,36 @@
     </script>
     <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
     <script type="application/javascript" src="{% static 'videos/js/scripts.js' %}" ></script>
+    <script>
+        function post_vote() {
+            var action = $(this).data('on-click-action');
+            var slug = $(this).attr('name');
+            var post_data = {
+                'slug': slug,
+                'type': action,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            };
+            $.post('{% url 'videos:vote' %}', post_data, function(response) {
+                    $('#upvote_count_' + slug).html(response.upvotes);
+                    $('#downvote_count_' + slug).html(response.downvotes);
+                }, 'json');
+            if (action == 'upvote') {
+                $(this).data('on-click-action', 'cancel_upvote');
+                $('#dwnbtn_' + slug).data('on-click-action', 'downvote');
+            } else if (action == 'cancel_upvote') {
+                $(this).data('on-click-action', 'upvote');
+            } else if (action == 'downvote') {
+                $(this).data('on-click-action', 'cancel_downvote');
+                $('#upbtn_' + slug).data('on-click-action', 'upvote');
+            } else if (action == 'cancel_downvote') {
+                $(this).data('on-click-action', 'downvote');
+            }
+        }
+        <!-- Event listeners for upvote and downvote buttons -->
+        $( document ).ready(function() {
+            $(".upvote-button, .downvote-button").on("click", post_vote)
+        });
+    </script>
 {% endblock %}
 
 {%  block app_title %}
@@ -33,6 +63,29 @@
                         src="https://www.youtube.com/embed/{{ video.video_url }}"
                         frameborder="0" allowfullscreen>
                     </iframe>
+                    <div class="video_buttons row">
+                        <button class="upvote-button" name="{{ video.slug }}" id="upbtn_{{ video.slug }}"
+                            {% if video.vote_state == 'upvoted' %}
+                                data-on-click-action = "cancel_upvote"
+                            {% else %}
+                                data-on-click-action = "upvote"
+                            {% endif %}
+                        >
+                            <i class="fa fa-thumbs-up fa-lg"></i>
+                            <section id="upvote_count_{{ video.slug }}">{{ video.up_votes }}</section>
+                        </button>
+
+                        <button class="downvote-button" name="{{ video.slug }}" id="dwnbtn_{{ video.slug }}"
+                            {% if video.vote_state == 'downvoted' %}
+                                data-on-click-action = "cancel_downvote"
+                            {% else %}
+                                data-on-click-action = "downvote"
+                            {% endif %}
+                        >
+                            <i class="fa fa-thumbs-down fa-lg"></i>
+                            <section id="downvote_count_{{ video.slug }}">{{  video.down_votes }}</section>
+                        </button>
+                </div>
                 </li>
             {% endfor %}
         </ul>
