@@ -28,6 +28,7 @@
                 var selectedItems = $productList.val();
                 var $initalList = $('.element-list');
 
+                $("#text-search").val(""); /* Set search text to empty string */
                 $errorMsg.hide();
                 $initalList.empty();
                 if (selectedItems == null) {
@@ -82,6 +83,52 @@
                 console.log("AJAX error: " + jqXHR.status);
             });
         })
+
+        {# Add actions to jQuery-UI-autocomplete plugin #}
+        $(document).ready(function() {
+            $("#text-search").autocomplete({
+                source: function(request, response) {
+                  var data;
+
+                   $.ajax({
+                       type: "GET",
+                       url: '{% url 'recipes:search_recipes' %}',
+                       data: request,
+                       dataType: 'json',
+                       encode: true,
+                    })
+                   .done(function(data) {
+                       console.log(data);
+                       var hintsData = $.map(data, function(key, val) {
+                           return {
+                               value: val,
+                               url: key
+                           }
+                       });
+
+                       $('#text-search').data("hints", hintsData);
+                       var hints = $.map(data, function(key, val) {
+                           return val;
+                       });
+
+                       response(hints);
+                   })
+                   .error(function(jqXHR) {
+                       console.log(jqXHR.status);
+                   })
+                },
+                select: function(event, ui) {
+                    var data = $('#text-search').data("hints");
+
+                    /* Find element in the array */
+                    var result = $.grep(data, function(element) {
+                        return element.value === ui.item.label;
+                    })[0] /* We're sure there is only 1 such element */
+
+                    window.location = result.url;
+                }
+            });
+        })
     </script>
 {% endblock scripts %}
 
@@ -92,14 +139,17 @@
                 multiple data-live-search="true"
                 data-selected-text-format="count > 3"
                 title="Wybierz składnik"
+                style="display: inline"
         >
         </select>
         <button id="search-button" class="btn btn-default"
-                style="padding-top: 6px; padding-bottom: 6px"
+                style="padding-top: 6px; padding-bottom: 6px; display:inline;"
                 type="button"
         >
         Wyszukaj
         </button>
+        <input id="text-search" type="text" class="form-control" placeholder="Wyszukaj przepis" autocomplete="off"
+               style="display: inline; width: auto; margin-left: 40px;">
     </div>
 
     <main>

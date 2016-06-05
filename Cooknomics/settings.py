@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = [
 ROOT_URLCONF = 'Cooknomics.urls'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/uploads/')
-MEDIA_URL = 'media/uploads/'
+MEDIA_URL = os.path.join(BASE_DIR, 'media/uploads/')
 
 TEMPLATES = [
     {
