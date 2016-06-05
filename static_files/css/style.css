@@ -203,3 +203,8 @@ img.center {
     -o-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
 }
+
+#text-search {
+    position: relative;
+    top: 1.7px;
+}
