@@ -16,29 +16,6 @@ li {
     padding-left: 20px;
 }
 
-.navbar-right {
-    float: right!important;
-    padding-right: 20px;
-}
-
-.navbar li {
-    margin-top: 10px;
-    margin-left: 12px;
-    font-family: 'Loved by the King', cursive;
-    font-style: italic;
-    font-size: 35px;
-}
-
-.navbar a {
-    color: white!important;
-}
-
-.navbar-custom {
-    background: transparent!important;
-    border-bottom-color: transparent!important;
-    box-shadow: none!important;
-}
-
 .intro-header {
     background: no-repeat center center;
     background-size: cover;
@@ -166,4 +143,63 @@ img.center {
 #disqus_thread {
     width: 80%;
     margin: 0 auto;
+}
+.navbar-right {
+    float: right;
+    padding-right: 20px;
+}
+
+.navbar li {
+    margin-top: 10px;
+    margin-left: 12px;
+    font-family: 'Loved by the King', cursive;
+    font-style: italic;
+    font-size: 35px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #FFF;
+}
+
+.navbar-custom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    background: transparent;
+    border-bottom-color: transparent;
+    box-shadow: none;
+    -webkit-transition: background-color .3s;
+    -moz-transition: background-color .3s;
+    transition: background-color .3s;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden
+}
+.navbar-custom.is-fixed {
+    position: fixed;
+    top: -61px;
+    color: black!important;
+    background-color: rgba(255, 255, 255, .90);
+    border-bottom: 1px solid #f2f2f2;
+    -webkit-transition: -webkit-transform .3s;
+    -moz-transition: -moz-transform .3s;
+    transition: transform .3s
+}
+
+.navbar-custom.is-fixed a {
+    color: black!important;
+}
+
+.navbar-custom.is-visible {
+    -webkit-transform: translate3d(0, 100%, 0);
+    -moz-transform: translate3d(0, 100%, 0);
+    -ms-transform: translate3d(0, 100%, 0);
+    -o-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
 }
