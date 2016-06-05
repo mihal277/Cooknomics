@@ -24,14 +24,15 @@
     <main>
         <ul class="element-list">
             {% for article in page %}
-                <div>
+                <div class="article-list-single">
                     <a href="{% url 'news:article' article.slug %}">
                         <h2>{{ article.title }}</h2>
-                        <h3>
-                            Problems look mighty small from 150 miles up
-                        </h3>
-                    </a>
-                    <p>Posted by <a href="#">{{ article.author }}</a> on {{ article.published_dateg }}</p>
+                     </a>
+
+                    <script>document.write(trim_str_to_n("{{ article.content }}"));</script>
+                    <a href="{% url 'news:article' article.slug %}">Go to article</a>
+
+                    <p>Posted by {{ article.author }} on {{ article.published_date }}</p>
                     <hr>
                 </div>
             {% endfor %}
