@@ -20,17 +20,22 @@
 {%  block app_title %}
 <span class="app_title">NEWS</span>
 {% endblock app_title %}
-
 {% block content %}
     <main>
         <ul class="element-list">
             {% for article in page %}
-                <li>
+                <div>
                     <a href="{% url 'news:article' article.slug %}">
-                        <h2 class="title">{{ article.title }}</h2>
+                        <h2>{{ article.title }}</h2>
+                        <h3>
+                            Problems look mighty small from 150 miles up
+                        </h3>
                     </a>
-                </li>
+                    <p>Posted by <a href="#">{{ article.author }}</a> on {{ article.published_dateg }}</p>
+                    <hr>
+                </div>
             {% endfor %}
         </ul>
     </main>
 {% endblock content %}
+
