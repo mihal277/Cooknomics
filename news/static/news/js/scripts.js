@@ -37,14 +37,3 @@ function appendElements(newData) {
     $(".element-list").append(newElementsHtml.join(""));
 }
 
-function trim_str_to_n(str, n) {
-    if (str.length > n) {
-        var white_space_index = str.substring(n).indexOf(' ');
-        if (!white_space_index)
-            return str;
-        return (str.substring(0, white_space_index) + "...");
-    }
-    else {
-        return str;
-    }
-}

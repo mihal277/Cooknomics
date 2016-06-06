@@ -4,6 +4,7 @@ from django.views.decorators.http import require_POST, require_GET
 from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
+from news.utils import shorten_content
 import json
 from .models import Article
 
@@ -22,6 +23,9 @@ def news_list(request):
     :return: HTML rendered from appropriate template with inital data.
     """
     articles = Article.objects.all().order_by('published_date')
+
+    for a in articles:
+        a.shortened_content = shorten_content(a.content, 150)
 
     paginator = Paginator(articles, INITIAL_PAGE_SIZE)
     page = paginator.page(1)
@@ -65,6 +69,7 @@ def news_page(request):
     for news in page.object_list:
         news_dict = model_to_dict(news, exclude='published_date')
         news_dict['slug'] = news.slug
+        news_dict['shortened_content'] = shorten_content(news.content, 150)
         news_dict['published_date'] = news.published_date.timestamp()
         news_dict['url'] = \
             reverse('news:article', kwargs={'article_slug': news.slug})
