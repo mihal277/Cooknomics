@@ -20,17 +20,23 @@
 {%  block app_title %}
 <span class="app_title">NEWS</span>
 {% endblock app_title %}
-
 {% block content %}
     <main>
         <ul class="element-list">
             {% for article in page %}
-                <li>
+                <div class="article-list-single">
                     <a href="{% url 'news:article' article.slug %}">
-                        <h2 class="title">{{ article.title }}</h2>
-                    </a>
-                </li>
+                        <h2>{{ article.title }}</h2>
+                     </a>
+
+                    <script>document.write(trim_str_to_n("{{ article.content }}"));</script>
+                    <a href="{% url 'news:article' article.slug %}">Go to article</a>
+
+                    <p>Posted by {{ article.author }} on {{ article.published_date }}</p>
+                    <hr>
+                </div>
             {% endfor %}
         </ul>
     </main>
 {% endblock content %}
+

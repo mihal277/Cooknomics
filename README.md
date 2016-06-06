@@ -71,7 +71,7 @@ Pycco
 django-disqus
 easy_thumbnails
 Pillow
-
+```
 
 Clone the repo:
 
