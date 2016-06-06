@@ -5,11 +5,9 @@ from videos.utils import youtube_video_exists
 class UtilsTestCase(TestCase):
 
     CORRECT_VIDEOS = [
-        'https://www.youtube.com/watch?v=jdiAraeA_8k&t=638s',
-        'https://www.youtube.com/watch?v=-iSxls2f0Qo',
-        'http://www.youtube.com/watch?v=-iSxls2f0Qo',
-        'www.youtube.com/watch?v=-iSxls2f0Qo',
-        'www.youtube.com/watch?v=-iSxls2f0Qo'
+        'jdiAraeA_8k&t=638s',
+        '-iSxls2f0Qo',
+        '-iSxls2f0Qo',
     ]
 
     INCORRECT_VIDEOS = [

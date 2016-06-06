@@ -42,8 +42,9 @@ def sort_dict_list_by(list, parameter):
 
 
 class NewsListTestCase(TestCase):
-    def setUp(self):
-        self.url = reverse('news:news_list')
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('news:news_list')
 
     def test_basic(self):
         response = self.client.get(self.url)
@@ -53,6 +54,13 @@ class NewsListTestCase(TestCase):
         self.assertTrue('page' in response.context)
         self.assertTrue('display_likes' in response.context)
         self.assertTrue(response.context['display_likes'])
+
+    def test_pagination(self):
+        for i in range(0, 20):
+            add_random_news()
+
+        response = self.client.get(self.url)
+        self.assertEqual(len(response.context['page']), 20)
 
     def test_pagination_too_much(self):
         for i in range(0, 40):
@@ -97,7 +105,6 @@ class NewsPageTestCase(TestCase):
             'page': 1,
             'sorting': 'published_date',
         }
-
         self.url = reverse("news:page")
 
     def test_basic(self):
@@ -217,20 +224,21 @@ class NewsPageTestCase(TestCase):
 
 
 class ArticleTestCase(TestCase):
-    def setUp(self):
-        for i in range(0, 40):
-            add_random_news()
-
-        self.article = Article.objects.create(
+    @classmethod
+    def setUpTestData(cls):
+        cls.article = Article.objects.create(
             title="title",
             author="me",
             content=generate_random_string(),
             up_votes=1337,
             down_votes=54337,
         )
+        cls.article_url = reverse('news:article',
+               kwargs={'article_slug': cls.article.slug})
 
-        self.article_url = reverse('news:article',
-                                   kwargs={'article_slug': self.article.slug})
+    def setUp(self):
+        for i in range(0, 40):
+            add_random_news()
 
     def test_basic(self):
         response = self.client.get(self.article_url)
