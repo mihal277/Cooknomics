@@ -10,6 +10,8 @@ function appendElements(newData) {
 
         htmlString += '<a href="' + data.url + '">';
         htmlString += '<h2 class="title">' + data.title + '</h2>';
+
+        /* Updating likes part */
         htmlString += '<div class="video_buttons row">';
         htmlString += '<button class="upvote-button" name="' + element + '" id="upbtn_' + element + '"' +
             ' data-on-click-action="upvote">';
@@ -22,9 +24,23 @@ function appendElements(newData) {
         htmlString += '<section id="downvote_count_'+ element +'">' + data.down_votes +'</section>';
         htmlString += '</button>';
         htmlString += '</div>';
+        /* End of updating likes */
+
         htmlString += '</li>';
 
         newElementsHtml.push(htmlString);
     });
     $(".element-list").append(newElementsHtml.join(""));
+}
+
+function trim_str_to_n(str, n) {
+    if (str.length > n) {
+        var white_space_index = str.substring(n).indexOf(' ');
+        if (!white_space_index)
+            return str;
+        return (str.substring(0, white_space_index) + "...");
+    }
+    else {
+        return str;
+    }
 }

@@ -67,6 +67,8 @@
                             <section id="downvote_count_{{ element.slug }}">{{  element.down_votes }}</section>
                         </button>
                     </div>
+                    {% block additional_element_display %}
+                    {% endblock additional_element_display %}
                     {% endif %}
                 </li>
             {% endfor %}
