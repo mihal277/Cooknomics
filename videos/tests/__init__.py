@@ -1,2 +1,3 @@
-from videos.tests.models import *
-from videos.tests.utils import *
+from videos.tests.test_models import *
+from videos.tests.test_utils import *
+from videos.tests.test_views import *

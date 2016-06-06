@@ -9,8 +9,8 @@ import json
 
 # === Views for video app ===
 
-INITIAL_PAGE_SIZE = 1
-NUMBER_OF_ELEMENTS_ON_PAGE = 1
+INITIAL_PAGE_SIZE = 2
+NUMBER_OF_ELEMENTS_ON_PAGE = 2
 
 
 def videos_list(request):
@@ -49,6 +49,11 @@ def video_page(request):
 
     # Get sorting parameter, if none is provides, sort by published_date
     sorting = request.GET.get('sorting', 'published_date')
+
+    possible_sortings = ['up_votes', 'published_date', 'title']
+    if sorting not in possible_sortings:
+        raise Http404
+
     if sorting == 'up_votes':
         sorting = '-up_votes'
 
