@@ -15,6 +15,7 @@ import json
 INITIAL_PAGE_SIZE = 1
 NUMBER_OF_ELEMENTS_ON_PAGE = 1
 
+
 def recipes_list(request):
     """
 
@@ -175,7 +176,9 @@ def recipe(request, recipe_slug):
         'content': current_recipe.content,
         'image_url': current_recipe.image.url,
         'ingredients': ingredients_list,
-        'price': price
+        'price': price,
+        'up_votes': current_recipe.up_votes,
+        'down_votes': current_recipe.down_votes,
     }
 
     return render(request, 'recipes_detail.html', context)

@@ -86,7 +86,13 @@ def single_video(request, video_slug):
     video = get_object_or_404(Video, pk=video_slug)
 
     context = {
-        'video': video
+        'slug': video_slug,
+        'title': video.title,
+        'video_url': video.video_url,
+        'published_date': video.published_date,
+        'description': video.description,
+        'up_votes': video.up_votes,
+        'down_votes': video.down_votes,
     }
 
     return render(request, 'video_detail.html', context)
