@@ -44,12 +44,15 @@ def news_page(request):
     :return: Requested pages
     """
     page_number = request.GET.get('page', None)
-
     if page_number is None:
         raise Http404
 
-    articles = Article.objects.all().order_by('published_date')
+    # Get sorting parameter, if none is provides, sort by published_date
+    sorting = request.GET.get('sorting', 'published_date')
+    if sorting == 'up_votes':
+        sorting = '-up_votes'
 
+    articles = Article.objects.all().order_by(sorting)
     paginator = Paginator(articles, NUMBER_OF_ELEMENTS_ON_PAGE)
 
     try:
@@ -57,15 +60,15 @@ def news_page(request):
     except InvalidPage:
         raise Http404
 
-    page_data = {'objects': {}}
+    page_data = {'objects': []}
 
     for news in page.object_list:
-        page_data['objects'][news.slug] = \
-            model_to_dict(news, exclude='published_date')
-        page_data['objects'][news.slug]['published_date'] = \
-            news.published_date.timestamp()
-        page_data['objects'][news.slug]['url'] = \
+        news_dict = model_to_dict(news, exclude='published_date')
+        news_dict['slug'] = news.slug
+        news_dict['published_date'] = news.published_date.timestamp()
+        news_dict['url'] = \
             reverse('news:article', kwargs={'article_slug': news.slug})
+        page_data['objects'].append(news_dict)
 
     page_data['has_next'] = page.has_next()
 

@@ -47,7 +47,12 @@ def video_page(request):
     if page_number is None:
         raise Http404
 
-    videos = Video.objects.all().order_by('published_date')
+    # Get sorting parameter, if none is provides, sort by published_date
+    sorting = request.GET.get('sorting', 'published_date')
+    if sorting == 'up_votes':
+        sorting = '-up_votes'
+
+    videos = Video.objects.all().order_by(sorting)
     paginator = Paginator(videos, NUMBER_OF_ELEMENTS_ON_PAGE)
 
     try:
@@ -55,18 +60,17 @@ def video_page(request):
     except InvalidPage:
         raise Http404
 
-    page_data = {'objects': {}}
+    page_data = {'objects': []}
 
     for video in page.object_list:
-        page_data['objects'][video.slug] = \
-            model_to_dict(video, exclude=['published_date', 'description'])
-        page_data['objects'][video.slug]['published_date'] = \
-            video.published_date.timestamp()
-        page_data['objects'][video.slug]['url'] = \
+        video_dict = model_to_dict(video, exclude=['published_date', 'description'])
+        video_dict['slug'] = video.slug
+        video_dict['published_date'] = video.published_date.timestamp()
+        video_dict['url'] = \
             reverse('videos:single_video', kwargs={'video_slug': video.slug})
+        page_data['objects'].append(video_dict)
 
     page_data['has_next'] = page.has_next()
-
 
     context = {
         "page": page_data

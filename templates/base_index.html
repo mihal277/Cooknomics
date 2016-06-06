@@ -11,6 +11,7 @@
         var pageNumber = {{ page.number }};
         var hasNextPage = {{ page.has_next|lower }};
         var dataDict = null;
+        var currentSorting = 'published_date';
         {%  with ""|addstr:appname|addstr:":page" as pagination_url %}
         var url = '{% url pagination_url %}';
         {% endwith %}
@@ -22,10 +23,25 @@
     <script type="application/javascript">
         {% with ""|addstr:appname|addstr:":vote" as vote_url %}
         {# Event listeners for upvote and downvote buttons #}
-        $( document ).ready(function() {
+        $(document).ready(function() {
             $(".element-list").on("click", ".upvote-button, .downvote-button", {voteUrl: '{% url vote_url %}'}, postVote);
         });
         {% endwith %}
+        $(document).ready(function() {
+            $(".sorting-select").on("change", function() {
+                var requestData = $(this).val();
+
+                if (requestData != currentSorting) {
+                    currentSorting = requestData;
+                    $('.element-list').empty();
+
+                    pageNumber = 0;
+                    hasNextPage = true;
+                    loadPage();
+                }
+            })
+        })
+
     </script>
 
     {% block additional_scripts %}
@@ -41,6 +57,13 @@
 {% endblock app_title %}
 
 {% block content %}
+    <div class="sorting">
+        <select class="selectpicker sorting-select" title="Sortuj po:">
+            <option value="up_votes">Ilość polubień</option>
+            <option value="published_date">Data publikacji</option>
+            <option value="title">Nazwa</option>
+        </select>
+    </div>
     {% block additional_content %}
     {% endblock additional_content %}
 

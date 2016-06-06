@@ -25,8 +25,8 @@ def recipes_list(request):
     recipes = Recipe.objects.all().order_by('published_date')
 
     # prawidlowy sposob zbierania URLa - object.image.url
-    recipe = recipes[0]
-    print("path: " + recipe.image.url)
+    # recipe = recipes[0]
+    # print("path: " + recipe.image.url)
 
     paginator = Paginator(recipes, INITIAL_PAGE_SIZE)
     page = paginator.page(1)
@@ -64,11 +64,15 @@ def recipes_page(request):
     :return:
     """
     page_number = request.GET.get('page', None)
-
     if page_number is None:
         raise Http404
 
-    recipes = Recipe.objects.all().order_by('published_date')
+    # Get sorting parameter, if none is provides, sort by published_date
+    sorting = request.GET.get('sorting', 'published_date')
+    if sorting == 'up_votes':
+        sorting = '-up_votes'
+
+    recipes = Recipe.objects.all().order_by(sorting)
 
     context = do_pagination(recipes, NUMBER_OF_ELEMENTS_ON_PAGE, page_number)
 
@@ -98,7 +102,12 @@ def get_filtered_recipes(request):
         if page_number is None:
             raise Http404
 
+        sorting = request.GET.get('sorting', 'published_date')
+        if sorting == 'up_votes':
+            sorting = '-up_votes'
+
         get_data.pop('page')
+        get_data.pop('sorting')
         # If GET data is not empty, choose only recipes that match passed ingredients
         ingredients = []
         for pk in get_data:
@@ -106,7 +115,7 @@ def get_filtered_recipes(request):
             ingredients.append(ingredient)
 
         # Filter the recipes, gets all the recipes that match at least 1 element
-        recipes_all = Recipe.objects.filter(ingredients__in=ingredients)
+        recipes_all = Recipe.objects.filter(ingredients__in=ingredients).order_by(sorting)
         # Remove duplicates
         unique_recipes = set()
         recipes = [r for r in recipes_all if not (r in unique_recipes or unique_recipes.add(r))]

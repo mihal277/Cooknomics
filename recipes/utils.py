@@ -16,17 +16,19 @@ def do_pagination(data, number_of_pages, page_number):
     if len(data) == 0:
         raise Http404
 
-    page_data = {'objects': {}}
+    page_data = {'objects': []}
 
     for r in page.object_list:
-        page_data['objects'][r.slug] = \
-            model_to_dict(r, exclude=['published_date', 'image', 'ingredients'])
-        page_data['objects'][r.slug]['image_url'] = \
-            r.image.url
-        page_data['objects'][r.slug]['published_date'] = \
-            r.published_date.timestamp()
-        page_data['objects'][r.slug]['url'] = \
+        recipe_dict = model_to_dict(r, exclude=['published_date',
+                                              'image',
+                                              'ingredients'
+                                                ])
+        recipe_dict['slug'] = r.slug
+        recipe_dict['image_url'] = r.image.url
+        recipe_dict['published_date'] = r.published_date.timestamp()
+        recipe_dict['url'] = \
             reverse('recipes:recipe', kwargs={'recipe_slug': r.slug})
+        page_data['objects'].append(recipe_dict)
 
     page_data['has_next'] = page.has_next()
 

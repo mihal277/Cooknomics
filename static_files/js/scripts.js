@@ -63,10 +63,12 @@ function loadPage(errorHandler) {
     if (dataDict != null) {
         for (var key in dataDict) {
              if (dataDict.hasOwnProperty(key)) {
-                formData[key] = ''
+                formData[key] = dataDict[key];
             }
         }
     }
+    /* Add sorting parameter to data sent to server. */
+    formData['sorting'] = currentSorting;
 
     $.ajax({
         type: 'GET',
@@ -104,9 +106,6 @@ function postVote(event) {
     var action = $(this).data('on-click-action');
     var pk = $(this).attr('name');
 
-    console.log("action: " + action);
-    console.log(event.data.voteUrl);
-
     var postData = {
         pk: pk,
         type: action
@@ -128,6 +127,8 @@ function postVote(event) {
         console.log(jqXHR.status);
     })
 }
+
+
 
 /* Utility functions */
 
