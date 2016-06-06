@@ -93,8 +93,8 @@ def article(request, article_slug):
         'title': current_article.title,
         'published_date': current_article.published_date,
         'content': current_article.content,
-        'upvotes': current_article.up_votes,
-        'downvotes': current_article.down_votes,
+        'up_votes': current_article.up_votes,
+        'down_votes': current_article.down_votes,
     }
 
     return render(request, 'news_detail.html', context)

@@ -1,44 +1,20 @@
-{% extends 'base.html' %}
+{% extends 'base_detail.html' %}
 {% load staticfiles %}
 
 {% block title %}
     {{ title }}
 {% endblock title %}
 
-{% block content %}
-    <main>
-        <div>
-            <h2>Składniki</h2>
-            {% for ingredient in ingredients %}
-                <h2>{{ ingredient }}</h2>
-            {% endfor %}
-            <h2>Cena: {{ price }} zł</h2>
-            <h2 class="title"> {{ title }}</h2>
-            <h3 class="author"> {{ author }}</h3>
-            <img src='{{ image_url }}' style="max-height:315px;width:auto;">
-            <h4 class="fcontent"> {{ content|safe }}</h4>
-        </div>
-        <div>
-            <a href="{% url 'recipes:recipes_list' %}">
-                <button class="more btn-md btn-primary">Back</button>
-            </a>
-        </div>
-    </main>
-
-    <div id="disqus_thread">
-        <script>
-            (function() {
-            var d = document, s = d.createElement('script');
-
-            s.src = '//cooknomics.disqus.com/embed.js';
-
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-            })();
-        </script>
-
-        <noscript>Please enable JavaScript to view the
-            <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-        </noscript>
+{% block element_display %}
+    <div>
+        <h2>Składniki</h2>
+        {% for ingredient in ingredients %}
+            <h2>{{ ingredient }}</h2>
+        {% endfor %}
+        <h2>Cena: {{ price }} zł</h2>
+        <h2 class="title"> {{ title }}</h2>
+        <h3 class="author"> {{ author }}</h3>
+        <img src='{{ image_url }}' style="max-height:315px;width:auto;">
+        <h4 class="fcontent"> {{ content|safe }}</h4>
     </div>
-{% endblock content %}
+{% endblock element_display %}

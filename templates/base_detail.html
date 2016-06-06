@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    {{ title }}
+{% endblock title %}
+
+{% block scripts %}
+    <script type="application/javascript" src="{% static 'js/vote.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/utils.js' %}"></script>
+    <script type="application/javascript">
+        {% with ""|addstr:appname|addstr:":vote" as vote_url %}
+        {# Event listeners for upvote and downvote buttons #}
+        $(document).ready(function() {
+            $(".upvote-button, .downvote-button").on("click", {voteUrl: '{% url vote_url %}'}, postVote);
+        });
+    {% endwith %}
+    </script>
+    {% block additional_scripts %}
+    {% endblock additional_scripts %}
+{% endblock scripts %}
+
+{% block extra_head %}
+{% endblock extra_head %}
+
+{%  block app_title %}
+    <span class="app_title">{{ appname|upper }}</span>
+{% endblock app_title %}
+
+{% block content %}
+    {% block additional_content %}
+    {% endblock additional_content %}
+    <main>
+        {% block element_display %}
+        {% endblock element_display %}
+        <div class="video_buttons row">
+            <button class="upvote-button" name="{{ slug }}" id="upbtn_{{ slug }}"
+                    data-on-click-action="upvote"
+            >
+                <i class="fa fa-thumbs-up fa-lg"></i>
+                <section id="upvote_count_{{ slug }}">{{ up_votes }}</section>
+            </button>
+
+            <button class="downvote-button" name="{{ slug }}" id="dwnbtn_{{ slug }}"
+                    data-on-click-action="downvote"
+            >
+                <i class="fa fa-thumbs-down fa-lg"></i>
+                <section id="downvote_count_{{ slug }}">{{  down_votes }}</section>
+            </button>
+        </div>
+        {% block additional_element_display %}
+        {% endblock additional_element_display %}
+        {% with ''|addstr:appname|addstr:':'|addstr:appname|addstr:'_list' as back_url %}
+        <a href="{% url back_url %}">
+        {% endwith %}
+            <button class="more btn-md btn-primary">Back</button>
+        </a>
+    </main>
+
+    <div id="disqus_thread">
+        <script>
+            (function() {
+            var d = document, s = d.createElement('script');
+
+            s.src = '//cooknomics.disqus.com/embed.js';
+
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+
+        <noscript>Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+        </noscript>
+    </div>
+
+
+{% endblock content %}

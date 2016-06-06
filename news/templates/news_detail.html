@@ -1,34 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'base_detail.html' %}
 {% load staticfiles %}
 
 {% block title %}
     {{ title }}
 {% endblock title %}
 
-{% block content %}
-    <main>
-        <div class="article">
-            <h2 class="title"> {{ title }}</h2>
-            <h3 class="author"> {{ author }}</h3>
-            <h4 class="fcontent"> {{ content|safe }}</h4>
-        </div>
-        <a href="{% url 'news:news_list' %}"><button class="more btn-md btn-primary">Back</button></a>
-    </main>
-
-    <div id="disqus_thread">
-        <script>
-            (function() {
-            var d = document, s = d.createElement('script');
-
-            s.src = '//cooknomics.disqus.com/embed.js';
-
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-            })();
-        </script>
-
-        <noscript>Please enable JavaScript to view the
-            <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-        </noscript>
+{% block element_display %}
+    <div class="article">
+        <h2 class="title"> {{ title }}</h2>
+        <h3 class="author"> {{ author }}</h3>
+        <h4 class="fcontent"> {{ content|safe }}</h4>
     </div>
-{% endblock content %}
+{% endblock element_display %}
