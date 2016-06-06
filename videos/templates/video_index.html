@@ -1,60 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'base_index.html' %}
 
-{% block title %}
-    Cooknomics - Videos
-{% endblock title %}
-
-{% block scripts %}
-    <!-- Script that gets new pages -->
-    <script type="application/javascript">
-        var pageNumber = {{ page.number }};
-        var hasNextPage = {{ page.has_next|lower }};
-        var url = '{% url 'videos:page' %}';
-        var dataDict = null;
-    </script>
-    <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
-    <script type="application/javascript" src="{% static 'videos/js/scripts.js' %}" ></script>
-    <script type="application/javascript">
-        {# Event listeners for upvote and downvote buttons #}
-        $( document ).ready(function() {
-            $(".element-list").on("click", ".upvote-button, .downvote-button", {voteUrl: '{% url 'videos:vote' %}'}, postVote);
-        });
-    </script>
-{% endblock %}
-
-{%  block app_title %}
-<span class="app_title">VIDEOS</span>
-{% endblock app_title %}
-
-{% block content %}
-    <main>
-        <ul class="element-list">
-            {% for video in page %}
-                <li>
-                    <a href="{% url 'videos:single_video' video.slug %}">
-                    <h2 class="title"> {{ video.title }}</h2>
-                    </a>
-                    <iframe width="560" height="315"
-                        src="https://www.youtube.com/embed/{{ video.video_url }}"
-                        frameborder="0" allowfullscreen>
-                    </iframe>
-                    <div class="video_buttons row">
-                        <button class="upvote-button" name="{{ video.slug }}" id="upbtn_{{ video.slug }}"
-                                data-on-click-action="upvote"
-                        >
-                            <i class="fa fa-thumbs-up fa-lg"></i>
-                            <section id="upvote_count_{{ video.slug }}">{{ video.up_votes }}</section>
-                        </button>
-
-                        <button class="downvote-button" name="{{ video.slug }}" id="dwnbtn_{{ video.slug }}"
-                                data-on-click-action="downvote"
-                        >
-                            <i class="fa fa-thumbs-down fa-lg"></i>
-                            <section id="downvote_count_{{ video.slug }}">{{  video.down_votes }}</section>
-                        </button>
-                </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </main>
-{% endblock content %}
+{% block element_display %}
+    <a href="{% url 'videos:single_video' element.slug %}">
+    <h2 class="title"> {{ element.title }}</h2>
+    </a>
+    <iframe width="560" height="315"
+        src="https://www.youtube.com/embed/{{ element.video_url }}"
+        frameborder="0" allowfullscreen>
+    </iframe>
+{% endblock element_display %}

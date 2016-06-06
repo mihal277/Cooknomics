@@ -1,94 +1,24 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+{% extends 'base_index.html' %}
 
-{% block title %}
-    Cooknomics - Recipes
-{% endblock title %}
-
-{%  block app_title %}
-<span class="app_title">RECIPES</span>
-{% endblock app_title %}
-
-{% block scripts %}
-    <!-- Script that gets new pages -->
-    <script type="application/javascript">
-        var pageNumber = {{ page.number }};
-        var hasNextPage = {{ page.has_next|lower }};
-        var url = '{% url 'recipes:page' %}';
-        var dataDict = null;
-    </script>
-    <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
-    <script type="application/javascript" src="{% static 'recipes/js/scripts.js' %}" ></script>
+{% block additional_scripts %}
     <script type="application/javascript">
         {# Add event listener to search button click #}
         $(document).ready(function() {
-            $('#search-button').click(function() {
-                var $errorMsg = $('#error-message');
-                var $productList = $('#ingredient-selecter');
-                var selectedItems = $productList.val();
-                var $initalList = $('.element-list');
-
-                $("#text-search").val(""); /* Set search text to empty string */
-                $errorMsg.hide();
-                $initalList.empty();
-                if (selectedItems == null) {
-                    /* If no items selected ask for all recipes */
-                    url = '{% url 'recipes:page' %}';
-                    dataDict = null;
-                } else {
-                    /* If some items selected ask for filtered recipes */
-                    url = '{% url 'recipes:get_recipes' %}';
-
-                    /* Create dict to send to server (its easier to process then) */
-                    var selectedItemsDict = {};
-                    var selectedItemsLength = selectedItems.length;
-                    for (var i = 0; i < selectedItemsLength; ++i) {
-                        selectedItemsDict[selectedItems[i]] = '';
-                    }
-                    dataDict = selectedItemsDict;
-                }
-
-                /* 0, cause loadPage does pageNumber++ */
-                pageNumber = 0;
-                hasNextPage = true;
-
-                loadPage(function(errorStatus) {
-                    var $errorMsg = $('#error-message');
-
-                    if (errorStatus == 404) {
-                        $errorMsg.text("Nie znaleziono żadnych przepisów.");
-                        $errorMsg.css('display', 'table');
-                    }
-                })
-            });
+            $('#search-button').on('click', {
+                nonFilteredRecipesUrl: '{% url 'recipes:page' %}',
+                filteredRecipesUrl: '{% url 'recipes:get_filtered_recipes' %}'
+            }, loadNewPage);
         });
 
         {# Fill product select list #}
         $(document).ready(function() {
-            var $productList = $('#ingredient-selecter');
-
-            $.ajax({
-                type:  'GET',
-                url: '{% url 'recipes:get_ingredients' %}'
-            })
-            .done(function(data) {
-                console.log(data);
-                $.each(data, function(index, parameter) {
-                    $.each(parameter, function(name, value) {
-                        $productList.append('<option value="' + value + '">' + name + '</option>');
-                    });
-                })
-            })
-            .error(function(jqXHR) {
-                console.log("AJAX error: " + jqXHR.status);
-            });
+            fillIngredientSelectBox('{% url 'recipes:get_ingredients' %}');
         });
 
-        {# Add actions to jQuery-UI-autocomplete plugin #}
+        {# Add actions to jQuery-UI-autocomplete plugin. #}
         $(document).ready(function() {
             $("#text-search").autocomplete({
                 source: function(request, response) {
-                  var data;
 
                    $.ajax({
                        type: "GET",
@@ -123,22 +53,16 @@
                     /* Find element in the array */
                     var result = $.grep(data, function(element) {
                         return element.value === ui.item.label;
-                    })[0] /* We're sure there is only 1 such element */
+                    })[0]; /* We're sure there is only 1 such element */
 
                     window.location = result.url;
                 }
             });
-
-            {# Add event listeners to vote buttons #}
-            $( document ).ready(function() {
-                $(".element-list").on("click", ".upvote-button, .downvote-button", {voteUrl: '{% url 'recipes:vote' %}'}, postVote);
-            });
         })
     </script>
-{% endblock scripts %}
+{% endblock additional_scripts %}
 
-
-{% block content %}
+{% block additional_content %}
     <div id="search-container">
         <select id="ingredient-selecter" class="selectpicker"
                 multiple data-live-search="true"
@@ -156,33 +80,11 @@
         <input id="text-search" type="text" class="form-control" placeholder="Wyszukaj przepis" autocomplete="off"
                style="display: inline; width: auto; margin-left: 40px;">
     </div>
+{% endblock additional_content %}
 
-    <main>
-        <span id="error-message" class="centered-error-msg " style="display: none;"></span>
-        <ul class="element-list">
-            {% for recipe in page %}
-                <li>
-                    <a href="{% url 'recipes:recipe' recipe.slug %}">
-                        <h2 class="title">{{ recipe.title }}</h2>
-                    </a>
-                    <img src='{{ recipe.image.url }}' class="center">
-                    <div class="video_buttons row">
-                            <button class="upvote-button" name="{{ recipe.pk }}" id="upbtn_{{ recipe.pk }}"
-                                    data-on-click-action="upvote"
-                            >
-                                <i class="fa fa-thumbs-up fa-lg"></i>
-                                <section id="upvote_count_{{ recipe.pk }}">{{ recipe.up_votes }}</section>
-                            </button>
-
-                            <button class="downvote-button" name="{{ recipe.pk }}" id="dwnbtn_{{ recipe.pk }}"
-                                    data-on-click-action="downvote"
-                            >
-                                <i class="fa fa-thumbs-down fa-lg"></i>
-                                <section id="downvote_count_{{ recipe.pk }}">{{  recipe.down_votes }}</section>
-                            </button>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </main>
-{% endblock content %}
+{% block element_display %}
+    <a href="{% url 'recipes:recipe' element.slug %}">
+        <h2 class="title">{{ element.title }}</h2>
+    </a>
+    <img src='{{ element.image.url }}' class="center">
+{% endblock element_display %}

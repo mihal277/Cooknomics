@@ -21,14 +21,32 @@ function fancyNavbar() {
     }
 }
 
+/*
+   When user scrolls down the page, calls the function that fetches new data
+   form server. In most cases it passes no data to loadPage function, meaning that
+   there is no callback function on ajax error.
+ */
 function loadPageOnScroll() {
     if ($(window).scrollTop() > $(document).height() - $(window).height() * 2) {
         // turn of the event handler so it doest't fire again
         $(window).off('scroll');
-        loadPage(null);
+        loadPage();
     }
 }
 
+/*
+    Loads new page from the server. Uses global variables that are declared in
+    every template that has pagination:
+        - pageNumber: number of the that is going to be fetched from server
+        - hasNextPage: sets the variable depending on whether there is new page
+          that can be fetched from server
+        - dataDict: if the dictionary is null it means that no filterig arguments
+          are going to be sent to the server. If it is not null it creates dictionary
+          of elements that are going to be used as filters on the server (e.g ingredients
+          when serching for recipes).
+    If errorHandler is defined, when AJAX error occurs errorHandler is call with server
+    response status code.
+ */
 function loadPage(errorHandler) {
     if (hasNextPage == false) {
         return false;
@@ -73,12 +91,14 @@ function loadPage(errorHandler) {
     });
 }
 
+/* Adds event listener to scroll function. */
 $(document).ready(function() {
     $(window).on('scroll', loadPageOnScrollAndNavbar);
 });
 
-/* Function that send up/down vote request to server and updates
-   up/down vote count with data recieved from server.
+/*
+   Function that send up/down vote request to server and updates
+   up/down vote count with data recieved from the server.
  */
 function postVote(event) {
     var action = $(this).data('on-click-action');

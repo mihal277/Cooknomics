@@ -9,26 +9,25 @@ import json
 
 # === Views for video app ===
 
+INITIAL_PAGE_SIZE = 1
+NUMBER_OF_ELEMENTS_ON_PAGE = 1
+
 
 def videos_list(request):
     """
 
-    Generates site containing list of videos sorted by title.
-    Adds a ***vote_state*** field to every video object passed
-    to template that contains information about whether user already
-    upvoted or downvoted the video. Style of like button objects
-    depend on this parameter.
-
+    Generates site containing list of videos sorted by published_date.
     :param request: HttpRequest passed by browser
-    :return: html rendered from appropriate template
+    :return: HTML rendered from appropriate template with inital data.
     """
     videos = Video.objects.all().order_by('published_date')
 
-    paginator = Paginator(videos, 1)
+    paginator = Paginator(videos, INITIAL_PAGE_SIZE)
     page = paginator.page(1)
 
     context = {
         'page': page,
+        'display_likes': True,
     }
 
     return render(request, 'video_index.html', context)
@@ -37,9 +36,11 @@ def videos_list(request):
 @require_GET
 def video_page(request):
     """
-    View to generate updates to videos list when user scrolls down the page.
 
-    Returns page_number-th page as JSON.
+    View that returns new pages of videos list when user scrolls down the page.
+    :param request: HttpRequest passed by broswer, should contain 'page' field
+                    that stores number of the page to be fetched from server.
+    :return: Requested pages
     """
     page_number = request.GET.get('page', None)
 
@@ -47,7 +48,7 @@ def video_page(request):
         raise Http404
 
     videos = Video.objects.all().order_by('published_date')
-    paginator = Paginator(videos, 1)
+    paginator = Paginator(videos, NUMBER_OF_ELEMENTS_ON_PAGE)
 
     try:
         page = paginator.page(page_number)
@@ -94,21 +95,21 @@ def vote(request):
     Generates JSON response to a POST request sent after user up(down)votes
     a video. Part of AJAX interface.
     Requires following parameters to be passed:
+    ***pk*** - videos database pk
     ***slug*** - videos slug
     ***type*** - type of request, possible choices:
                 upvote - increase up_vote count
-                cancel_upvote - decrease up_vote count
                 downvote - increase down_vote count
-                cancel_downvote - decreast down_vote count
     Returns JSON file containing:
     ***upvotes*** - up_vote count of given video
     ***downvotes*** - down_vote count of given video
+    ***pk*** - primary key of the up/down voted video
     """
     if request.method == 'POST':
         video_slug = request.POST.get('pk', None)
         current_video = get_object_or_404(Video, pk=video_slug)
 
-        status = request.session.get('vote_state_article_%s' % video_slug, 'none')
+        status = request.session.get('vote_state_video_%s' % video_slug, 'none')
         request_type = request.POST.get('type', None)
 
         # set cookie expiry to 1 year
@@ -117,25 +118,25 @@ def vote(request):
         if request_type == 'upvote':
             if status == 'none':
                 current_video.upvote()
-                request.session['vote_state_article_%s' % video_slug] = 'upvoted'
+                request.session['vote_state_video_%s' % video_slug] = 'upvoted'
             elif status == 'upvoted':
                 current_video.cancel_upvote()
-                request.session['vote_state_article_%s' % video_slug] = 'none'
+                request.session['vote_state_video_%s' % video_slug] = 'none'
             elif status == 'downvoted':
                 current_video.upvote()
                 current_video.cancel_downvote()
-                request.session['vote_state_article_%s' % video_slug] = 'upvoted'
+                request.session['vote_state_video_%s' % video_slug] = 'upvoted'
         elif request_type == 'downvote':
             if status == 'none':
                 current_video.downvote()
-                request.session['vote_state_article_%s' % video_slug] = 'downvoted'
+                request.session['vote_state_video_%s' % video_slug] = 'downvoted'
             elif status == 'upvoted':
                 current_video.cancel_upvote()
                 current_video.downvote()
-                request.session['vote_state_article_%s' % video_slug] = 'downvoted'
+                request.session['vote_state_video_%s' % video_slug] = 'downvoted'
             elif status == 'downvoted':
                 current_video.cancel_downvote()
-                request.session['vote_state_article_%s' % video_slug] = 'none'
+                request.session['vote_state_video_%s' % video_slug] = 'none'
 
         context = {
             'upvotes': current_video.up_votes,

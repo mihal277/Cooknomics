@@ -1,3 +1,8 @@
+/*
+   Appends data fetched from server to the list of elements on webstie.
+   Gets called when user scrolls down the page and AJAX request to fetch
+   new data is finished.
+ */
 function appendElements(newData) {
     var newElementsHtml = [];
     $.each(newData, function(element, data) {
