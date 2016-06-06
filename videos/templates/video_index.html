@@ -1,40 +1,11 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+{% extends 'base_index.html' %}
 
-{% block title %}
-    Cooknomics - Videos
-{% endblock title %}
-
-{% block scripts %}
-    <!-- Script that gets new pages -->
-    <script type="application/javascript">
-        var pageNumber = {{ page.number }};
-        var hasNextPage = {{ page.has_next|lower }};
-        var url = '{% url 'videos:page' %}';
-        var dataDict = null;
-    </script>
-    <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
-    <script type="application/javascript" src="{% static 'videos/js/scripts.js' %}" ></script>
-{% endblock %}
-
-{%  block app_title %}
-<span class="app_title">VIDEOS</span>
-{% endblock app_title %}
-
-{% block content %}
-    <main>
-        <ul class="element-list">
-            {% for video in page %}
-                <li>
-                    <a href="{% url 'videos:single_video' video.slug %}">
-                    <h2 class="title"> {{ video.title }}</h2>
-                    </a>
-                    <iframe width="560" height="315"
-                        src="https://www.youtube.com/embed/{{ video.video_url }}"
-                        frameborder="0" allowfullscreen>
-                    </iframe>
-                </li>
-            {% endfor %}
-        </ul>
-    </main>
-{% endblock content %}
+{% block element_display %}
+    <a href="{% url 'videos:single_video' element.slug %}">
+    <h2 class="title"> {{ element.title }}</h2>
+    </a>
+    <iframe width="560" height="315"
+        src="https://www.youtube.com/embed/{{ element.video_url }}"
+        frameborder="0" allowfullscreen>
+    </iframe>
+{% endblock element_display %}

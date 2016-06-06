@@ -21,14 +21,32 @@ function fancyNavbar() {
     }
 }
 
+/*
+   When user scrolls down the page, calls the function that fetches new data
+   form server. In most cases it passes no data to loadPage function, meaning that
+   there is no callback function on ajax error.
+ */
 function loadPageOnScroll() {
     if ($(window).scrollTop() > $(document).height() - $(window).height() * 2) {
         // turn of the event handler so it doest't fire again
         $(window).off('scroll');
-        loadPage(null);
+        loadPage();
     }
 }
 
+/*
+    Loads new page from the server. Uses global variables that are declared in
+    every template that has pagination:
+        - pageNumber: number of the that is going to be fetched from server
+        - hasNextPage: sets the variable depending on whether there is new page
+          that can be fetched from server
+        - dataDict: if the dictionary is null it means that no filterig arguments
+          are going to be sent to the server. If it is not null it creates dictionary
+          of elements that are going to be used as filters on the server (e.g ingredients
+          when serching for recipes).
+    If errorHandler is defined, when AJAX error occurs errorHandler is call with server
+    response status code.
+ */
 function loadPage(errorHandler) {
     if (hasNextPage == false) {
         return false;
@@ -73,6 +91,59 @@ function loadPage(errorHandler) {
     });
 }
 
+/* Adds event listener to scroll function. */
 $(document).ready(function() {
     $(window).on('scroll', loadPageOnScrollAndNavbar);
 });
+
+/*
+   Function that send up/down vote request to server and updates
+   up/down vote count with data recieved from the server.
+ */
+function postVote(event) {
+    var action = $(this).data('on-click-action');
+    var pk = $(this).attr('name');
+
+    console.log("action: " + action);
+    console.log(event.data.voteUrl);
+
+    var postData = {
+        pk: pk,
+        type: action
+    };
+
+    $.ajax({
+        type: 'POST',
+        headers: {'X-CSRFToken': getCookie('csrftoken')},
+        url: event.data.voteUrl,
+        data: postData,
+        dataType: 'json',
+        encode: true
+    })
+    .done(function(data) {
+        $('#upvote_count_' + pk).html(data.upvotes);
+        $('#downvote_count_' + pk).html(data.downvotes);
+    })
+    .error(function(jqXHR) {
+        console.log(jqXHR.status);
+    })
+}
+
+/* Utility functions */
+
+/* get CSRF token from cookie, copied from https://docs.djangoproject.com/en/1.9/ref/csrf/ */
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

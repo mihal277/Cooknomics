@@ -1,36 +1,7 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
+{% extends 'base_index.html' %}
 
-{% block title %}
-    Cooknomics - News
-{% endblock title %}
-
-{% block scripts %}
-    <!-- Script that gets new pages -->
-    <script type="application/javascript">
-        var pageNumber = {{ page.number }};
-        var hasNextPage = {{ page.has_next|lower }};
-        var url = '{% url 'news:page' %}';
-        var dataDict = null;
-    </script>
-    <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
-    <script type="application/javascript" src="{% static 'news/js/scripts.js' %}" ></script>
-{% endblock %}
-
-{%  block app_title %}
-<span class="app_title">NEWS</span>
-{% endblock app_title %}
-
-{% block content %}
-    <main>
-        <ul class="element-list">
-            {% for article in page %}
-                <li>
-                    <a href="{% url 'news:article' article.slug %}">
-                        <h2 class="title">{{ article.title }}</h2>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </main>
-{% endblock content %}
+{% block element_display %}
+    <a href="{% url 'news:article' element.slug %}">
+        <h2 class="title">{{ element.title }}</h2>
+    </a>
+{% endblock element_display %}
