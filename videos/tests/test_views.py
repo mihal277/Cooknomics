@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from videos.models import *
+from videos.views import NUMBER_OF_ELEMENTS_ON_PAGE, INITIAL_PAGE_SIZE
 import string
 import random
 
@@ -20,12 +21,17 @@ def add_video(video_url):
     )
 
 
-def sort_object_list_by(list, parameter):
-    return sorted(list, key=lambda elem: getattr(elem, parameter))
+def sort_object_list_by(list_to_sort, parameter):
+    return sorted(list_to_sort, key=lambda elem: getattr(elem, parameter))
 
 
-def sort_dict_list_by(list, parameter):
-    return sorted(list, key=lambda elem: elem[parameter])
+def sort_dict_list_by(list_to_sort, parameter):
+    return sorted(list_to_sort, key=lambda elem: elem[parameter])
+
+# THOSE TESTS DEPEND ON THE FACT, THAT INITIAL PAGE SIZE = 2 AND
+# NUMBER_OF_ELEMENTS_ON_PAGE = 2, because it was hard to generate
+# random valid video slugs.
+
 
 class VideosListTestCase(TestCase):
     @classmethod
@@ -46,14 +52,14 @@ class VideosListTestCase(TestCase):
         self.video2 = add_video('HOQS3fTPDsw')
         response = self.client.get(self.url)
 
-        self.assertEqual(len(response.context['page']), 2)
+        self.assertEqual(len(response.context['page']), INITIAL_PAGE_SIZE)
 
     def test_pagination_too_much(self):
         self.video1 = add_video('hBQ8fh_Fp04')
         self.video2 = add_video('HOQS3fTPDsw')
         response = self.client.get(self.url)
 
-        self.assertEqual(len(response.context['page']), 2)
+        self.assertEqual(len(response.context['page']), INITIAL_PAGE_SIZE)
 
     def test_pagination_not_enough(self):
         self.video1 = add_video('hBQ8fh_Fp04')
@@ -79,6 +85,7 @@ class VideosListTestCase(TestCase):
 
         self.assertTrue(self.video1 in response.context['page'].object_list)
 
+
 class VideoPageTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -103,7 +110,7 @@ class VideoPageTestCase(TestCase):
         self.assertTrue('page' in response_json)
         self.assertTrue('has_next' in page_data)
         self.assertTrue('objects' in page_data)
-        self.assertEqual(len(page_data['objects']), 2)
+        self.assertEqual(len(page_data['objects']), NUMBER_OF_ELEMENTS_ON_PAGE)
 
     def test_has_next(self):
         response = self.client.get(self.url, self.data)
