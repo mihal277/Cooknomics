@@ -45,23 +45,25 @@
 
 </head>
 <body>
-    <div class="container">
-        <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+{#    <div class="container">#}
+{#       #}
+{#    </div>#}
+
+    <header class="intro-header" style="background-image: url({% static 'img/desk_shade.png' %})">
+         <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav" id="pad-left">
                     <li><a href="{% url 'news:news_list' %}">Cooknomics</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right" id="pad-right">
-                    <li id="funny"><a href="{% url 'news:news_list' %}">News</a></li>
+                <ul class="nav navbar-nav go-right">
+                    <li><a href="{% url 'news:news_list' %}">News</a></li>
                     <li><a href="{% url 'videos:videos_list' %}">Videos</a></li>
                     <li><a href="{% url 'recipes:recipes_list' %}">Recipes</a></li>
-                    <li id="funny"><a href="{% url 'partners:partners_list' %}">Partners</a></li>
+                    <li><a href="{% url 'partners:partners_list' %}">Partners</a></li>
                 </ul>
             </div>
         </nav>
-    </div>
 
-    <header class="intro-header" style="background-image: url({% static 'img/desk_shade.png' %})">
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
@@ -71,7 +73,7 @@
                         <br>
                         {%  block app_title %}
                         {% endblock app_title %}
-                    </div>
+                    </div>http://127.0.0.1:8000/static/img/logobiale.png
                 </div>
             </div>
         </div>
@@ -79,10 +81,9 @@
 
     {% block content %}
     {% endblock content %}
+    <br>
+    <br>
 
-    <br>
-    <br>
-{#    <button class="more btn-md btn-primary">More</button>#}
     <footer>
         <div class="container">
             <a href="https://www.facebook.com/Cooknomics">
