@@ -22,7 +22,7 @@ def news_list(request):
     :param request: HttpRequest passed by browser
     :return: HTML rendered from appropriate template with inital data.
     """
-    articles = Article.objects.all().order_by('published_date')
+    articles = Article.objects.all().order_by('-published_date')
 
     for a in articles:
         a.shortened_content = shorten_content(a.content, 150)
@@ -52,9 +52,11 @@ def news_page(request):
         raise Http404
 
     # Get sorting parameter, if none is provides, sort by published_date
-    sorting = request.GET.get('sorting', 'published_date')
+    sorting = request.GET.get('sorting', '-published_date')
     if sorting == 'up_votes':
         sorting = '-up_votes'
+    if sorting == 'published_date':
+        sorting = '-published_date'
 
     articles = Article.objects.all().order_by(sorting)
     paginator = Paginator(articles, NUMBER_OF_ELEMENTS_ON_PAGE)
@@ -71,6 +73,7 @@ def news_page(request):
         news_dict['slug'] = news.slug
         news_dict['shortened_content'] = shorten_content(news.content, 150)
         news_dict['published_date'] = news.published_date.timestamp()
+        news_dict['voting_status'] = request.session.get('vote_state_recipe_%s' % news.slug, 'none')
         news_dict['url'] = \
             reverse('news:article', kwargs={'article_slug': news.slug})
         page_data['objects'].append(news_dict)
@@ -118,8 +121,8 @@ def vote(request):
                 upvote - increase up_vote count
                 downvote - increase down_vote count
     Returns JSON file containing:
-    ***upvotes*** - up_vote count of given video
-    ***downvotes*** - down_vote count of given video
+    ***upvotes*** - up_vote count of given article
+    ***downvotes*** - down_vote count of given article
     ***pk*** - primary key of the up/down voted article
     """
     if request.method == 'POST':

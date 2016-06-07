@@ -1,25 +1,27 @@
 {% extends 'base_index.html' %}
 
+
 {% block element_display %}
+    <hr>
+    <div class="post">
 
-        <div class="post">
+        <a href="{% url 'news:article' element.slug %}">
 
-                <a href="{% url 'news:article' element.slug %}">
-                    <h1 class="title">
-                        {{ element.title }}
-                    </h1>
-                </a>
+            <h2>{{ element.title }}</h2>
 
-                <p>{{ element.shortened_content|safe }}</p>
-                <a class="read_more" href="{% url 'news:article' element.slug %}">
-                    Read more <i class="read_more_arrow"></i>
-                </a>
+        </a>
 
-                <p>Posted by {{ element.author }} on {{ element.published_date }}</p>
-        </div>
+        <p>{{ element.shortened_content|safe }}</p>
+
+        <p class="post-metadata">Posted by {{ element.author }} on {{ element.published_date }}</p>
+
+        <a href="{% url 'news:article' element.slug %}" class="button">Read and comment</a>
+
+    </div>
 
 
 {% endblock element_display %}
+
 
 {% block additional_element_display %}
 

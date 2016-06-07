@@ -76,19 +76,13 @@
 
                     {% if display_likes %}
                     <div class="video_buttons row">
-                        <button class="upvote-button" name="{{ element.slug }}" id="upbtn_{{ element.slug }}"
-                                data-on-click-action="upvote"
-                        >
-                            <i class="fa fa-thumbs-up fa-lg"></i>
-                            <section id="upvote_count_{{ element.slug }}">{{ element.up_votes }}</section>
-                        </button>
 
-                        <button class="downvote-button" name="{{ element.slug }}" id="dwnbtn_{{ element.slug }}"
-                                data-on-click-action="downvote"
-                        >
-                            <i class="fa fa-thumbs-down fa-lg"></i>
-                            <section id="downvote_count_{{ element.slug }}">{{  element.down_votes }}</section>
-                        </button>
+                        <i name="{{ element.slug }}" class="fa fa-thumbs-up fa-lg upvote-button" id="upbtn_{{ element.slug }}"
+                            data-on-click-action="upvote"></i>
+                        <section id="upvote_count_{{ element.slug }}">{{ element.up_votes }}</section>
+                        <i name="{{ element.slug }}" class="fa fa-thumbs-down fa-lg downvote-button" id="dwnbtn_{{ element.slug }}"
+                            data-on-click-action="downvote"></i>
+                        <section id="downvote_count_{{ element.slug }}">{{  element.down_votes }}</section>
                     </div>
                     {% block additional_element_display %}
                     {% endblock additional_element_display %}
