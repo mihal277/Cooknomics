@@ -45,10 +45,6 @@
 
 </head>
 <body>
-{#    <div class="container">#}
-{#       #}
-{#    </div>#}
-
     <header class="intro-header" style="background-image: url({% static 'img/desk_shade.png' %})">
          <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -68,12 +64,12 @@
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                     <div class="site-heading">
-                        <img src={% static 'img/logobiale.png' %}>
+                        <img id="logo" src={% static 'img/logobiale.png' %}>
                         <span class="subheading">Simple meals for everyone</span>
                         <br>
                         {%  block app_title %}
                         {% endblock app_title %}
-                    </div>http://127.0.0.1:8000/static/img/logobiale.png
+                    </div>
                 </div>
             </div>
         </div>
@@ -81,6 +77,7 @@
 
     {% block content %}
     {% endblock content %}
+
     <br>
     <br>
 
