@@ -1,18 +1,28 @@
 {% extends 'base_index.html' %}
 
+
 {% block element_display %}
-    <div class="article-list-single">
+    <hr>
+    <div class="post">
+
         <a href="{% url 'news:article' element.slug %}">
-            <h2>{{ article.title }}</h2>
+
+            <h2>{{ element.title }}</h2>
+
         </a>
 
-        <script>document.write(trim_str_to_n("{{ element.content }}"));</script>
-        <a href="{% url 'news:article' element.slug %}"><br>Go to article</a>
+        <p>{{ element.shortened_content|safe }}</p>
 
-        <p>Posted by {{ element.author }} on {{ element.published_date }}</p>
+        <p class="post-metadata">Posted by {{ element.author }} on {{ element.published_date }}</p>
+
+        <a href="{% url 'news:article' element.slug %}" class="button">Read and comment</a>
+
+    </div>
+
+
 {% endblock element_display %}
 
+
 {% block additional_element_display %}
-          <hr>
-    </div>
+
 {% endblock additional_element_display %}
