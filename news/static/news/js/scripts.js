@@ -26,10 +26,10 @@ function appendElements(newData) {
 
         console.log(data.voting_status);
         if (data.voting_status == 'upvoted') {
-            upvote_class += 'clicked';
+            upvote_class += ' clicked';
         }
         if (data.voting_status == 'downvoted') {
-            downvote_class = 'clicked';
+            downvote_class = ' clicked';
         }
 
         htmlString += '<div class="video_buttons row">';

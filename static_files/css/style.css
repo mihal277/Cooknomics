@@ -99,7 +99,7 @@ hr.small {
     margin-top: 10px;
 }
 
-.fa-thumbs-up {
+.fa-thumbs-up, .fa-thumbs-down {
     color: grey;
     cursor: pointer;
     -moz-transition: color 0.35s ease-in-out;
@@ -109,12 +109,12 @@ hr.small {
     transition: color 0.35s ease-in-out;
 }
 
-.fa-thumbs-up:hover {
+.fa-thumbs-up:hover, .fa-thumbs-down:hover {
     color: black;
 }
 
-.fa-thumbs-down {
-    color: grey;
+.fa-thumbs-up.clicked, .fa-thumbs-down.clicked {
+    color: black;
     cursor: pointer;
     -moz-transition: color 0.35s ease-in-out;
     -webkit-transition: color 0.35s ease-in-out;
@@ -123,8 +123,8 @@ hr.small {
     transition: color 0.35s ease-in-out;
 }
 
-.fa-thumbs-down:hover {
-    color: black;
+.fa-thumbs-up.clicked:hover, .fa-thumbs-down.clicked:hover {
+    color: grey;
 }
 
 .more {

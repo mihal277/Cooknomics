@@ -1,6 +1,7 @@
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
-from partners.utils import validate_url, validate_image
+from partners.utils import validate_url
+from Cooknomics.utils import validate_image
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 

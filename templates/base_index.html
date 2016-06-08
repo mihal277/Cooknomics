@@ -77,11 +77,17 @@
                     {% if display_likes %}
                     <div class="video_buttons row">
 
-                        <i name="{{ element.slug }}" class="fa fa-thumbs-up fa-lg upvote-button" id="upbtn_{{ element.slug }}"
-                            data-on-click-action="upvote"></i>
+                        <i name="{{ element.slug }}"
+                           class="fa fa-thumbs-up fa-lg upvote-button {% if element.voting_status == 'upvoted' %}
+                                                                      clicked
+                                                                      {% endif %}" id="upbtn_{{ element.slug }}"
+                                                                      data-on-click-action="upvote"></i>
                         <section id="upvote_count_{{ element.slug }}">{{ element.up_votes }}</section>
-                        <i name="{{ element.slug }}" class="fa fa-thumbs-down fa-lg downvote-button" id="dwnbtn_{{ element.slug }}"
-                            data-on-click-action="downvote"></i>
+                        <i name="{{ element.slug }}"
+                           class="fa fa-thumbs-down fa-lg downvote-button {% if element.voting_status == 'downvoted' %}
+                                                                          clicked
+                                                                          {% endif %}" id="dwnbtn_{{ element.slug }}"
+                                                                          data-on-click-action="downvote"></i>
                         <section id="downvote_count_{{ element.slug }}">{{  element.down_votes }}</section>
                     </div>
                     {% block additional_element_display %}

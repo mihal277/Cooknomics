@@ -26,6 +26,7 @@ def news_list(request):
 
     for a in articles:
         a.shortened_content = shorten_content(a.content, 150)
+        a.voting_status = request.session.get('vote_state_article_%s' % a.slug, 'none')
 
     paginator = Paginator(articles, INITIAL_PAGE_SIZE)
     page = paginator.page(1)
@@ -73,7 +74,7 @@ def news_page(request):
         news_dict['slug'] = news.slug
         news_dict['shortened_content'] = shorten_content(news.content, 150)
         news_dict['published_date'] = news.published_date.timestamp()
-        news_dict['voting_status'] = request.session.get('vote_state_recipe_%s' % news.slug, 'none')
+        news_dict['voting_status'] = request.session.get('vote_state_article_%s' % news.slug, 'none')
         news_dict['url'] = \
             reverse('news:article', kwargs={'article_slug': news.slug})
         page_data['objects'].append(news_dict)

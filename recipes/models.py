@@ -5,6 +5,9 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from tinymce.models import HTMLField
 from unidecode import unidecode
+from Cooknomics.utils import validate_image
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
 
 # === Models for recipes app ===
 
@@ -67,7 +70,7 @@ class Recipe(models.Model):
     author = models.CharField(max_length=200)
     content = HTMLField()
     published_date = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(default='images/BNN.jpg', upload_to='images/')
+    image = models.ImageField(blank=True, upload_to='images/')
     ingredients = models.ManyToManyField(Ingredient, through='IngredientDetails')
     up_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     down_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
@@ -79,6 +82,25 @@ class Recipe(models.Model):
         self.image_url = self.image.url[self.image.url.find('/media/'):]
         if self.published_date > timezone.now():
             raise ValidationError('The date cannot be in the future')
+        try:
+            if self.image:
+                validate_image(self.image.file.size, self.image.name)
+        except:
+            raise
+
+    def save(self, *args, **kwargs):
+        try:
+            this = Recipe.objects.get(slug=self.slug)
+            if this.image != self.image:
+                this.image.delete(save=False)
+        except:
+            pass  # new photo
+        super(Recipe, self).save(*args, **kwargs)
+
+    def image_tag(self):
+        return u'<img src="%s" />' % self.image.url
+    image_tag.short_description = 'Image'
+    image_tag.allow_tags = True
 
     def upvote(self):
         self.up_votes += 1
@@ -101,23 +123,32 @@ class Recipe(models.Model):
         verbose_name_plural = "Przepisy"
 
 
+@receiver(pre_delete, sender=Recipe)
+def image_delete(sender, instance, **kwargs):
+    """
+
+    image_delete makes sure to delete the file whenever an image object is deleted
+
+    """
+    instance.image.delete(False)
+
+
 class IngredientDetails(models.Model):
     """
 
-        The IngredientRecipe class defines ingredients used in recipe
-        Each recipe has the following fields:
+    The IngredientRecipe class defines ingredients used in recipe
+    Each recipe has the following fields:
 
-        1. **ingredient**
-        2. **recipe**
-        3. **amountt** - amount of the given ingredient
+    1. **ingredient**
+    2. **recipe**
+    3. **amountt** - amount of the given ingredient
 
-        The Recipe Class has also two functions:
+    The Recipe Class has also two functions:
 
-        1. **__str__**
-        2. **clean** - validates the amount field
+    1. **__str__**
+    2. **clean** - validates the amount field
 
-        """
-
+    """
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, verbose_name="Składnik")
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, verbose_name="Przepis")
     amount = models.FloatField(default=0, verbose_name="Ilość składnika (kilogramów lub litrów)")
