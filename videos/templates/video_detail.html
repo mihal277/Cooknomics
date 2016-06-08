@@ -1,53 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'base_detail.html' %}
 {% load staticfiles %}
 
 {% block title %}
-    {{ video.title }}
+    {{ title }}
 {% endblock title %}
 
-{% block scripts %}
-{% endblock scripts %}
-
-{% block content %}
-    <main>
+{% block element_display %}
         <div>
-            <h2 class="title"> {{ video.title }}</h2>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video.video_url }}" frameborder="0" allowfullscreen></iframe>
+            <h2 class="title"> {{ title }}</h2>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{ video_url }}" frameborder="0" allowfullscreen></iframe>
             <div>
                 <h2>Content:</h2>
-                <span>{{ video.description|safe }}</span>
-            </div>
-            <div class="video_buttons row">
-                <button>
-                    <i class="fa fa-thumbs-up fa-lg"></i> {{ video.up_votes }}
-                </button>
-                <button>
-                    <i class="fa fa-thumbs-down fa-lg"></i> {{  video.down_votes }}
-                </button>
-               <p class="description">{{ video.description }}</p>
+                <span>{{ description|safe }}</span>
             </div>
         </div>
-        <div>
-            <a href="{% url 'videos:videos_list' %}">
-                <button class="more btn-md btn-primary">Back</button>
-            </a>
-        </div>
-    </main>
-
-    <div id="disqus_thread">
-        <script>
-            (function() {
-            var d = document, s = d.createElement('script');
-
-            s.src = '//cooknomics.disqus.com/embed.js';
-
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-            })();
-        </script>
-
-        <noscript>Please enable JavaScript to view the
-            <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
-        </noscript>
-    </div>
-{% endblock content %}
+{% endblock element_display %}

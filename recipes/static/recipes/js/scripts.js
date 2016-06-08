@@ -16,16 +16,17 @@ function appendElements(newData) {
         htmlString += '<i class="fa fa-thumbs-up fa-lg"></i>';
         htmlString += '<section id="upvote_count_' + data.slug + '">' + data.up_votes + '</section>';
         htmlString += '</button>';
-        htmlString += '<button class="downvote-button" name="' + data.slug + '" id="dwnbtn_'+ data.slug + '"' +
+        htmlString += '<button class="downvote-button" name="' + data.slug + '" id="dwnbtn_'+ element + '"' +
                                 'data-on-click-action="downvote">';
         htmlString += '<i class="fa fa-thumbs-down fa-lg"></i>';
-        htmlString += '<section id="downvote_count_'+ data.slug +'">' + data.down_votes +'</section>';
+        htmlString += '<section id="downvote_count_'+ element +'">' + data.down_votes +'</section>';
         htmlString += '</button>';
         htmlString += '</div>';
         htmlString += '</li>';
 
         newElementsHtml.push(htmlString);
     });
+    console.log(newElementsHtml);
     $(".element-list").append(newElementsHtml.join(""));
 }
 
@@ -48,7 +49,8 @@ function fillIngredientSelectBox(requestUrl) {
             $.each(parameter, function(name, value) {
                 $productList.append('<option value="' + value + '">' + name + '</option>');
             });
-        })
+        });
+        $productList.selectpicker('refresh');
     })
     .error(function(jqXHR) {
         console.log("AJAX error: " + jqXHR.status);

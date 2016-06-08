@@ -12,8 +12,9 @@ import json
 
 # === Views for recipes app ===
 
-INITIAL_PAGE_SIZE = 1
-NUMBER_OF_ELEMENTS_ON_PAGE = 1
+INITIAL_PAGE_SIZE = 2
+NUMBER_OF_ELEMENTS_ON_PAGE = 2
+
 
 def recipes_list(request):
     """
@@ -38,6 +39,7 @@ def recipes_list(request):
 
     return render(request, 'recipes_index.html', context)
 
+
 @require_GET
 def get_ingredients(request):
     """
@@ -55,6 +57,7 @@ def get_ingredients(request):
 
     return HttpResponse(json.dumps(context), content_type='application/json')
 
+
 @require_GET
 def recipes_page(request):
     """
@@ -69,6 +72,11 @@ def recipes_page(request):
 
     # Get sorting parameter, if none is provides, sort by published_date
     sorting = request.GET.get('sorting', 'published_date')
+
+    possible_sortings = ['up_votes', 'published_date', 'title']
+    if sorting not in possible_sortings:
+        raise Http404
+
     if sorting == 'up_votes':
         sorting = '-up_votes'
 
@@ -103,6 +111,11 @@ def get_filtered_recipes(request):
             raise Http404
 
         sorting = request.GET.get('sorting', 'published_date')
+
+        possible_sortings = ['up_votes', 'published_date', 'title']
+        if sorting not in possible_sortings:
+            raise Http404
+
         if sorting == 'up_votes':
             sorting = '-up_votes'
 
@@ -175,10 +188,13 @@ def recipe(request, recipe_slug):
         'content': current_recipe.content,
         'image_url': current_recipe.image.url,
         'ingredients': ingredients_list,
-        'price': price
+        'price': price,
+        'up_votes': current_recipe.up_votes,
+        'down_votes': current_recipe.down_votes,
     }
 
     return render(request, 'recipes_detail.html', context)
+
 
 @require_POST
 def vote(request):

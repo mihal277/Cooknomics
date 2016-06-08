@@ -17,6 +17,7 @@
         {% endwith %}
     </script>
     <script type="application/javascript" src="{% static 'js/scripts.js' %}"></script>
+    <script type="application/javascript" src="{% static 'js/vote.js' %}"></script>
     {% with ""|addstr:appname|addstr:"/js/scripts.js" as scripts_path %}
     <script type="application/javascript" src="{% static scripts_path %}" ></script>
     {% endwith %}
@@ -90,9 +91,10 @@
                                                                           data-on-click-action="downvote"></i>
                         <section id="downvote_count_{{ element.slug }}">{{  element.down_votes }}</section>
                     </div>
+                    {% endif %}
+
                     {% block additional_element_display %}
                     {% endblock additional_element_display %}
-                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

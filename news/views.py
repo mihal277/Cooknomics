@@ -53,7 +53,13 @@ def news_page(request):
         raise Http404
 
     # Get sorting parameter, if none is provides, sort by published_date
+
     sorting = request.GET.get('sorting', '-published_date')
+
+    possible_sortings = ['up_votes', 'published_date', 'title']
+    if sorting not in possible_sortings:
+        raise Http404
+
     if sorting == 'up_votes':
         sorting = '-up_votes'
     if sorting == 'published_date':
@@ -102,8 +108,8 @@ def article(request, article_slug):
         'title': current_article.title,
         'published_date': current_article.published_date,
         'content': current_article.content,
-        'upvotes': current_article.up_votes,
-        'downvotes': current_article.down_votes,
+        'up_votes': current_article.up_votes,
+        'down_votes': current_article.down_votes,
     }
 
     return render(request, 'news_detail.html', context)

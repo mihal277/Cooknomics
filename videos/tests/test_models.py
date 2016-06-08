@@ -8,11 +8,11 @@ class VideoTestCase(TestCase):
 
     def setUp(self):
         Video.objects.create(title='A', description='B',
-                             video_url='https://www.youtube.com/watch?v=HMNoC-EMzw8')
+                             video_url='HMNoC-EMzw8')
         Video.objects.create(title='C', description='D',
-                             video_url='https://www.youtube.com/watch?v=C-EMzw8')
+                             video_url='C-EMzw8')
         Video.objects.create(title='E', description='F',
-                             video_url='https://www.youtube.com/watch?v=HMNoC-EMzw8',
+                             video_url='HMNoC-EMzw8',
                              published_date=one_day_hence())
 
     def test_video(self):
