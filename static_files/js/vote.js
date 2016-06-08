@@ -4,7 +4,7 @@
  */
 function postVote(event) {
     var action = $(this).data('on-click-action');
-    var pk = $(this).attr('name');
+    var pk = $(this).data('name');
 
     var postData = {
         pk: pk,

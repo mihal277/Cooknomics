@@ -34,18 +34,18 @@
         {% block element_display %}
         {% endblock element_display %}
         <div class="video_buttons row">
-            <button class="upvote-button" name="{{ slug }}" id="upbtn_{{ slug }}"
+            <button class="upvote-button" data-name="{{ slug }}" id="upbtn_{{ slug }}"
                     data-on-click-action="upvote"
             >
                 <i class="fa fa-thumbs-up fa-lg"></i>
-                <section id="upvote_count_{{ slug }}">{{ up_votes }}</section>
+                <span id="upvote_count_{{ slug }}">{{ up_votes }}</span>
             </button>
 
-            <button class="downvote-button" name="{{ slug }}" id="dwnbtn_{{ slug }}"
+            <button class="downvote-button" data-name="{{ slug }}" id="dwnbtn_{{ slug }}"
                     data-on-click-action="downvote"
             >
                 <i class="fa fa-thumbs-down fa-lg"></i>
-                <section id="downvote_count_{{ slug }}">{{  down_votes }}</section>
+                <span id="downvote_count_{{ slug }}">{{  down_votes }}</span>
             </button>
         </div>
         {% block additional_element_display %}
