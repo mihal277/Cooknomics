@@ -83,6 +83,9 @@ hr {
     color: black;
     text-align: center;
     margin-bottom: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0px;
 }
 
 .recipe_image {
@@ -271,4 +274,9 @@ img.center {
 
 .post .post-metadata {
     color: #b8b894  ;
+}
+
+.element {
+    margin-left: auto;
+    margin-right: auto;
 }
