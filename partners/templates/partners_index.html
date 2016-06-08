@@ -5,11 +5,15 @@
     Cooknomics - Partners
 {% endblock title %}
 
+{%  block app_title %}
+<span class="app_title">{{ appname|upper }}</span>
+{% endblock app_title %}
+
 {% block content %}
     <main>
         <ul class="element-list">
             {% for partner in partners %}
-                <li>
+                <li class="element">
                 {% if partner.url %}
                     <a href="{{ partner.url }}">
                 {% endif %}

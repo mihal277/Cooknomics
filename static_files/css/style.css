@@ -30,8 +30,8 @@ li {
 }
 
 .row {
-    margin-right: -15px;
-    margin-left: -15px;
+    margin-right: 0;
+    margin-left: 0;
 }
 
 .col-lg-8, .col-md-10 {
@@ -44,6 +44,8 @@ li {
 .site-heading {
     padding: 150px 0;
     color: #fff;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
 }
 
@@ -65,7 +67,6 @@ hr {
     display: block;
     font-family: 'Amatic SC', cursive;
     font-weight: 300;
-    margin-left: 60px;
 }
 
 .app_title {
@@ -74,7 +75,6 @@ hr {
     display: block;
     font-family: 'Amatic SC', cursive;
     font-weight: 300;
-    margin-left: 60px;
 }
 
 .element-list  {
@@ -83,6 +83,9 @@ hr {
     color: black;
     text-align: center;
     margin-bottom: 60px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0px;
 }
 
 .recipe_image {
@@ -133,6 +136,8 @@ hr.small {
 
 footer {
     margin-top: -10px!important;
+    margin-left: auto;
+    margin-right: auto;
     text-align: center;
     margin-bottom: 40px;
 }
@@ -164,7 +169,7 @@ img.center {
     width: 80%;
     margin: 0 auto;
 }
-.navbar-right {
+.go-right {
     float: right;
     padding-right: 20px;
 }
@@ -179,6 +184,10 @@ img.center {
 
 .navbar-default .navbar-nav>li>a {
     color: #FFF;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: #337ab7;
 }
 
 .navbar-custom {
@@ -229,6 +238,12 @@ img.center {
     top: 2px;
 }
 
+#logo {
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 30px;
+}
+
 .button {
     position: relative;
     display: inline-block;
@@ -265,4 +280,7 @@ img.center {
     color: #b8b894  ;
 }
 
-
+.element {
+    margin-left: auto;
+    margin-right: auto;
+}
