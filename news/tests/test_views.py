@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from news.models import *
 from datetime import timedelta
 from django.utils import timezone
+from news.views import NUMBER_OF_ELEMENTS_ON_PAGE, INITIAL_PAGE_SIZE
 import string
 import random
 
@@ -33,12 +34,12 @@ def add_news(title, author, up_votes=0, down_votes=0):
     )
 
 
-def sort_object_list_by(list, parameter):
-    return sorted(list, key=lambda elem: getattr(elem, parameter))
+def sort_object_list_by(list_to_sort, parameter):
+    return sorted(list_to_sort, key=lambda elem: getattr(elem, parameter))
 
 
-def sort_dict_list_by(list, parameter):
-    return sorted(list, key=lambda elem: elem[parameter])
+def sort_dict_list_by(list_to_sort, parameter):
+        return sorted(list_to_sort, key=lambda elem: elem[parameter])
 
 
 class NewsListTestCase(TestCase):
@@ -56,28 +57,28 @@ class NewsListTestCase(TestCase):
         self.assertTrue(response.context['display_likes'])
 
     def test_pagination(self):
-        for i in range(0, 20):
+        for i in range(0, INITIAL_PAGE_SIZE):
             add_random_news()
 
         response = self.client.get(self.url)
-        self.assertEqual(len(response.context['page']), 20)
+        self.assertEqual(len(response.context['page']), INITIAL_PAGE_SIZE)
 
     def test_pagination_too_much(self):
-        for i in range(0, 40):
+        for i in range(0, 2*INITIAL_PAGE_SIZE):
             add_random_news()
 
         response = self.client.get(self.url)
-        self.assertEqual(len(response.context['page']), 20)
+        self.assertEqual(len(response.context['page']), INITIAL_PAGE_SIZE)
 
     def test_pagination_not_enough(self):
-        for i in range(0, 10):
+        for i in range(0, INITIAL_PAGE_SIZE-1):
             add_random_news()
 
         response = self.client.get(self.url)
-        self.assertEqual(len(response.context['page']), 10)
+        self.assertEqual(len(response.context['page']), INITIAL_PAGE_SIZE-1)
 
     def test_good_order(self):
-        for i in range(0, 10):
+        for i in range(0, INITIAL_PAGE_SIZE-1):
             add_random_news()
 
         response = self.client.get(self.url)
@@ -88,7 +89,7 @@ class NewsListTestCase(TestCase):
 
     def test_initial_page(self):
         article = add_news('title', 'me')
-        for i in range(0, 40):
+        for i in range(0, 2*INITIAL_PAGE_SIZE):
             add_random_news()
 
         response = self.client.get(self.url)
@@ -97,15 +98,18 @@ class NewsListTestCase(TestCase):
 
 
 class NewsPageTestCase(TestCase):
-    def setUp(self):
-        for i in range(0, 40):
-            add_random_news()
-
-        self.data = {
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse("news:page")
+        cls.data = {
             'page': 1,
             'sorting': 'published_date',
         }
-        self.url = reverse("news:page")
+        cls.NUMBER_OF_PAGES = 2
+
+    def setUp(self):
+        for i in range(0, self.NUMBER_OF_PAGES * NUMBER_OF_ELEMENTS_ON_PAGE):
+            add_random_news()
 
     def test_basic(self):
         response = self.client.get(self.url, self.data)
@@ -116,7 +120,7 @@ class NewsPageTestCase(TestCase):
         self.assertTrue('page' in response_json)
         self.assertTrue('has_next' in page_data)
         self.assertTrue('objects' in page_data)
-        self.assertEqual(len(page_data['objects']), 20)
+        self.assertEqual(len(page_data['objects']), NUMBER_OF_ELEMENTS_ON_PAGE)
 
     def test_has_next(self):
         response = self.client.get(self.url, self.data)
@@ -127,7 +131,7 @@ class NewsPageTestCase(TestCase):
 
     def test_doesnt_have_next(self):
         data = {
-            'page': 2,
+            'page': self.NUMBER_OF_PAGES,
             'sorting': 'published_date',
         }
         response = self.client.get(self.url, data)
@@ -148,7 +152,7 @@ class NewsPageTestCase(TestCase):
     def test_correct_data_sent(self):
         article = add_news('news', 'me')
         data = {
-            'page': 3,
+            'page': self.NUMBER_OF_PAGES + 1,
             'sorting': 'published_date',
         }
         response = self.client.get(self.url, data)
@@ -183,7 +187,7 @@ class NewsPageTestCase(TestCase):
 
     def test_incorrect_page_number(self):
         data = {
-            'page': 5,
+            'page': self.NUMBER_OF_PAGES + 5,
             'sorting': 'published_date',
         }
         response = self.client.get(self.url, data)
@@ -234,7 +238,7 @@ class ArticleTestCase(TestCase):
             down_votes=54337,
         )
         cls.article_url = reverse('news:article',
-               kwargs={'article_slug': cls.article.slug})
+                                  kwargs={'article_slug': cls.article.slug})
 
     def setUp(self):
         for i in range(0, 40):
@@ -524,4 +528,3 @@ class VoteTestCase(TestCase):
 
         self.assertGreater(session.get_expiry_date(),
                            timezone.now() + timedelta(days=364))
-

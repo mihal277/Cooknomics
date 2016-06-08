@@ -99,12 +99,32 @@ hr.small {
     margin-top: 10px;
 }
 
-.fa-thumbs-up {
-    color: green;
+.fa-thumbs-up, .fa-thumbs-down {
+    color: grey;
+    cursor: pointer;
+    -moz-transition: color 0.35s ease-in-out;
+    -webkit-transition: color 0.35s ease-in-out;
+    -o-transition: color 0.35s ease-in-out;
+    -ms-transition: color 0.35s ease-in-out;
+    transition: color 0.35s ease-in-out;
 }
 
-.fa-thumbs-down {
-    color: red;
+.fa-thumbs-up:hover, .fa-thumbs-down:hover {
+    color: black;
+}
+
+.fa-thumbs-up.clicked, .fa-thumbs-down.clicked {
+    color: black;
+    cursor: pointer;
+    -moz-transition: color 0.35s ease-in-out;
+    -webkit-transition: color 0.35s ease-in-out;
+    -o-transition: color 0.35s ease-in-out;
+    -ms-transition: color 0.35s ease-in-out;
+    transition: color 0.35s ease-in-out;
+}
+
+.fa-thumbs-up.clicked:hover, .fa-thumbs-down.clicked:hover {
+    color: grey;
 }
 
 .more {
@@ -215,4 +235,40 @@ img.center {
     margin-left: auto;
     margin-right: auto;
     padding-bottom: 30px;
+}
+
+.button {
+    position: relative;
+    display: inline-block;
+    margin-top: 0.5em;
+    padding: 0.5em 0.75em;
+    background: #337ab7;
+    border-radius: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 1.1em;
+    color: #FFF;
+    -moz-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+    -webkit-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+    -o-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+    -ms-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+    transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: #39CCCC;
+    color: #FFF !important;
+    text-decoration: none;
+}
+
+.post {
+    max-width: 500px;
+    margin: 0 auto;
+    font-family: Impact, Charcoal, sans-serif;
+    text-align: left;
+}
+
+.post .post-metadata {
+    color: #b8b894  ;
 }
