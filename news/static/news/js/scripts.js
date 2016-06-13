@@ -13,10 +13,10 @@ function appendElements(newData) {
         var date = new Date(data.published_date)
         htmlString += '<div class="post">';
         htmlString += '<a href="' + data.url + '"><h2>' + data.title + '</h2></a>';
-        htmlString += '<i class="fa fa-clock-o clock-icon" aria-hidden="true"></i>' +
+        htmlString += '<i class="fa fa-clock-o footnote-icon" aria-hidden="true"></i>' +
                       '<p class="post-metadata"> ' + date + '</p>';
         htmlString += '<i class="fa fa-comment comment-icon" aria-hidden="true"></i>' +
-                      '<a href="' + data.slug + '#disqus_thread" class="comment-link"></a>';
+                      '<a href="' + data.url + '#disqus_thread" class="comment-link"></a>';
 
 
         var upvote_class = 'fa fa-thumbs-up fa-lg upvote-button';

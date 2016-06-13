@@ -6,9 +6,12 @@
 {% endblock title %}
 
 {% block element_display %}
-    <div class="article">
+    <div class="post">
         <h2 class="title"> {{ title }}</h2>
-        <h3 class="author"> {{ author }}</h3>
-        <h4 class="fcontent"> {{ content|safe }}</h4>
+        <i class="fa fa-clock-o footnote-icon" aria-hidden="true"></i>
+        <p class="post-metadata">{{ published_date }}</p>
+        <i class="fa fa-user footnote-icon" aria-hidden="true"></i>
+        <p class="post-metadata">{{ author }}</p>
+        {{ content|safe }}
     </div>
 {% endblock element_display %}
