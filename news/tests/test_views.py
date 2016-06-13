@@ -34,12 +34,12 @@ def add_news(title, author, up_votes=0, down_votes=0):
     )
 
 
-def sort_object_list_by(list_to_sort, parameter):
-    return sorted(list_to_sort, key=lambda elem: getattr(elem, parameter))
+def sort_object_list_by(list_to_sort, parameter, reverse_bool=False):
+    return sorted(list_to_sort, key=lambda elem: getattr(elem, parameter), reverse=reverse_bool)
 
 
-def sort_dict_list_by(list_to_sort, parameter):
-        return sorted(list_to_sort, key=lambda elem: elem[parameter])
+def sort_dict_list_by(list_to_sort, parameter, reverse_bool=False):
+        return sorted(list_to_sort, key=lambda elem: elem[parameter], reverse=reverse_bool)
 
 
 class NewsListTestCase(TestCase):
@@ -82,15 +82,15 @@ class NewsListTestCase(TestCase):
             add_random_news()
 
         response = self.client.get(self.url)
-        sorted_by_published_date = sort_object_list_by(response.context['page'].object_list,
-                                                'published_date')
+        sorted_by_published_date = sort_object_list_by(response.context['page'].object_list, 'published_date', True)
 
         self.assertEqual(response.context['page'].object_list, sorted_by_published_date)
 
     def test_initial_page(self):
-        article = add_news('title', 'me')
         for i in range(0, 2*INITIAL_PAGE_SIZE):
             add_random_news()
+
+        article = add_news('title', 'me')
 
         response = self.client.get(self.url)
 
@@ -158,7 +158,8 @@ class NewsPageTestCase(TestCase):
         response = self.client.get(self.url, data)
         response_json = response.json()
 
-        response_article = response_json['page']['objects'][0]
+        articles_count = len(response_json['page']['objects'])
+        response_article = response_json['page']['objects'][articles_count - 1]
 
         self.assertEqual(article.slug, response_article['slug'])
         self.assertEqual(article.title, response_article['title'])

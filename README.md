@@ -71,7 +71,14 @@ Pycco
 django-disqus
 easy_thumbnails
 Pillow
+lxml
+```
 
+If you encounter some errors while installing lxml, try the following command:
+
+```
+sudo apt-get install python-dev libxml2-dev libxslt1-dev zlib1g-dev
+```
 
 Clone the repo:
 
