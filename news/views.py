@@ -25,7 +25,7 @@ def news_list(request):
     articles = Article.objects.all().order_by('-published_date')
 
     for a in articles:
-        a.shortened_content = shorten_content(a.content, 150)
+        a.shortened_content = shorten_content(a.content, 300)
         a.voting_status = request.session.get('vote_state_article_%s' % a.slug, 'none')
 
     paginator = Paginator(articles, INITIAL_PAGE_SIZE)
@@ -78,7 +78,7 @@ def news_page(request):
     for news in page.object_list:
         news_dict = model_to_dict(news, exclude='published_date')
         news_dict['slug'] = news.slug
-        news_dict['shortened_content'] = shorten_content(news.content, 150)
+        news_dict['shortened_content'] = shorten_content(news.content, 300)
         news_dict['published_date'] = news.published_date.timestamp()
         news_dict['voting_status'] = request.session.get('vote_state_article_%s' % news.slug, 'none')
         news_dict['url'] = \

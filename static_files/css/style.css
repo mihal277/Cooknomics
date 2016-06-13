@@ -106,8 +106,13 @@ hr.small {
     margin-right: auto;
 }
 
+.like-buttons {
+    display: inline;
+    margin-left: 1em;
+}
+
 .fa-thumbs-up, .fa-thumbs-down {
-    color: grey;
+    color: #cccccc;
     cursor: pointer;
     -moz-transition: color 0.35s ease-in-out;
     -webkit-transition: color 0.35s ease-in-out;
@@ -117,11 +122,11 @@ hr.small {
 }
 
 .fa-thumbs-up:hover, .fa-thumbs-down:hover {
-    color: black;
+    color: grey;
 }
 
 .fa-thumbs-up.clicked, .fa-thumbs-down.clicked {
-    color: black;
+    color: grey;
     cursor: pointer;
     -moz-transition: color 0.35s ease-in-out;
     -webkit-transition: color 0.35s ease-in-out;
@@ -131,7 +136,11 @@ hr.small {
 }
 
 .fa-thumbs-up.clicked:hover, .fa-thumbs-down.clicked:hover {
-    color: grey;
+    color: #cccccc;
+}
+
+.votes-count {
+    display: inline;
 }
 
 .more {
@@ -254,11 +263,11 @@ img.center {
     margin-top: 0.5em;
     padding: 0.5em 0.75em;
     background: #337ab7;
-    border-radius: 4px;
+    border-radius: 6px;
     text-decoration: none;
     text-transform: uppercase;
     font-size: 1.1em;
-    color: #FFF;
+    color: #fff;
     -moz-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
     -webkit-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
     -o-transition: color 0.35s ease-in-out, background-color 0.35s ease-in-out;
@@ -268,20 +277,42 @@ img.center {
 }
 
 .button:hover {
-    background: #39CCCC;
-    color: #FFF !important;
+    background: #0099CC;
+    color: #fff !important;
     text-decoration: none;
 }
 
 .post {
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 1000px;
+    margin: 1em auto;
     font-family: Impact, Charcoal, sans-serif;
     text-align: left;
+    border-radius: 25px;
+    padding: 1em 3em;
+    border: 1px solid #cccccc;
+}
+
+.post .footnote-icon {
+    color: #cccccc;
+}
+
+.post .comment-icon {
+    color: #9ac400;
+    margin-left: 1em;
+}
+
+.post .comment-link {
+    color: #9ac400;
 }
 
 .post .post-metadata {
-    color: #b8b894  ;
+    color: #cccccc;
+    display: inline;
+}
+
+.post .short-content {
+    margin-top: 0.5em;
+    font-weight: normal;
 }
 
 .element {
@@ -333,3 +364,4 @@ img.center {
     display: block;
     margin: 0 auto;
 }
+
