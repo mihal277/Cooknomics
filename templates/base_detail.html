@@ -33,6 +33,7 @@
     <main>
         {% block element_display %}
         {% endblock element_display %}
+
         <div class="like-buttons">
             <i data-name="{{ slug }}"
                class="fa fa-thumbs-up fa-lg upvote-button {% if element.voting_status == 'upvoted' %}
@@ -47,12 +48,15 @@
                                                               data-on-click-action="downvote"></i>
             <section id="downvote_count_{{ slug }}" class="votes-count">{{ down_votes }}</section>
         </div>
+
         {% block additional_element_display %}
         {% endblock additional_element_display %}
         {% with ''|addstr:appname|addstr:':'|addstr:appname|addstr:'_list' as back_url %}
         <a href="{% url back_url %}" class="button">
         {% endwith %}
+
             Back
+
         </a>
     </main>
 

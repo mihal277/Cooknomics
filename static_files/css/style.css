@@ -100,6 +100,10 @@ hr.small {
 
 .video_buttons {
     margin-top: 10px;
+    width: 0px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .like-buttons {
@@ -314,5 +318,50 @@ img.center {
 .element {
     margin-left: auto;
     margin-right: auto;
+}
+
+.title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 50px;
+}
+
+.article_title {
+    font-family: 'Amatic SC', cursive;
+    font-size: 70px;
+    text-align: center;
+}
+
+.article_author {
+    font-family: 'Amatic SC', cursive;
+    font-size: 30px;
+    text-align: center;
+}
+
+.article_content {
+    font-family: 'Amatic SC', cursive;
+    font-size: 40px;
+    display:table;
+    margin:0 auto;
+}
+
+.video_frame {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ingredients {
+    list-style-type: circle;
+    list-style-position:inside;
+    font-family: 'Amatic SC', cursive;
+    font-size: 40px;
+    display:table;
+    margin:0 auto;
+}
+
+.dish_image {
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
 }
 
