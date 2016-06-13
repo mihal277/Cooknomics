@@ -3,7 +3,9 @@ from django.utils import timezone
 from autoslug.fields import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from videos.utils import youtube_video_exists
+from videos.utils import youtube_video_exists, trim_youtube_url, \
+                         get_youtube_video_title, \
+                         get_youtube_video_description
 from unidecode import unidecode
 
 # === Models for videos app ===
@@ -39,9 +41,9 @@ class Video(models.Model):
     """
     slug = AutoSlugField(populate_from=unidecode('title'),
                          unique=True, primary_key=True, editable=False)
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True, null=True)
     video_url = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     published_date = models.DateTimeField(default=timezone.now)
     up_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     down_votes = models.IntegerField(default=0, validators=[MinValueValidator(0)])
@@ -50,10 +52,18 @@ class Video(models.Model):
         return self.title
 
     def clean(self):
+        original_url = self.video_url
         if self.published_date > timezone.now():
             raise ValidationError('The date cannot be in the future')
         if not youtube_video_exists(self.video_url):
             raise ValidationError('Video doesn\'t exist')
+        else:
+            self.video_url = trim_youtube_url(self.video_url)
+
+        if not self.title:
+            self.title = get_youtube_video_title(original_url)
+        if not self.description:
+            self.description = get_youtube_video_description(original_url)
 
     def upvote(self):
         self.up_votes += 1
