@@ -13,6 +13,7 @@ function appendElements(newData) {
         var date = new Date(data.published_date)
         htmlString += '<div class="post">';
         htmlString += '<a href="' + data.url + '"><h2>' + data.title + '</h2></a>';
+        
         htmlString += '<i class="fa fa-clock-o footnote-icon" aria-hidden="true"></i>' +
                       '<p class="post-metadata"> ' + date + '</p>';
         htmlString += '<i class="fa fa-comment comment-icon" aria-hidden="true"></i>' +

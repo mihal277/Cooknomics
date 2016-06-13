@@ -6,16 +6,20 @@
 {% endblock title %}
 
 {% block element_display %}
-    <div>
+    <div class="post">
         <h2 class="article_title"> {{ title }}, {{ price }} pln</h2>
-        <h3 class="article_author"> {{ author }}</h3>
         <ul class="ingredients">
             {% for ingredient in ingredients %}
                 <li class="ingredient">- {{ ingredient }}</li>
             {% endfor %}
         </ul>
         <br>
-        <span class="article_content"> {{ content|safe }}</span>
         <img class="dish_image" src='{{ image_url }}' style="max-height:315px;width:auto;">
+        <span class="content"> {{ content|safe }}</span>
+        <br>
+        <i class="fa fa-clock-o footnote-icon" aria-hidden="true"></i>
+        <p class="post-metadata" align="center">{{ published_date }}</p>
+        <i class="fa fa-user footnote-icon" aria-hidden="true"></i>
+        <p class="post-metadata" align="center">{{ author }}</p>
     </div>
 {% endblock element_display %}

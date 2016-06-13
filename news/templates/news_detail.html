@@ -8,11 +8,13 @@
 {% block element_display %}
 
     <div class="post">
-        <h2 class="title"> {{ title }}</h2>
+        <h2 class="article_title"> {{ title }}</h2>
         <i class="fa fa-clock-o footnote-icon" aria-hidden="true"></i>
-        <p class="post-metadata">{{ published_date }}</p>
+        <p class="post-metadata" align="center">{{ published_date }}</p>
         <i class="fa fa-user footnote-icon" aria-hidden="true"></i>
-        <p class="post-metadata">{{ author }}</p>
-        {{ content|safe }}
+        <p class="post-metadata" align="center">{{ author }}</p>
+        <br>
+        <span class="content">{{ content|safe }}</span>
+
     </div>
 {% endblock element_display %}

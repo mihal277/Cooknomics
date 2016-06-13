@@ -1,11 +1,39 @@
 {% extends 'base_index.html' %}
 
 {% block element_display %}
-    <a href="{% url 'videos:single_video' element.slug %}">
-    <h2 class="title"> {{ element.title }}</h2>
-    </a>
-    <iframe width="560" height="315"
-        src="https://www.youtube.com/embed/{{ element.video_url }}"
-        frameborder="0" allowfullscreen>
-    </iframe>
+    <div class="post">
+        <a href="{% url 'videos:single_video' element.slug %}">
+            <h2 class="title"> {{ element.title }}</h2>
+        </a>
+        <iframe width="560" height="315"
+            src="https://www.youtube.com/embed/{{ element.video_url }}"
+            frameborder="0" allowfullscreen>
+        </iframe>
+
+        <br>
+
+        <i class="fa fa-clock-o footnote-icon" aria-hidden="true"></i>
+        <p class="post-metadata">{{ element.published_date }}</p>
+
+        <i class="fa fa-comment comment-icon" aria-hidden="true"></i>
+        <a href="{% url 'news:article' element.slug %}#disqus_thread" class="comment-link"></a>
+
+        {% if display_likes %}
+            <div class="like-buttons">
+                <i data-name="{{ element.slug }}"
+                   class="fa fa-thumbs-up fa-lg upvote-button {% if element.voting_status == 'upvoted' %}
+                                                              clicked
+                                                              {% endif %}" id="upbtn_{{ element.slug }}"
+                                                              data-on-click-action="upvote"></i>
+                <section id="upvote_count_{{ element.slug }}" class="votes-count">{{ element.up_votes }}</section>
+                <i data-name="{{ element.slug }}"
+                   class="fa fa-thumbs-down fa-lg downvote-button {% if element.voting_status == 'downvoted' %}
+                                                                  clicked
+                                                                  {% endif %}" id="dwnbtn_{{ element.slug }}"
+                                                                  data-on-click-action="downvote"></i>
+                <section id="downvote_count_{{ element.slug }}" class="votes-count">{{ element.down_votes }}</section>
+            </div>
+        {% endif %}
+    </div>
+
 {% endblock element_display %}

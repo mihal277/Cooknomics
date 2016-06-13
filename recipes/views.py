@@ -180,6 +180,8 @@ def recipe(request, recipe_slug):
 
     print(current_recipe.image.url)
 
+    price = int(price)
+
     context = {
         'slug': recipe_slug,
         'author': current_recipe.author,

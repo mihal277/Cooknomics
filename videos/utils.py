@@ -1,7 +1,7 @@
 import requests
 import json
 import urllib.request
-from lxml import etree
+#from lxml import etree
 
 # === Utils for videos app ===
 
@@ -32,9 +32,10 @@ def get_youtube_video_description(video_url):
     The function extracts and returns the description of the video, which gets downloaded from youtube
 
     """
-    with urllib.request.urlopen(video_url) as response:
-        video_page_source = etree.HTML(response.read())
-    return str(video_page_source.xpath("//p[@id='eow-description']/text()"))[2:-2]
+    #with urllib.request.urlopen(video_url) as response:
+        #video_page_source = etree.HTML(response.read())
+    #return str(video_page_source.xpath("//p[@id='eow-description']/text()"))[2:-2]
+    return "no description"
 
 
 def youtube_video_exists(video_url):

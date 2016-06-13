@@ -6,10 +6,15 @@
 {% endblock title %}
 
 {% block element_display %}
-        <div>
+        <div class="post">
             <h2 class="article_title"> {{ title }}</h2>
             <iframe class="video_frame" width="560" height="315" src="https://www.youtube.com/embed/{{ video_url }}" frameborder="0" allowfullscreen></iframe>
             <br>
-            <span class="article_content">{{ description|safe }}</span>
+            <i class="fa fa-clock-o footnote-icon" aria-hidden="true"></i>
+            <p class="post-metadata" align="center">{{ published_date }}</p>
+            <i class="fa fa-user footnote-icon" aria-hidden="true"></i>
+            <p class="post-metadata" align="center">{{ author }}</p>
+            <br>
+            <span class="content">{{ description|safe }}</span>
         </div>
 {% endblock element_display %}
