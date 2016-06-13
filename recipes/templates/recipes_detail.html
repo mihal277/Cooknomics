@@ -7,14 +7,15 @@
 
 {% block element_display %}
     <div>
-        <h2>Składniki</h2>
-        {% for ingredient in ingredients %}
-            <h2>{{ ingredient }}</h2>
-        {% endfor %}
-        <h2>Cena: {{ price }} zł</h2>
-        <h2 class="title"> {{ title }}</h2>
-        <h3 class="author"> {{ author }}</h3>
-        <img src='{{ image_url }}' style="max-height:315px;width:auto;">
-        <h4 class="fcontent"> {{ content|safe }}</h4>
+        <h2 class="article_title"> {{ title }}, {{ price }} pln</h2>
+        <h3 class="article_author"> {{ author }}</h3>
+        <ul class="ingredients">
+            {% for ingredient in ingredients %}
+                <li class="ingredient">- {{ ingredient }}</li>
+            {% endfor %}
+        </ul>
+        <br>
+        <span class="article_content"> {{ content|safe }}</span>
+        <img class="dish_image" src='{{ image_url }}' style="max-height:315px;width:auto;">
     </div>
 {% endblock element_display %}

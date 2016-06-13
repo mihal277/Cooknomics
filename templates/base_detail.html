@@ -34,26 +34,24 @@
         {% block element_display %}
         {% endblock element_display %}
         <div class="video_buttons row">
-            <button class="upvote-button" data-name="{{ slug }}" id="upbtn_{{ slug }}"
-                    data-on-click-action="upvote"
-            >
-                <i class="fa fa-thumbs-up fa-lg"></i>
-                <span id="upvote_count_{{ slug }}">{{ up_votes }}</span>
-            </button>
-
-            <button class="downvote-button" data-name="{{ slug }}" id="dwnbtn_{{ slug }}"
-                    data-on-click-action="downvote"
-            >
-                <i class="fa fa-thumbs-down fa-lg"></i>
-                <span id="downvote_count_{{ slug }}">{{  down_votes }}</span>
-            </button>
-        </div>
+                        <i data-name="{{ slug }}"
+                           class="fa fa-thumbs-up fa-lg upvote-button {% if voting_status == 'upvoted' %}
+                                                                      clicked
+                                                                      {% endif %}" id="upbtn_{{ slug }}"
+                                                                      data-on-click-action="upvote"></i>
+                        <section id="upvote_count_{{ slug }}">{{ up_votes }}</section>
+                        <i data-name="{{ slug }}"
+                           class="fa fa-thumbs-down fa-lg downvote-button {% if voting_status == 'downvoted' %}
+                                                                          clicked
+                                                                          {% endif %}" id="dwnbtn_{{ slug }}"
+                                                                          data-on-click-action="downvote"></i>
+                        <section id="downvote_count_{{ slug }}">{{  down_votes }}</section>
+                    </div>
         {% block additional_element_display %}
         {% endblock additional_element_display %}
         {% with ''|addstr:appname|addstr:':'|addstr:appname|addstr:'_list' as back_url %}
         <a href="{% url back_url %}">
         {% endwith %}
-            <button class="more btn-md btn-primary">Back</button>
         </a>
     </main>
 

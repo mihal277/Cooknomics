@@ -10,18 +10,30 @@ function appendElements(newData) {
 
         htmlString += '<a href="' + data.url + '"><h2 class="title">' + data.title + '</h2></a>';
         htmlString += '<img src="' + data.image_url + '" style="max-height:315px;width:auto;">';
-                htmlString += '<div class="video_buttons row">';
-        htmlString += '<button class="upvote-button" name="' + data.slug + '" id="upbtn_' + data.slug + '"' +
-            ' data-on-click-action="upvote">';
-        htmlString += '<i class="fa fa-thumbs-up fa-lg"></i>';
+
+        /* Updating likes part */
+        var upvote_class = 'upvote-button fa fa-thumbs-up fa-lg';
+        var downvote_class = 'downvote-button fa fa-thumbs-down fa-lg';
+
+        console.log(data.voting_status);
+        if (data.voting_status == 'upvoted') {
+            upvote_class += ' clicked';
+        }
+        if (data.voting_status == 'downvoted') {
+            downvote_class = ' clicked';
+        }
+
+        htmlString += '<div class="video_buttons row">';
+        htmlString += '<i class="' + upvote_class +'" name="' + data.slug + '" id="upbtn_' + data.slug + '"' +
+            ' data-on-click-action="upvote"></i>';
         htmlString += '<section id="upvote_count_' + data.slug + '">' + data.up_votes + '</section>';
-        htmlString += '</button>';
-        htmlString += '<button class="downvote-button" name="' + data.slug + '" id="dwnbtn_'+ element + '"' +
-                                'data-on-click-action="downvote">';
-        htmlString += '<i class="fa fa-thumbs-down fa-lg"></i>';
-        htmlString += '<section id="downvote_count_'+ element +'">' + data.down_votes +'</section>';
-        htmlString += '</button>';
+
+        htmlString += '<i class="' + downvote_class + '" name="' + data.slug + '" id="dwnbtn_'+ data.slug + '"' +
+                                'data-on-click-action="downvote"></i>';
+        htmlString += '<section id="downvote_count_'+ data.slug +'">' + data.down_votes +'</section>';
         htmlString += '</div>';
+        /* End of updating likes */
+
         htmlString += '</li>';
 
         newElementsHtml.push(htmlString);
