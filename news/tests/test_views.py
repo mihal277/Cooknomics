@@ -152,14 +152,14 @@ class NewsPageTestCase(TestCase):
     def test_correct_data_sent(self):
         article = add_news('news', 'me')
         data = {
-            'page': self.NUMBER_OF_PAGES + 1,
+            'page': 1,
             'sorting': 'published_date',
         }
         response = self.client.get(self.url, data)
         response_json = response.json()
 
         articles_count = len(response_json['page']['objects'])
-        response_article = response_json['page']['objects'][articles_count - 1]
+        response_article = response_json['page']['objects'][0]
 
         self.assertEqual(article.slug, response_article['slug'])
         self.assertEqual(article.title, response_article['title'])
@@ -182,7 +182,7 @@ class NewsPageTestCase(TestCase):
             }
             response = self.client.get(self.url, data)
             response_objects = response.json()['page']['objects']
-            sorted_list = sort_dict_list_by(response_objects, sorting)
+            sorted_list = sort_dict_list_by(response_objects, sorting, sorting == 'published_date')
 
             self.assertEqual(response_objects, sorted_list)
 
@@ -218,7 +218,7 @@ class NewsPageTestCase(TestCase):
         }
         response = self.client.get(self.url, data)
         response_objects = response.json()['page']['objects']
-        sorted_list = sort_dict_list_by(response_objects, 'published_date')
+        sorted_list = sort_dict_list_by(response_objects, 'published_date', True)
 
         self.assertEqual(response_objects, sorted_list)
 

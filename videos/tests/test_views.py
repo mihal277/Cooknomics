@@ -15,7 +15,7 @@ def generate_random_string():
 
 def add_video(video_url):
     return Video.objects.create(
-        video_url=video_url,
+        video_url=('https://www.youtube.com/watch?v=' + video_url),
         title=generate_random_string(),
         description=generate_random_string(),
     )

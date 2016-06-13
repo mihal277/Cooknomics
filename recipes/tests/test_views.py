@@ -19,6 +19,7 @@ def add_recipe(title):
     return Recipe.objects.create(
         title=title,
         author=generate_random_string(),
+        image="media/uploads/images/BNN.jpg",
     )
 
 
@@ -26,6 +27,7 @@ def add_random_recipe(ingredients):
     recipe = Recipe.objects.create(
         title=generate_random_string(),
         author=generate_random_string(),
+        image="media/uploads/images/BNN.jpg",
     )
 
     for i in ingredients:
@@ -105,7 +107,8 @@ class RecipeListTestCase(TestCase):
     def test_initial_page(self):
         recipe = Recipe.objects.create(
             title="recipe",
-            author="me"
+            author="me",
+            image="media/uploads/images/BNN.jpg"
         )
         ingredient = Ingredient.objects.create(
             name="ingredient",
@@ -232,6 +235,7 @@ class RecipesPageTestCase(TestCase):
         recipe = Recipe.objects.create(
             title="title",
             author="me",
+            image="media/uploads/images/BNN.jpg",
         )
         data = {
             'page': self.NUMBER_OF_PAGES + 1,
@@ -399,6 +403,7 @@ def add_random_recipe(ingredients):
     recipe = Recipe.objects.create(
         title=generate_random_string(),
         author=generate_random_string(),
+        image="media/uploads/images/BNN.jpg",
     )
 
     for i in ingredients:
@@ -418,6 +423,7 @@ class RecipeTestCase(TestCase):
         cls.recipe = Recipe.objects.create(
             title="title",
             author="me",
+            image="media/uploads/images/BNN.jpg",
         )
         cls.ingredients = [add_random_ingredient() for _ in range(0, 10)]
 
