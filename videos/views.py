@@ -86,7 +86,12 @@ def video_page(request):
 
 def single_video(request, video_slug):
     """
-    TODO
+
+    Generates site of a given video.
+    :param request: HttpRequest passed by browser.
+    :param video_slug: Given video slug.
+    :return: Information about a given video. Format: JSON.
+
     """
     video = get_object_or_404(Video, pk=video_slug)
 
@@ -107,18 +112,10 @@ def single_video(request, video_slug):
 def vote(request):
     """
 
-    Generates JSON response to a POST request sent after user up(down)votes
-    a video. Part of AJAX interface.
-    Requires following parameters to be passed:
-    ***pk*** - videos database pk
-    ***slug*** - videos slug
-    ***type*** - type of request, possible choices:
-                upvote - increase up_vote count
-                downvote - increase down_vote count
-    Returns JSON file containing:
-    ***upvotes*** - up_vote count of given video
-    ***downvotes*** - down_vote count of given video
-    ***pk*** - primary key of the up/down voted video
+    Handles vote request.
+    :param request: HttpRequest passed by browser. Should contain pk, state of votes and action for the video.
+    :return: Information about current state of votes. Format: JSON.
+
     """
     if request.method == 'POST':
         video_slug = request.POST.get('pk', None)
