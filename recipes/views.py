@@ -165,7 +165,10 @@ def search_recipes(request):
 def recipe(request, recipe_slug):
     """
 
-    Generates site of a given recipe
+    Generates site of a given recipe.
+    :param request: HttpRequest passed by browser.
+    :param recipe_slug: Given recipe slug.
+    :return: Information about a given recipe. Format: JSON.
 
     """
     current_recipe = get_object_or_404(Recipe, pk=recipe_slug)
@@ -202,17 +205,10 @@ def recipe(request, recipe_slug):
 def vote(request):
     """
 
-    Generates JSON response to a POST request sent after user up(down)votes
-    a recipe. Part of AJAX interface.
-    Requires following parameters to be passed:
-    ***pk*** - recipes database pk
-    ***type*** - type of request, possible choices:
-                upvote - increase up_vote count
-                downvote - increase down_vote count
-    Returns JSON file containing:
-    ***upvotes*** - up_vote count of given recipe
-    ***downvotes*** - down_vote count of given recipe
-    ***pk*** - primary key of the up/down voted recipe
+    Handles vote request.
+    :param request: HttpRequest passed by browser. Should contain pk, state of votes and action for the recipe.
+    :return: Information about current state of votes. Format: JSON.
+
     """
     if request.method == 'POST':
         recipe_pk = request.POST.get('pk', None)

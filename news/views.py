@@ -98,6 +98,9 @@ def article(request, article_slug):
     """
 
     Generates site of a given article.
+    :param request: HttpRequest passed by browser.
+    :param article_slug: Given article slug.
+    :return: Information about a given article. Format: JSON.
 
     """
     current_article = get_object_or_404(Article, pk=article_slug)
@@ -119,18 +122,10 @@ def article(request, article_slug):
 def vote(request):
     """
 
-    Generates JSON response to a POST request sent after user up(down)votes
-    a news. Part of AJAX interface.
-    Requires following parameters to be passed:
-    ***pk*** - news database pk
-    ***slug*** - news slug
-    ***type*** - type of request, possible choices:
-                upvote - increase up_vote count
-                downvote - increase down_vote count
-    Returns JSON file containing:
-    ***upvotes*** - up_vote count of given article
-    ***downvotes*** - down_vote count of given article
-    ***pk*** - primary key of the up/down voted article
+    Handles vote request.
+    :param request: HttpRequest passed by browser. Should contain pk, state of votes and action for the article.
+    :return: Information about current state of votes. Format: JSON.
+
     """
     if request.method == 'POST':
         article_slug = request.POST.get('pk', None)
