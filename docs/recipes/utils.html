@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>utils.py</title>
+  <link rel="stylesheet" href="../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>utils.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span><span class="p">,</span> <span class="n">InvalidPage</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">Http404</span>
+<span class="kn">from</span> <span class="nn">django.forms.models</span> <span class="kn">import</span> <span class="n">model_to_dict</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>Paginates the data</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">do_pagination</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_pages</span><span class="p">,</span> <span class="n">page_number</span><span class="p">):</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_pages</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page_number</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">InvalidPage</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>If there are no recipes, return 404 (internet says so)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span>
+
+    <span class="n">page_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;objects&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">object_list</span><span class="p">:</span>
+        <span class="n">recipe_dict</span> <span class="o">=</span> <span class="n">model_to_dict</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;published_date&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;image&#39;</span><span class="p">,</span>
+                                              <span class="s1">&#39;ingredients&#39;</span>
+                                                <span class="p">])</span>
+        <span class="n">recipe_dict</span><span class="p">[</span><span class="s1">&#39;slug&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">slug</span>
+        <span class="n">recipe_dict</span><span class="p">[</span><span class="s1">&#39;image_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">url</span>
+        <span class="n">recipe_dict</span><span class="p">[</span><span class="s1">&#39;published_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">published_date</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()</span>
+        <span class="n">recipe_dict</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;recipes:recipe&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;recipe_slug&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">slug</span><span class="p">})</span>
+        <span class="n">page_data</span><span class="p">[</span><span class="s1">&#39;objects&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">recipe_dict</span><span class="p">)</span>
+
+    <span class="n">page_data</span><span class="p">[</span><span class="s1">&#39;has_next&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">has_next</span><span class="p">()</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;page&quot;</span><span class="p">:</span> <span class="n">page_data</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">context</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

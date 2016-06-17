@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>views.py</title>
+  <link rel="stylesheet" href="../pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>views.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span><span class="p">,</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="n">Http404</span>
+<span class="kn">from</span> <span class="nn">django.views.decorators.http</span> <span class="kn">import</span> <span class="n">require_GET</span><span class="p">,</span> <span class="n">require_POST</span>
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Ingredient</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Recipe</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">IngredientDetails</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">do_pagination</span>
+<span class="kn">import</span> <span class="nn">json</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h3><span id="views-for-recipes-app" href="views-for-recipes-app"> Views for recipes app </span></h3>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">INITIAL_PAGE_SIZE</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">NUMBER_OF_ELEMENTS_ON_PAGE</span> <span class="o">=</span> <span class="mi">2</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>Generates site containing first page of recipes list sorted by published_date.
+:param request: HttpRequest passed by browser.
+:return: HTML rendered from aproppriate template with initial data.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">recipes_list</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">recipes</span> <span class="o">=</span> <span class="n">Recipe</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;published_date&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>prawidlowy sposob zbierania URLa - object.image.url
+recipe = recipes[0]
+print("path: " + recipe.image.url)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">recipes</span><span class="p">,</span> <span class="n">INITIAL_PAGE_SIZE</span><span class="p">)</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="n">page</span><span class="p">,</span>
+        <span class="s1">&#39;display_likes&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;recipes_index.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>View responding to AJAX request for list of all ingredients currently stored in database.
+:param request: HttpRequest passed by browser.
+:return: List of all ingredients stored in a database in format {'ingredient.name': ingredient.pk}.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@require_GET</span>
+<span class="k">def</span> <span class="nf">get_ingredients</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">items</span> <span class="o">=</span> <span class="n">Ingredient</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>return list of {item.name: item.pk}</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">context</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">item</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">pk</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p>View to generate updates to recipes list when user scrolls down the page.
+:param request: HttpRequest passed by browser. Its data hould contain 'page' -
+:return:</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@require_GET</span>
+<span class="k">def</span> <span class="nf">recipes_page</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">page_number</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">page_number</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>Get sorting parameter, if none is provides, sort by published_date</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">sorting</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sorting&#39;</span><span class="p">,</span> <span class="s1">&#39;published_date&#39;</span><span class="p">)</span>
+
+    <span class="n">possible_sortings</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;up_votes&#39;</span><span class="p">,</span> <span class="s1">&#39;published_date&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">sorting</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">possible_sortings</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">Http404</span>
+
+    <span class="k">if</span> <span class="n">sorting</span> <span class="o">==</span> <span class="s1">&#39;up_votes&#39;</span><span class="p">:</span>
+        <span class="n">sorting</span> <span class="o">=</span> <span class="s1">&#39;-up_votes&#39;</span>
+
+    <span class="n">recipes</span> <span class="o">=</span> <span class="n">Recipe</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">sorting</span><span class="p">)</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="n">do_pagination</span><span class="p">(</span><span class="n">recipes</span><span class="p">,</span> <span class="n">NUMBER_OF_ELEMENTS_ON_PAGE</span><span class="p">,</span> <span class="n">page_number</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>View called when user clicks on search button on website. Searches database for recipces that contain
+ingredients selected by user.
+:param request: HttpRequest passed by browser. Should contain dict with keys:
+                'page' - number of page to fetch from server,
+                and the rest of keys: '<ingrednient_pk>', values don't matter.
+:return: List of recipes that contain at least one of ingredients selected by user. Format: JSON.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@require_GET</span>
+<span class="k">def</span> <span class="nf">get_filtered_recipes</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">page_number</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>If GET data is empty, assume no filters and return list of all recipes</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">recipes</span> <span class="o">=</span> <span class="n">Recipe</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;published_date&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">get_data</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span>
+
+        <span class="n">page_number</span> <span class="o">=</span> <span class="n">get_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">page_number</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Http404</span>
+
+        <span class="n">sorting</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sorting&#39;</span><span class="p">,</span> <span class="s1">&#39;published_date&#39;</span><span class="p">)</span>
+
+        <span class="n">possible_sortings</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;up_votes&#39;</span><span class="p">,</span> <span class="s1">&#39;published_date&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">sorting</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">possible_sortings</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">Http404</span>
+
+        <span class="k">if</span> <span class="n">sorting</span> <span class="o">==</span> <span class="s1">&#39;up_votes&#39;</span><span class="p">:</span>
+            <span class="n">sorting</span> <span class="o">=</span> <span class="s1">&#39;-up_votes&#39;</span>
+
+        <span class="n">get_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span>
+        <span class="n">get_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sorting&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>If GET data is not empty, choose only recipes that match passed ingredients</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">ingredients</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pk</span> <span class="ow">in</span> <span class="n">get_data</span><span class="p">:</span>
+            <span class="n">ingredient</span> <span class="o">=</span> <span class="n">Ingredient</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">pk</span><span class="p">)</span>
+            <span class="n">ingredients</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ingredient</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>Filter the recipes, gets all the recipes that match at least 1 element</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">recipes_all</span> <span class="o">=</span> <span class="n">Recipe</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">ingredients__in</span><span class="o">=</span><span class="n">ingredients</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">sorting</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>Remove duplicates</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">unique_recipes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">recipes</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">recipes_all</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">r</span> <span class="ow">in</span> <span class="n">unique_recipes</span> <span class="ow">or</span> <span class="n">unique_recipes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">r</span><span class="p">))]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <p>Paginate, throws 404 on error</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">context</span> <span class="o">=</span> <span class="n">do_pagination</span><span class="p">(</span><span class="n">recipes</span><span class="p">,</span> <span class="n">NUMBER_OF_ELEMENTS_ON_PAGE</span><span class="p">,</span> <span class="n">page_number</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      <p>View called when user enters some string into textbox on website.
+:param request: HttpRequest passed by browser. Should contain string to be searched for.
+:return: List of recipes whose title contains given string. Format: JSON.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@require_GET</span>
+<span class="k">def</span> <span class="nf">search_recipes</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">string_to_find</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;term&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">string_to_find</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+
+    <span class="n">matching_recipes</span> <span class="o">=</span> <span class="n">Recipe</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">title__icontains</span><span class="o">=</span><span class="n">string_to_find</span><span class="p">)</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">matching_recipes</span><span class="p">:</span>
+        <span class="n">context</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">title</span><span class="p">]</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;recipes:recipe&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;recipe_slug&#39;</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">slug</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      <p>Generates site of a given recipe.
+:param request: HttpRequest passed by browser.
+:param recipe_slug: Given recipe slug.
+:return: Information about a given recipe. Format: JSON.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">recipe</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">recipe_slug</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">current_recipe</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Recipe</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">recipe_slug</span><span class="p">)</span>
+    <span class="n">ingredients</span> <span class="o">=</span> <span class="n">IngredientDetails</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">recipe</span><span class="o">=</span><span class="n">current_recipe</span><span class="p">)</span>
+
+    <span class="n">ingredients_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">price</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">ingredient</span> <span class="ow">in</span> <span class="n">ingredients</span><span class="p">:</span>
+        <span class="n">ingredients_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ingredient</span><span class="o">.</span><span class="n">ingredient</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ingredient</span><span class="o">.</span><span class="n">amount_name</span><span class="p">))</span>
+        <span class="n">price</span> <span class="o">+=</span> <span class="n">ingredient</span><span class="o">.</span><span class="n">ingredient</span><span class="o">.</span><span class="n">price</span> <span class="o">*</span> <span class="n">ingredient</span><span class="o">.</span><span class="n">amount</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="n">current_recipe</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="n">price</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">price</span><span class="p">)</span>
+
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;slug&#39;</span><span class="p">:</span> <span class="n">recipe_slug</span><span class="p">,</span>
+        <span class="s1">&#39;author&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">author</span><span class="p">,</span>
+        <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+        <span class="s1">&#39;published_date&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">published_date</span><span class="p">,</span>
+        <span class="s1">&#39;content&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">content</span><span class="p">,</span>
+        <span class="s1">&#39;image_url&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+        <span class="s1">&#39;ingredients&#39;</span><span class="p">:</span> <span class="n">ingredients_list</span><span class="p">,</span>
+        <span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="n">price</span><span class="p">,</span>
+        <span class="s1">&#39;up_votes&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">up_votes</span><span class="p">,</span>
+        <span class="s1">&#39;down_votes&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">down_votes</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;recipes_detail.html&#39;</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      <p>Handles vote request.
+:param request: HttpRequest passed by browser. Should contain pk, state of votes and action for the recipe.
+:return: Information about current state of votes. Format: JSON.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nd">@require_POST</span>
+<span class="k">def</span> <span class="nf">vote</span><span class="p">(</span><span class="n">request</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">recipe_pk</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pk&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="n">current_recipe</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Recipe</span><span class="p">,</span> <span class="n">pk</span><span class="o">=</span><span class="n">recipe_pk</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;vote_state_recipe_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">recipe_pk</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">)</span>
+        <span class="n">request_type</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      <p>set cookie expiry to 1 year</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">set_expiry</span><span class="p">(</span><span class="mi">31556926</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s1">&#39;upvote&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">upvote</span><span class="p">()</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_recipe_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">recipe_pk</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;upvoted&#39;</span>
+            <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;upvoted&#39;</span><span class="p">:</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">cancel_upvote</span><span class="p">()</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_recipe_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">recipe_pk</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+            <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;downvoted&#39;</span><span class="p">:</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">upvote</span><span class="p">()</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">cancel_downvote</span><span class="p">()</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_recipe_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">recipe_pk</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;upvoted&#39;</span>
+        <span class="k">elif</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s1">&#39;downvote&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">downvote</span><span class="p">()</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_recipe_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">recipe_pk</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;downvoted&#39;</span>
+            <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;upvoted&#39;</span><span class="p">:</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">cancel_upvote</span><span class="p">()</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">downvote</span><span class="p">()</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_recipe_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">recipe_pk</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;downvoted&#39;</span>
+            <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;downvoted&#39;</span><span class="p">:</span>
+                <span class="n">current_recipe</span><span class="o">.</span><span class="n">cancel_downvote</span><span class="p">()</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s1">&#39;vote_state_recipe_</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">recipe_pk</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+
+        <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;upvotes&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">up_votes</span><span class="p">,</span>
+            <span class="s1">&#39;downvotes&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">down_votes</span><span class="p">,</span>
+            <span class="s1">&#39;pk&#39;</span><span class="p">:</span> <span class="n">current_recipe</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">context</span><span class="p">),</span> <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">)</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
